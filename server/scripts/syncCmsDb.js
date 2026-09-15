@@ -358,11 +358,11 @@ async function syncCms() {
       { 
         key: 'navigation_links', 
         value: JSON.stringify([
+          { name: 'About', path: '/about', is_active: true },
           { name: 'Areas of Care', path: '/areas-of-care', is_active: true },
           { name: 'Patients & Caregivers', path: '/patients-caregivers', is_active: true },
-          { name: 'Healthcare Professionals', path: '/healthcare-professionals', is_active: true },
+          { name: 'Healthcare Professionals', path: '/patients-caregivers#for-professionals', is_active: true },
           { name: 'Quality & Manufacturing', path: '/quality-manufacturing', is_active: true },
-          { name: 'About', path: '/about', is_active: true },
           { name: 'News', path: '/news', is_active: true },
         ]), 
         group: 'navigation' 

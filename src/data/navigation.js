@@ -2,6 +2,7 @@ export const mainNavLinks = [
   { name: "About", path: "/about" },
   { name: "Areas of Care", path: "/areas-of-care" },
   { name: "Patients & Caregivers", path: "/patients-caregivers" },
+  { name: "Healthcare Professionals", path: "/patients-caregivers#for-professionals" },
   { name: "Quality & Manufacturing", path: "/quality-manufacturing" },
   { name: "News", path: "/news" },
 ];

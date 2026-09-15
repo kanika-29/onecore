@@ -133,12 +133,6 @@ export default function Home() {
                     <span>{heroSec.cta_text || 'Discover Onecore'}</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
-                  <Link
-                    to="/areas-of-care"
-                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-transparent border border-brand-border text-brand-dark text-sm font-medium rounded-full hover:bg-brand-surface hover:border-brand-muted/40 transition-all duration-200"
-                  >
-                    <span>View Specialties</span>
-                  </Link>
                 </div>
               </ScrollReveal>
             </div>

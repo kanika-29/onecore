@@ -24,12 +24,17 @@ export default function Navbar() {
         links = mainNavLinks;
       }
     }
-    return links.filter(
-      (l) =>
-        l.is_active !== false &&
-        !l.path?.includes('healthcare') &&
-        !l.name?.toLowerCase().includes('healthcare professional')
+    const filtered = links.filter((l) => l.is_active !== false);
+
+    // Ensure "About" is moved to the front (immediately after logo)
+    const aboutIndex = filtered.findIndex(
+      (l) => l.name?.toLowerCase() === 'about' || l.path === '/about'
     );
+    if (aboutIndex > 0) {
+      const [aboutItem] = filtered.splice(aboutIndex, 1);
+      filtered.unshift(aboutItem);
+    }
+    return filtered;
   })();
 
   useEffect(() => {
