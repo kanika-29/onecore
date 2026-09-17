@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import PageHero from '../components/PageHero';
+import PageBanner from '../components/PageBanner';
 import ScrollReveal from '../components/ScrollReveal';
 
 export default function Privacy() {
@@ -9,10 +9,10 @@ export default function Privacy() {
 
   return (
     <div className="w-full bg-brand-ivory text-brand-text">
-      <PageHero
-        eyebrow="LEGAL & PRIVACY"
+      <PageBanner
         title="Privacy Policy"
-        description="How Onecore Pharma collects, uses, and safeguards information provided through our corporate communication channels."
+        imageUrl="/assets/about-facility.jpg"
+        imageAlt="Privacy Policy - Onecore Pharma"
       />
 
       <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-12">

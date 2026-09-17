@@ -856,8 +856,8 @@ async function syncCms() {
         section_key: 'direct_channels',
         section_type: 'cards_grid',
         eyebrow: 'GET IN TOUCH',
-        heading: 'Direct Communication Channels',
-        subheading: null,
+        heading: 'Contact',
+        subheading: 'We’d love to hear from you. Whether you’re a healthcare professional interested in our products or a patient seeking more information, reach out to us',
         body: null,
         items_json: JSON.stringify([
           {
@@ -876,7 +876,7 @@ async function syncCms() {
           },
           {
             channel: 'BUSINESS HOURS',
-            value: '10 AM to 7 PM',
+            value: '10 AM - 7 PM',
             desc: 'For enquiries handled by the Onecore team.',
             cta_text: 'WORKING DAYS // MON – SAT',
             cta_url: null
@@ -1148,7 +1148,7 @@ async function syncCms() {
       { key: 'copyright_text', value: '© 2026 Onecore Pharma Pvt. Ltd.', group: 'general' },
       { key: 'contact_email', value: 'info@onecorepharma.in', group: 'contact' },
       { key: 'contact_phone', value: '8169255034', group: 'contact' },
-      { key: 'contact_hours', value: '10 AM to 7 PM', group: 'contact' },
+      { key: 'contact_hours', value: '10 AM - 7 PM', group: 'contact' },
       { key: 'default_seo_title', value: 'Onecore Pharma — Purposeful Formulations, Dependable Quality', group: 'seo' },
       { key: 'default_seo_desc', value: 'Onecore Pharma is a modern pharmaceutical company developing purposeful formulations and healthcare solutions centered on patients and healthcare professionals.', group: 'seo' },
       {
@@ -1185,10 +1185,14 @@ async function syncCms() {
       {
         key: 'footer_company_links',
         value: JSON.stringify([
-          { name: 'About Onecore', path: '/about' },
-          { name: 'Quality & Manufacturing', path: '/quality-manufacturing' },
-          { name: 'Sustainability', path: '/#sustainability' },
-          { name: 'Contact Us', path: '/contact' },
+          { name: 'Zeovus Sports', path: '#', isExternal: true },
+          { name: 'Zeovus Vet', path: '#', isExternal: true },
+          { name: 'Zeovus Life', path: '#', isExternal: true },
+          { name: 'Zeovus Food', path: '#', isExternal: true },
+          { name: 'Onecore', path: '/', isExternal: false },
+          { name: 'Xearma', path: '#', isExternal: true },
+          { name: 'Zeovus Health', path: '#', isExternal: true },
+          { name: 'Zeovus Herbs', path: '#', isExternal: true },
         ]),
         group: 'footer'
       }

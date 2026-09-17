@@ -4,6 +4,7 @@ import { ArrowRight, ArrowDown, ArrowUpRight, ShieldCheck, FileText, AlertCircle
 import SectionEyebrow from '../components/SectionEyebrow';
 import ScrollReveal from '../components/ScrollReveal';
 import FallbackImage from '../components/FallbackImage';
+import PageBanner from '../components/PageBanner';
 import { useCmsPage } from '../hooks/useCmsPage';
 
 export default function PatientsCaregivers() {
@@ -12,7 +13,7 @@ export default function PatientsCaregivers() {
   const [modalSubmitted, setModalSubmitted] = useState(false);
 
   useEffect(() => {
-    document.title = "Patients & Professionals | Onecore Pharma";
+    document.title = "Patients & Caregivers | Onecore Pharma";
 
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
@@ -59,19 +60,19 @@ export default function PatientsCaregivers() {
     setTimeout(() => {
       setModalSubmitted(false);
       setActiveSafetyModal(null);
-    }, 2800);
+    }, 4000);
   };
 
   // Section 1: Hero
   const heroSec = getSection('hero', {
     eyebrow: 'PATIENTS & PROFESSIONALS',
-    title: 'For the people receiving care. \nAnd the people providing it.',
+    title: 'Patients & Caregivers',
     body: 'Patients live the experience of a health condition. Healthcare professionals bring the knowledge and judgement needed to manage it.\n\nAt Onecore, both perspectives matter. Our role is to support them with dependable products, clear information and responsible communication.',
     cta_text: 'For patients',
     cta_url: '#for-patients',
     secondary_cta_text: 'For healthcare professionals',
     secondary_cta_url: '#for-professionals',
-    image_url: '/assets/hero-patients-professionals.jpg',
+    image_url: '/assets/patients-caregivers.jpg',
   });
 
   // Section 2: Two Perspectives
@@ -139,52 +140,39 @@ export default function PatientsCaregivers() {
     image_url: '/assets/healthcare-professionals.jpg',
     items: [
       {
-        title: 'Onecore medicines',
-        desc: 'Access compositions, dosage forms and factual information across the Onecore product portfolio.',
-        cta_text: 'View product information',
-        cta_url: '/areas-of-care'
+        title: 'SCIENTIFIC COMPOSITIONS & DOSAGE FORMS',
+        desc: 'Review product listings, active ingredients and available delivery formats across therapeutic specialties.'
       },
       {
-        title: 'Professional resources',
-        desc: 'Access approved prescribing and product information where available for Onecore medicines.',
-        cta_text: 'View professional resources',
-        cta_url: '#prescribing-modal'
+        title: 'CLINICAL SAFETY REPORTING',
+        desc: 'Submit adverse drug observations, product quality feedback or pharmacovigilance reports directly.'
       },
       {
-        title: 'Safety reporting',
-        desc: 'Report suspected adverse reactions or product quality concerns involving Onecore products.',
-        cta_text: 'Report safety information',
-        cta_url: '#patient-safety'
+        title: 'MEDICAL & FORMULATION DIALOGUE',
+        desc: 'Connect with our medical and quality teams for product inquiries, documentation and clinical details.'
       }
     ]
   });
 
-  // Section 6: Treatment Journey
-  const treatmentJourneySec = getSection('treatment_journey', {
-    eyebrow: 'THE TREATMENT JOURNEY',
-    title: 'A prescription begins in the clinic. \nCare continues beyond it.',
-    body: 'Healthcare professionals make treatment decisions in the clinical setting. Patients then carry those decisions into everyday life.\n\nWe believe a responsible pharmaceutical company should understand both parts of that journey and support them with medicines and information people can depend on.',
-    image_url: '/assets/treatment-journey.jpg',
+  // Section 6: How Onecore Approaches Patients & Professionals
+  const howWeWorkSec = getSection('how_we_work', {
+    eyebrow: 'HOW WE WORK',
+    title: 'Connecting patient needs with clinical realities.',
     items: [
       {
-        num: '01',
-        title: 'Healthcare professional',
-        desc: 'Clinical assessment, diagnosis and evidence-based therapeutic evaluation.'
+        icon: 'Stethoscope',
+        title: 'Purposeful Formulations',
+        desc: 'We develop formulations designed to support real treatment regimens, prioritizing patient adherence and ease of administration.'
       },
       {
-        num: '02',
-        title: 'Treatment decision',
-        desc: 'Selecting appropriate formulation, dosage schedule and treatment guidance.'
+        icon: 'ShieldCheck',
+        title: 'Reliable Information',
+        desc: 'Accurate, accessible and transparent product specifications that help clinicians prescribe and patients understand.'
       },
       {
-        num: '03',
-        title: 'Patient',
-        desc: 'Understanding administration instructions, storage conditions and safety facts.'
-      },
-      {
-        num: '04',
-        title: 'Everyday care',
-        desc: 'Managing treatment adherence and monitoring recovery in home routine.'
+        icon: 'HeartHandshake',
+        title: 'Open Safety Channels',
+        desc: 'Direct, responsive pharmacovigilance channels ensuring patient concerns and clinician reports receive prompt review.'
       }
     ]
   });
@@ -225,92 +213,14 @@ export default function PatientsCaregivers() {
   return (
     <div className="w-full">
       {/* =========================================================================
-          SECTION 1 — HERO
+          SECTION 1 — HERO / BANNER
           ========================================================================= */}
       {heroSec.is_active && (
-        <section className="pt-32 sm:pt-40 lg:pt-44 pb-20 sm:pb-28 lg:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            {/* Left Column: Heading, Supporting Text & Dual CTAs */}
-            <div className="lg:col-span-7 space-y-8">
-              <ScrollReveal>
-                <SectionEyebrow>{heroSec.eyebrow || 'PATIENTS & PROFESSIONALS'}</SectionEyebrow>
-                <h1 className="editorial-heading text-4xl sm:text-5xl lg:text-6xl xl:text-[4.4rem] font-light text-brand-dark tracking-tight leading-[1.08] whitespace-pre-line">
-                  {heroSec.title}
-                </h1>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.1}>
-                <div className="space-y-3 text-lg sm:text-xl text-brand-muted font-normal max-w-xl leading-relaxed whitespace-pre-line">
-                  {heroSec.body}
-                </div>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.2}>
-                <div className="pt-2 flex flex-wrap items-center gap-4">
-                  {heroSec.cta_url && (
-                    heroSec.cta_url.startsWith('#') ? (
-                      <button
-                        onClick={() => scrollToSection(heroSec.cta_url)}
-                        className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-dark text-white text-sm font-semibold tracking-wide rounded-full hover:bg-brand-sage transition-all duration-300 shadow-sm group cursor-pointer"
-                      >
-                        <span>{heroSec.cta_text || 'For patients'}</span>
-                        <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
-                      </button>
-                    ) : (
-                      <Link
-                        to={heroSec.cta_url}
-                        className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-dark text-white text-sm font-semibold tracking-wide rounded-full hover:bg-brand-sage transition-all duration-300 shadow-sm group"
-                      >
-                        <span>{heroSec.cta_text || 'For patients'}</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                      </Link>
-                    )
-                  )}
-
-                  {heroSec.secondary_cta_url && (
-                    heroSec.secondary_cta_url.startsWith('#') ? (
-                      <button
-                        onClick={() => scrollToSection(heroSec.secondary_cta_url)}
-                        className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-surface border border-brand-border text-brand-dark text-sm font-medium rounded-full hover:bg-brand-ivory hover:border-brand-sage/40 transition-all duration-200 cursor-pointer group"
-                      >
-                        <span>{heroSec.secondary_cta_text || 'For healthcare professionals'}</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform text-brand-sage" />
-                      </button>
-                    ) : (
-                      <Link
-                        to={heroSec.secondary_cta_url}
-                        className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-surface border border-brand-border text-brand-dark text-sm font-medium rounded-full hover:bg-brand-ivory hover:border-brand-sage/40 transition-all duration-200 group"
-                      >
-                        <span>{heroSec.secondary_cta_text || 'For healthcare professionals'}</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform text-brand-sage" />
-                      </Link>
-                    )
-                  )}
-                </div>
-              </ScrollReveal>
-            </div>
-
-            {/* Right Column: Hero Healthcare Photograph */}
-            <div className="lg:col-span-5">
-              <ScrollReveal delay={0.2} direction="left">
-                <div className="relative group">
-                  <div className="overflow-hidden rounded-sm border border-brand-border shadow-sm">
-                    <FallbackImage
-                      src={heroSec.image_url || '/assets/hero-patients-professionals.jpg'}
-                      alt="Doctor speaking attentively with a patient and a family member in a warm clinical consultation room"
-                      aspectRatio="aspect-[4/3] sm:aspect-[5/4] lg:aspect-[4/5]"
-                      className="group-hover:scale-102 transition-transform duration-700"
-                    />
-                  </div>
-                  <div className="absolute -bottom-4 -left-4 hidden sm:block bg-brand-ivory/95 backdrop-blur-sm border border-brand-border p-4 shadow-sm max-w-xs rounded-sm">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-brand-sage">Shared Understanding</p>
-                    <p className="text-xs text-brand-muted mt-1">Connecting patient experience with clinical expertise.</p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            </div>
-          </div>
-        </section>
+        <PageBanner
+          title="Patients & Caregivers"
+          imageUrl={heroSec.image_url || '/assets/patients-caregivers.jpg'}
+          imageAlt="Patients and Caregivers - Onecore Pharma"
+        />
       )}
 
       {/* =========================================================================

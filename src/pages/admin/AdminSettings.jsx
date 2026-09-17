@@ -34,7 +34,7 @@ export default function AdminSettings() {
     safety_email: 'info@onecorepharma.in',
     phone: '8169255034',
     address: 'Onecore Pharma Corporate Headquarters, Bio-Innovation Park, Level 7, Mumbai, Maharashtra 400051, India',
-    office_hours: '10 AM to 7 PM',
+    office_hours: '10 AM - 7 PM',
     default_seo_title: 'Onecore Pharma — Purposeful Formulations, Dependable Quality',
     default_seo_desc: 'Onecore Pharma is a modern pharmaceutical company developing purposeful formulations and healthcare solutions centered on patients and healthcare professionals.',
   });

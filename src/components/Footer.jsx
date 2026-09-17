@@ -31,8 +31,8 @@ export default function Footer() {
   };
 
   const exploreList = parseLinks(siteSettings.footer_explore_links, footerLinks.explore);
-  const productList = parseLinks(siteSettings.footer_product_links, footerLinks.product);
-  const companyList = parseLinks(siteSettings.footer_company_links, footerLinks.company);
+  const areasOfCareList = footerLinks.areasOfCare;
+  const companyList = footerLinks.company;
 
   const handleAnchorClick = (path) => {
     if (path.includes('#')) {
@@ -84,13 +84,13 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 2: Product */}
+          {/* Column 2: Areas of Care */}
           <div className="space-y-4">
             <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-              Product
+              Areas of Care
             </h4>
-            <ul className="space-y-3 text-sm">
-              {productList.map((item) => (
+            <ul className="space-y-2.5 text-sm">
+              {areasOfCareList.map((item) => (
                 <li key={item.name}>
                   <Link
                     to={item.path}
@@ -110,18 +110,45 @@ export default function Footer() {
             <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-400">
               Company
             </h4>
-            <ul className="space-y-3 text-sm">
-              {companyList.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    to={item.path}
-                    className="text-gray-300 hover:text-white transition-colors flex items-center gap-1 group"
-                  >
-                    <span>{item.name}</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  </Link>
-                </li>
-              ))}
+            <ul className="space-y-2.5 text-sm">
+              {companyList.map((item) => {
+                const isOnecore = item.name.toLowerCase() === 'onecore';
+                const isExternal = item.isExternal || !isOnecore;
+                const hasValidUrl = item.path && item.path !== '#' && item.path !== '';
+
+                if (isOnecore) {
+                  return (
+                    <li key={item.name}>
+                      <Link
+                        to="/"
+                        className="text-gray-300 hover:text-white transition-colors flex items-center gap-1 group"
+                      >
+                        <span>{item.name}</span>
+                        <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                      </Link>
+                    </li>
+                  );
+                }
+
+                return (
+                  <li key={item.name}>
+                    <a
+                      href={hasValidUrl ? item.path : '#'}
+                      target={hasValidUrl ? '_blank' : undefined}
+                      rel={hasValidUrl ? 'noopener noreferrer' : undefined}
+                      className="text-gray-300 hover:text-white transition-colors flex items-center gap-1 group"
+                      onClick={(e) => {
+                        if (!hasValidUrl) {
+                          e.preventDefault();
+                        }
+                      }}
+                    >
+                      <span>{item.name}</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
@@ -139,4 +166,3 @@ export default function Footer() {
     </footer>
   );
 }
-

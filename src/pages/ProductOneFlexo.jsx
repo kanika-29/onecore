@@ -4,6 +4,7 @@ import { ChevronRight, ShieldAlert, Sparkles, ArrowDown, ArrowRight, Layers, Fil
 import SectionEyebrow from '../components/SectionEyebrow';
 import ScrollReveal from '../components/ScrollReveal';
 import FallbackImage from '../components/FallbackImage';
+import PageBanner from '../components/PageBanner';
 import { useProduct } from '../hooks/useProduct';
 
 export default function ProductOneFlexo() {
@@ -161,99 +162,13 @@ export default function ProductOneFlexo() {
   return (
     <div className="w-full bg-brand-ivory text-brand-text">
       {/* =========================================================================
-          SECTION 1 — PRODUCT HERO & BREADCRUMB
+          SECTION 1 — HERO / BANNER
           ========================================================================= */}
-      <section className="pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        {/* Breadcrumbs */}
-        <nav aria-label="Breadcrumb" className="mb-8 flex items-center gap-2 text-xs font-medium text-brand-muted">
-          <Link to="/areas-of-care" className="hover:text-brand-dark transition-colors">
-            Therapeutic Areas
-          </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-brand-muted/60" />
-          <Link to="/areas-of-care#orthopaedics" className="hover:text-brand-dark transition-colors">
-            Orthopaedics
-          </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-brand-muted/60" />
-          <span className="text-brand-dark font-semibold">{brandName}</span>
-        </nav>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          {/* Left Column: Eyebrow, H1, Formulation Highlights */}
-          <div className="lg:col-span-6 space-y-8">
-            <ScrollReveal>
-              <SectionEyebrow>{product?.therapeutic_area_name || 'ORTHOPAEDICS'}</SectionEyebrow>
-              <h1 className="editorial-heading text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-light text-brand-dark tracking-tight leading-[1.04]">
-                One<span className="font-semibold text-brand-text">FLEXO</span>
-              </h1>
-              <p className="text-xs font-mono font-semibold tracking-widest uppercase text-brand-sage pt-1">
-                {tagline}
-              </p>
-            </ScrollReveal>
-
-            {/* Formulation Highlights */}
-            <ScrollReveal delay={0.1}>
-              <div className="space-y-3 pt-2">
-                <span className="text-xs font-mono uppercase tracking-widest text-brand-muted block">
-                  FORMULATION HIGHLIGHTS
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {compositionItems.slice(0, 3).map((item) => (
-                    <div key={item.name} className="p-4 bg-brand-surface border border-brand-border rounded-sm space-y-1">
-                      <span className="text-xs font-semibold text-brand-dark block">{item.name}</span>
-                      <span className="text-lg font-light font-mono text-brand-sage font-bold">{item.amount}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.15}>
-              <div className="pt-2 flex items-center gap-4">
-                <button
-                  onClick={() => scrollToSection('description')}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-dark text-white text-sm font-semibold rounded-full hover:bg-brand-sage transition-all duration-300 shadow-sm cursor-pointer group"
-                >
-                  <span>Explore Formulation</span>
-                  <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
-                </button>
-                <button
-                  onClick={() => scrollToSection('safety')}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-surface border border-brand-border text-brand-dark text-sm font-medium rounded-full hover:bg-brand-ivory transition-all duration-200 cursor-pointer"
-                >
-                  <span>Safety Information</span>
-                </button>
-              </div>
-            </ScrollReveal>
-          </div>
-
-          {/* Right Column: Large Packshot Focus */}
-          <div className="lg:col-span-6 flex justify-center">
-            <ScrollReveal delay={0.2} direction="left">
-              <div className="relative p-6 sm:p-10 bg-gradient-to-b from-brand-surface/70 via-brand-ivory to-brand-surface/40 border border-brand-border rounded-sm shadow-sm max-w-lg w-full flex flex-col items-center group">
-                <div className="w-full flex justify-between items-center text-[11px] font-mono text-brand-muted pb-4 border-b border-brand-border/60">
-                  <span className="font-semibold text-brand-dark">ONECORE PHARMA</span>
-                  <span>PRODUCT REF // OC-FLX</span>
-                </div>
-
-                <div className="my-6 w-full flex justify-center overflow-hidden">
-                  <img
-                    src={packshotUrl}
-                    alt={`${brandName} specialised formulation packshot`}
-                    className="w-full max-w-[340px] h-auto object-contain transition-transform duration-700 group-hover:scale-103"
-                  />
-                </div>
-
-                <div className="w-full pt-4 border-t border-brand-border/60 flex items-center justify-between text-xs text-brand-muted">
-                  <span>
-                    Triple Ingredient Matrix
-                  </span>
-                  <span className="font-mono text-[11px]">ORTHOPAEDIC RANGE</span>
-                </div>
-              </div>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
+      <PageBanner
+        title="OneFLEXO"
+        imageUrl="/assets/therapeutic-orthopaedics.jpg"
+        imageAlt="OneFLEXO - Onecore Pharma"
+      />
 
       {/* =========================================================================
           SECTION 9 — STICKY SUB-NAVIGATION

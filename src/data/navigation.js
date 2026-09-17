@@ -14,14 +14,25 @@ export const footerLinks = {
     { name: "Quality & Manufacturing", path: "/quality-manufacturing" },
     { name: "Contact", path: "/contact" },
   ],
-  product: [
-    { name: "Product Information", path: "/areas-of-care" },
-    { name: "Business & Distribution", path: "/contact" },
-    { name: "Safety Reporting", path: "/patients-caregivers#patient-safety" },
+  areasOfCare: [
+    { name: "Women's Health", path: "/areas-of-care#womens-health" },
+    { name: "Pediatrics", path: "/areas-of-care#paediatrics" },
+    { name: "Orthopaedics", path: "/areas-of-care#orthopaedics" },
+    { name: "Neurology", path: "/areas-of-care#neurology" },
+    { name: "Ophthalmology", path: "/areas-of-care#ophthalmology" },
+    { name: "Dermatology", path: "/areas-of-care#dermatology" },
+    { name: "ENT", path: "/areas-of-care#ent" },
+    { name: "General Medicine", path: "/areas-of-care#general-medicine" },
+    { name: "Oncology", path: "/areas-of-care#oncology" },
   ],
   company: [
-    { name: "News", path: "/news" },
-    { name: "Privacy", path: "/privacy" },
-    { name: "Disclaimer", path: "/disclaimer" },
+    { name: "Zeovus Sports", path: "#", isExternal: true },
+    { name: "Zeovus Vet", path: "#", isExternal: true },
+    { name: "Zeovus Life", path: "#", isExternal: true },
+    { name: "Zeovus Food", path: "#", isExternal: true },
+    { name: "Onecore", path: "/", isExternal: false },
+    { name: "Xearma", path: "#", isExternal: true },
+    { name: "Zeovus Health", path: "#", isExternal: true },
+    { name: "Zeovus Herbs", path: "#", isExternal: true },
   ]
 };

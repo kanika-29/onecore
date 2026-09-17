@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight, ShieldCheck, Cpu, Leaf, Layers, RefreshCw, Us
 import SectionEyebrow from '../components/SectionEyebrow';
 import ScrollReveal from '../components/ScrollReveal';
 import FallbackImage from '../components/FallbackImage';
+import PageBanner from '../components/PageBanner';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { useTherapeuticAreas } from '../hooks/useTherapeuticAreas';
 import { useNews } from '../hooks/useNews';
@@ -16,7 +17,7 @@ export default function Home() {
   // Fallbacks matching approved design & copy
   const heroSec = getSection('hero', {
     eyebrow: 'ABOUT ONECORE',
-    title: 'Healthcare is personal. \nOur approach should be too.',
+    title: 'Committed to better tomorrow',
     body: 'Onecore Pharma is a pharmaceutical company focused on purposeful formulations, dependable quality and the needs of patients and healthcare professionals.',
     cta_text: 'Discover Onecore',
     cta_url: '/about',
@@ -153,54 +154,14 @@ export default function Home() {
   return (
     <div className="w-full">
       {/* =========================================================================
-          SECTION 1 — HERO
+          SECTION 1 — HERO / BANNER
           ========================================================================= */}
       {heroSec.is_active && (
-        <section className="pt-32 sm:pt-40 lg:pt-44 pb-16 sm:pb-24 lg:pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            {/* Left Column: Heading & Copy (Top-Aligned) */}
-            <div className="lg:col-span-7 space-y-8">
-              <ScrollReveal>
-                <SectionEyebrow>{heroSec.eyebrow || 'ABOUT ONECORE'}</SectionEyebrow>
-                <h1 className="editorial-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light text-brand-dark tracking-tight leading-[1.08] whitespace-pre-line">
-                  {heroSec.title}
-                </h1>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.1}>
-                <p className="text-lg sm:text-xl text-brand-muted font-normal max-w-2xl leading-relaxed whitespace-pre-line">
-                  {heroSec.body}
-                </p>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.15}>
-                <div className="pt-2 flex flex-wrap items-center gap-4">
-                  <Link
-                    to={heroSec.cta_url || '/about'}
-                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-dark text-white text-sm font-semibold tracking-wide rounded-full hover:bg-brand-sage transition-all duration-300 shadow-sm group"
-                  >
-                    <span>{heroSec.cta_text || 'Discover Onecore'}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </ScrollReveal>
-            </div>
-
-            {/* Right Column: Hero Visual Asset (Top-Aligned) */}
-            <div className="lg:col-span-5">
-              <ScrollReveal delay={0.15} direction="left">
-                <div className="relative rounded-sm overflow-hidden border border-brand-border shadow-sm">
-                  <FallbackImage
-                    src={heroSec.image_url || '/assets/hero-healthcare.jpg'}
-                    alt="Onecore Pharma clinical and research environment"
-                    aspectRatio="aspect-[4/3] sm:aspect-[4/3] lg:aspect-[4/3]"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </ScrollReveal>
-            </div>
-          </div>
-        </section>
+        <PageBanner
+          title="Committed to better tomorrow"
+          imageUrl={heroSec.image_url || '/assets/hero-healthcare.jpg'}
+          imageAlt="Onecore Pharma - Committed to better tomorrow"
+        />
       )}
 
       {/* =========================================================================

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import PageHero from '../components/PageHero';
+import PageBanner from '../components/PageBanner';
 import ScrollReveal from '../components/ScrollReveal';
 
 export default function Disclaimer() {
@@ -9,10 +9,10 @@ export default function Disclaimer() {
 
   return (
     <div className="w-full bg-brand-ivory text-brand-text">
-      <PageHero
-        eyebrow="LEGAL & REGULATORY"
+      <PageBanner
         title="Disclaimer"
-        description="Important legal, medical, and corporate informational statements regarding Onecore Pharma communications."
+        imageUrl="/assets/hero-healthcare.jpg"
+        imageAlt="Disclaimer - Onecore Pharma"
       />
 
       <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-12">

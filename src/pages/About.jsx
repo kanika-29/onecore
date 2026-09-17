@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ScrollReveal from '../components/ScrollReveal';
 import FallbackImage from '../components/FallbackImage';
+import PageBanner from '../components/PageBanner';
 import { ArrowRight, ShieldCheck, HeartPulse, Layers, Award, Sparkles } from 'lucide-react';
 import { useCmsPage } from '../hooks/useCmsPage';
 
@@ -14,7 +15,7 @@ export default function About() {
 
   const heroSec = getSection('hero', {
     eyebrow: 'ABOUT ONECORE',
-    title: 'Purposeful formulations. Dependable quality. Patient-centered care.',
+    title: 'About Onecore',
     body: 'Onecore Pharma is built around the belief that modern pharmaceutical science achieves its highest impact when aligned closely with the clinical reality of patients and doctors.',
     poster_url: '/assets/about-video-poster.jpg',
   });
@@ -105,57 +106,14 @@ export default function About() {
   return (
     <div className="w-full bg-brand-ivory text-brand-text">
       {/* =========================================================================
-          SECTION 1 — HERO / EDITORIAL STATEMENT & VIDEO COMPOSITION
+          SECTION 1 — HERO / BANNER
           ========================================================================= */}
       {heroSec.is_active && (
-        <section className="pt-32 pb-20 sm:pt-40 sm:pb-28 lg:pb-32 border-b border-brand-border/60 bg-gradient-to-b from-brand-surface/60 to-brand-ivory">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-              {/* Left Column: Heading & Supporting Text */}
-              <div className="lg:col-span-6 space-y-6 sm:space-y-8">
-                <ScrollReveal>
-                  <h1 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl xl:text-5xl font-light text-brand-dark tracking-tight leading-[1.14] whitespace-pre-line">
-                    {heroSec.title || 'Purposeful formulations. Dependable quality. Patient-centered care.'}
-                  </h1>
-                </ScrollReveal>
-
-                <ScrollReveal delay={0.1}>
-                  <p className="text-base sm:text-lg lg:text-xl text-brand-muted leading-relaxed font-normal max-w-xl whitespace-pre-line">
-                    {heroSec.body || 'Onecore Pharma is built around the belief that modern pharmaceutical science achieves its highest impact when aligned closely with the clinical reality of patients and doctors.'}
-                  </p>
-                </ScrollReveal>
-              </div>
-
-              {/* Right Column: Video / Visual Composition */}
-              <div className="lg:col-span-6">
-                <ScrollReveal delay={0.15} direction="left">
-                  <div className="relative rounded-sm overflow-hidden border border-brand-border shadow-sm bg-brand-dark aspect-[16/9] flex items-center justify-center group">
-                    {heroSec.video_url ? (
-                      <video
-                        src={heroSec.video_url}
-                        poster={heroSec.poster_url || heroSec.image_url || '/assets/about-video-poster.jpg'}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="relative w-full h-full">
-                        <FallbackImage
-                          src={heroSec.poster_url || heroSec.image_url || '/assets/about-video-poster.jpg'}
-                          alt="Onecore Pharma pharmaceutical science and clinical care"
-                          aspectRatio="aspect-[16/9]"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                  </div>
-                </ScrollReveal>
-              </div>
-            </div>
-          </div>
-        </section>
+        <PageBanner
+          title="About Onecore"
+          imageUrl={heroSec.image_url || heroSec.poster_url || '/assets/about-facility.jpg'}
+          imageAlt="About Onecore Pharma"
+        />
       )}
 
       {/* =========================================================================

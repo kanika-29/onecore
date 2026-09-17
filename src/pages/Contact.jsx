@@ -4,6 +4,7 @@ import { Mail, Phone, Clock, ArrowRight, ArrowDown, CheckCircle2, ShieldAlert, A
 import SectionEyebrow from '../components/SectionEyebrow';
 import ScrollReveal from '../components/ScrollReveal';
 import FallbackImage from '../components/FallbackImage';
+import PageBanner from '../components/PageBanner';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { useSettings } from '../hooks/useSettings';
 
@@ -13,22 +14,23 @@ export default function Contact() {
 
   const displayEmail = contact?.general_email || contact?.email || 'info@onecorepharma.in';
   const displayPhone = contact?.phone || '8169255034';
-  const displayHours = contact?.office_hours || contact?.business_hours || '10 AM to 7 PM';
+  const displayHours = contact?.office_hours || contact?.business_hours || '10 AM - 7 PM';
 
   const heroSec = getSection('hero', {
     eyebrow: 'CONTACT ONECORE',
-    title: 'Start a conversation with Onecore.',
+    title: 'Contact',
     body: 'Whether you are looking for product information, exploring a business opportunity or simply want to reach our team, we will help direct your enquiry to the appropriate place.',
     cta_text: 'Send an Enquiry',
     cta_url: '#enquiry-form',
     secondary_cta_text: 'Contact Details',
     secondary_cta_url: '#contact-details',
-    image_url: '/assets/patients-caregivers.jpg',
+    image_url: '/assets/contact-hero.jpg',
   });
 
   const channelsSec = getSection('direct_channels', {
     eyebrow: 'GET IN TOUCH',
-    title: 'Direct Communication Channels',
+    title: 'Contact',
+    subheading: 'We’d love to hear from you. Whether you’re a healthcare professional interested in our products or a patient seeking more information, reach out to us',
     items: [
       {
         channel: 'EMAIL',
@@ -182,15 +184,8 @@ export default function Contact() {
 
     if (!formData.email.trim()) {
       newErrors.email = "Please enter your email address.";
-    } else {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.email.trim())) {
-        newErrors.email = "Please enter a valid email address.";
-      }
-    }
-
-    if (!formData.contactType) {
-      newErrors.contactType = "Please select who you are contacting Onecore as.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address.";
     }
 
     if (!formData.natureOfEnquiry) {
@@ -198,15 +193,26 @@ export default function Contact() {
     }
 
     if (!formData.message.trim()) {
-      newErrors.message = "Please enter your message.";
+      newErrors.message = "Please provide your message or enquiry details.";
     }
 
     if (!formData.consent) {
-      newErrors.consent = "You must agree to the privacy policy to submit this enquiry.";
+      newErrors.consent = "Please confirm your agreement before submitting.";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -217,26 +223,26 @@ export default function Contact() {
     try {
       await fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fullName: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          organisation: formData.organisation,
-          contactType: formData.contactType,
-          natureOfEnquiry: formData.natureOfEnquiry,
-          message: formData.message,
-          consent: formData.consent,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
-      setIsSubmitting(false);
       setIsSubmitted(true);
+      setFormData({
+        fullName: '',
+        email: '',
+        phone: '',
+        organisation: '',
+        contactType: '',
+        natureOfEnquiry: '',
+        message: '',
+        consent: false,
+      });
     } catch (err) {
-      console.warn('Contact submission error:', err);
-      setIsSubmitting(false);
+      console.warn('Enquiry submission error:', err);
+      // Still show success or handle gracefully
       setIsSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -250,71 +256,18 @@ export default function Contact() {
   return (
     <div className="w-full bg-brand-ivory text-brand-text">
       {/* =========================================================================
-          SECTION 1 — HERO — CONTACT ONECORE
+          SECTION 1 — HERO / BANNER
           ========================================================================= */}
       {heroSec.is_active && (
-        <section className="pt-32 sm:pt-40 lg:pt-44 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            {/* Left Column: Eyebrow, H1, Text */}
-            <div className="lg:col-span-7 space-y-8">
-              <ScrollReveal>
-                <SectionEyebrow>{heroSec.eyebrow || 'CONTACT ONECORE'}</SectionEyebrow>
-                <h1 className="editorial-heading text-4xl sm:text-5xl lg:text-6xl xl:text-[4.4rem] font-light text-brand-dark tracking-tight leading-[1.08] whitespace-pre-line">
-                  {heroSec.title}
-                </h1>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.1}>
-                <p className="text-lg sm:text-xl text-brand-muted font-normal max-w-xl leading-relaxed whitespace-pre-line">
-                  {heroSec.body}
-                </p>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.15}>
-                <div className="pt-2 flex items-center gap-4">
-                  {heroSec.cta_url && (
-                    <a
-                      href={heroSec.cta_url}
-                      className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-dark text-white text-sm font-semibold rounded-full hover:bg-brand-sage transition-all duration-300 shadow-sm cursor-pointer group"
-                    >
-                      <span>{heroSec.cta_text || 'Send an Enquiry'}</span>
-                      <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
-                    </a>
-                  )}
-                  {heroSec.secondary_cta_url && (
-                    <a
-                      href={heroSec.secondary_cta_url}
-                      className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-surface border border-brand-border text-brand-dark text-sm font-medium rounded-full hover:bg-brand-ivory transition-all duration-200 cursor-pointer"
-                    >
-                      <span>{heroSec.secondary_cta_text || 'Contact Details'}</span>
-                    </a>
-                  )}
-                </div>
-              </ScrollReveal>
-            </div>
-
-            {/* Right Column: Hero Visual Asset */}
-            <div className="lg:col-span-5">
-              <ScrollReveal delay={0.2} direction="left">
-                <div className="relative rounded-sm overflow-hidden border border-brand-border shadow-sm">
-                  <FallbackImage
-                    src={heroSec.image_url || '/assets/patients-caregivers.jpg'}
-                    alt="Onecore Pharma customer support and medical dialogue"
-                    aspectRatio="aspect-[4/3] sm:aspect-[5/4] lg:aspect-[4/5]"
-                  />
-                  <div className="p-4 bg-brand-ivory/95 backdrop-blur-sm border-t border-brand-border">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-brand-sage">Dedicated Response</p>
-                    <p className="text-xs text-brand-muted mt-0.5">Enquiries are reviewed and routed to the appropriate department.</p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            </div>
-          </div>
-        </section>
+        <PageBanner
+          title={heroSec.title || "Contact"}
+          imageUrl={heroSec.image_url || '/assets/contact-hero.jpg'}
+          imageAlt="Contact - Onecore Pharma"
+        />
       )}
 
       {/* =========================================================================
-          SECTION 2 — GET IN TOUCH
+          SECTION 2 — GET IN TOUCH / CONTACT
           ========================================================================= */}
       {channelsSec.is_active && (
         <section id="contact-details" className="py-20 sm:py-28 bg-brand-surface/70 border-y border-brand-border/80 scroll-mt-24">
@@ -322,8 +275,13 @@ export default function Contact() {
             <ScrollReveal>
               <SectionEyebrow>{channelsSec.eyebrow || 'GET IN TOUCH'}</SectionEyebrow>
               <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight whitespace-pre-line">
-                {channelsSec.title || 'Direct Communication Channels'}
+                {channelsSec.title || 'Contact'}
               </h2>
+              {(channelsSec.subheading || channelsSec.body) && (
+                <p className="text-lg sm:text-xl text-brand-muted font-normal max-w-2xl leading-relaxed pt-3">
+                  {channelsSec.subheading || channelsSec.body}
+                </p>
+              )}
             </ScrollReveal>
 
             {/* Large Typography Contact Rows */}

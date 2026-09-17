@@ -3,6 +3,7 @@ import { ArrowRight, ArrowDown, Check, FileText, Download, Building2, UserCheck,
 import SectionEyebrow from '../components/SectionEyebrow';
 import ScrollReveal from '../components/ScrollReveal';
 import FallbackImage from '../components/FallbackImage';
+import PageBanner from '../components/PageBanner';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { useTherapeuticAreas } from '../hooks/useTherapeuticAreas';
 
@@ -12,7 +13,7 @@ export default function AreasOfCare() {
 
   const heroSec = getSection('hero', {
     eyebrow: 'THERAPEUTIC AREAS',
-    title: 'Healthcare needs are different. \nSo are the solutions they require.',
+    title: 'Areas of Care',
     body: 'Explore the areas of care represented across the Onecore portfolio and discover the medicines and formulations within each specialty.',
     image_url: '/assets/therapeutic-hero.jpg',
   });
@@ -68,14 +69,14 @@ export default function AreasOfCare() {
   const scrollToSpecialty = (id) => {
     const el = document.getElementById(id);
     if (el) {
-      const yOffset = -90;
+      const yOffset = -80;
       const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
   const scrollToCatalogueForm = () => {
-    const el = document.getElementById('catalogue-request-form');
+    const el = document.getElementById('catalogue-form-section');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
@@ -119,59 +120,14 @@ export default function AreasOfCare() {
   return (
     <div className="w-full">
       {/* =========================================================================
-          SECTION 1 — HERO
+          SECTION 1 — HERO / BANNER
           ========================================================================= */}
       {heroSec.is_active && (
-        <section className="pt-32 sm:pt-40 lg:pt-44 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            {/* Left Column: H1 and Copy */}
-            <div className="lg:col-span-7 space-y-8">
-              <ScrollReveal>
-                <h1 className="editorial-heading text-4xl sm:text-5xl lg:text-6xl xl:text-[4.4rem] font-light text-brand-dark tracking-tight leading-[1.08] whitespace-pre-line">
-                  {heroSec.title}
-                </h1>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.1}>
-                <p className="text-lg sm:text-xl text-brand-muted font-normal max-w-2xl leading-relaxed whitespace-pre-line">
-                  {heroSec.body}
-                </p>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.15}>
-                <div className="pt-2 flex items-center gap-4">
-                  <button
-                    onClick={() => scrollToSpecialty(areasList[0]?.id || 'womens-health')}
-                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-dark text-white text-sm font-semibold rounded-full hover:bg-brand-sage transition-all duration-300 shadow-sm cursor-pointer group"
-                  >
-                    <span>Explore Specialties</span>
-                    <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
-                  </button>
-                  <button
-                    onClick={scrollToCatalogueForm}
-                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-surface border border-brand-border text-brand-dark text-sm font-medium rounded-full hover:bg-brand-ivory transition-all duration-200 cursor-pointer"
-                  >
-                    <span>Product Catalogue</span>
-                  </button>
-                </div>
-              </ScrollReveal>
-            </div>
-
-            {/* Right Column: Hero Visual Asset (Top-Aligned) */}
-            <div className="lg:col-span-5">
-              <ScrollReveal delay={0.2} direction="left">
-                <div className="relative rounded-sm overflow-hidden border border-brand-border shadow-sm">
-                  <FallbackImage
-                    src={heroSec.image_url || '/assets/therapeutic-hero.jpg'}
-                    alt="Multidisciplinary pharmaceutical research and healthcare clinical environment"
-                    aspectRatio="aspect-[4/3]"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </ScrollReveal>
-            </div>
-          </div>
-        </section>
+        <PageBanner
+          title="Areas of Care"
+          imageUrl={heroSec.image_url || '/assets/therapeutic-hero.jpg'}
+          imageAlt="Areas of Care - Onecore Pharma"
+        />
       )}
 
       {/* =========================================================================

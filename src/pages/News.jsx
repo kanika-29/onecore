@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import ScrollReveal from '../components/ScrollReveal';
 import FallbackImage from '../components/FallbackImage';
+import PageBanner from '../components/PageBanner';
 import { useNews } from '../hooks/useNews';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { ArrowRight, Clock } from 'lucide-react';
@@ -15,8 +16,9 @@ export default function News() {
 
   const heroSec = getSection('hero', {
     eyebrow: 'NEWS & PERSPECTIVES',
-    title: 'Insights, clinical updates and formulation perspectives.',
+    title: 'News',
     body: 'Stay updated with therapeutic breakthroughs, clinical partnership highlights, and sustainable manufacturing practices from Onecore Pharma.',
+    image_url: '/assets/news-1.jpg',
   });
 
   const featuredArticle = newsArticles.length > 0 ? newsArticles[0] : null;
@@ -25,31 +27,13 @@ export default function News() {
   return (
     <div className="w-full bg-brand-ivory text-brand-text">
       {/* =========================================================================
-          HERO SECTION — Balanced 2-Column Editorial Header
+          HERO / BANNER
           ========================================================================= */}
-      <section className="pt-32 pb-16 sm:pt-40 sm:pb-24 border-b border-brand-border/60 bg-gradient-to-b from-brand-surface/60 to-brand-ivory">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
-            {/* Main Title Column */}
-            <div className="lg:col-span-7 space-y-4">
-              <ScrollReveal>
-                <h1 className="editorial-heading text-4xl sm:text-5xl lg:text-6xl font-light text-brand-dark tracking-tight leading-[1.1]">
-                  {heroSec.title || 'Insights, clinical updates and formulation perspectives.'}
-                </h1>
-              </ScrollReveal>
-            </div>
-
-            {/* Supporting Description Column */}
-            <div className="lg:col-span-5 lg:pb-1">
-              <ScrollReveal delay={0.1}>
-                <p className="text-base sm:text-lg lg:text-xl text-brand-muted leading-relaxed font-normal">
-                  {heroSec.body || 'Stay updated with therapeutic breakthroughs, clinical partnership highlights, and sustainable manufacturing practices from Onecore Pharma.'}
-                </p>
-              </ScrollReveal>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PageBanner
+        title="News"
+        imageUrl={heroSec.image_url || '/assets/news-1.jpg'}
+        imageAlt="News - Onecore Pharma"
+      />
 
       {/* =========================================================================
           NEWS & PERSPECTIVES ARTICLES SECTION

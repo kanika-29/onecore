@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 
 const defaultContact = {
-  general_email: 'contact@onecorepharma.com',
-  product_email: 'productinfo@onecorepharma.com',
-  business_email: 'commercial@onecorepharma.com',
-  careers_email: 'careers@onecorepharma.com',
-  safety_email: 'patientsafety@onecorepharma.com',
-  phone: '+91 (0) 22 4500 8900',
+  general_email: 'info@onecorepharma.in',
+  product_email: 'info@onecorepharma.in',
+  business_email: 'info@onecorepharma.in',
+  careers_email: 'info@onecorepharma.in',
+  safety_email: 'info@onecorepharma.in',
+  phone: '8169255034',
   address: 'Onecore Pharma Corporate Headquarters, Bio-Innovation Park, Level 7, Mumbai, Maharashtra 400051, India',
-  office_hours: 'Monday to Friday, 9:00 AM – 6:00 PM IST',
+  office_hours: '10 AM - 7 PM',
 };
 
 export function useSettings() {
@@ -37,11 +37,11 @@ export function useSettings() {
 
         const c = json.data.contactSettings || {};
         setContact({
-          general_email: map.general_email || c.email || defaultContact.general_email,
-          product_email: map.product_email || c.email || defaultContact.product_email,
-          business_email: map.business_email || c.email || defaultContact.business_email,
-          careers_email: map.careers_email || c.email || defaultContact.careers_email,
-          safety_email: map.safety_email || c.email || defaultContact.safety_email,
+          general_email: map.general_email || map.contact_email || c.email || defaultContact.general_email,
+          product_email: map.product_email || map.contact_email || c.email || defaultContact.product_email,
+          business_email: map.business_email || map.contact_email || c.email || defaultContact.business_email,
+          careers_email: map.careers_email || map.contact_email || c.email || defaultContact.careers_email,
+          safety_email: map.safety_email || map.contact_email || c.email || defaultContact.safety_email,
           phone: map.phone || map.contact_phone || c.phone || defaultContact.phone,
           address: map.address || defaultContact.address,
           office_hours: map.office_hours || map.contact_hours || c.business_hours || defaultContact.office_hours,
@@ -62,4 +62,3 @@ export function useSettings() {
 
   return { contact, siteSettings, loading };
 }
-
