@@ -17,24 +17,30 @@ export function useTherapeuticAreas() {
         if (!isMounted || !json.success || !Array.isArray(json.data) || json.data.length === 0) return;
 
         const divisionMap = {
-          'oncology': { divisionName: 'Cytos', therapeuticArea: 'Oncology' },
-          'paediatrics': { divisionName: 'Pediaplus', therapeuticArea: 'Pediatrics' },
-          'pediatrics': { divisionName: 'Pediaplus', therapeuticArea: 'Pediatrics' },
-          'ent': { divisionName: 'OTIRA', therapeuticArea: 'ENT' },
-          'womens-health': { divisionName: 'Femme', therapeuticArea: "Women's Health" },
-          'general-medicine': { divisionName: 'Omnara', therapeuticArea: 'General' },
-          'general': { divisionName: 'Omnara', therapeuticArea: 'General' },
-          'dermatology': { divisionName: 'Vellis', therapeuticArea: 'Dermatology' },
-          'ophthalmology': { divisionName: 'Eyerix', therapeuticArea: 'Ophthalmology' },
-          'neurology': { divisionName: 'Neurix', therapeuticArea: 'Neurology' },
-          'orthopaedics': { divisionName: 'Ortheon', therapeuticArea: 'Orthopedic' },
-          'orthopedic': { divisionName: 'Ortheon', therapeuticArea: 'Orthopedic' },
+          'oncology': { divisionName: 'Cytos', therapeuticArea: 'Oncology', fallbackImage: '/assets/therapeutic-oncology.jpg' },
+          'paediatrics': { divisionName: 'Pediaplus', therapeuticArea: 'Pediatrics', fallbackImage: '/assets/therapeutic-paediatrics.jpg' },
+          'pediatrics': { divisionName: 'Pediaplus', therapeuticArea: 'Pediatrics', fallbackImage: '/assets/therapeutic-paediatrics.jpg' },
+          'ent': { divisionName: 'OTIRA', therapeuticArea: 'ENT', fallbackImage: '/assets/therapeutic-ent.jpg' },
+          'womens-health': { divisionName: 'Femme', therapeuticArea: "Women's Health", fallbackImage: '/assets/therapeutic-womens-health.jpg' },
+          'general-medicine': { divisionName: 'Omnara', therapeuticArea: 'General', fallbackImage: '/assets/therapeutic-general-medicine.jpg' },
+          'general': { divisionName: 'Omnara', therapeuticArea: 'General', fallbackImage: '/assets/therapeutic-general-medicine.jpg' },
+          'dermatology': { divisionName: 'Vellis', therapeuticArea: 'Dermatology', fallbackImage: '/assets/therapeutic-dermatology.jpg' },
+          'ophthalmology': { divisionName: 'Eyerix', therapeuticArea: 'Ophthalmology', fallbackImage: '/assets/therapeutic-ophthalmology.jpg' },
+          'neurology': { divisionName: 'Neurix', therapeuticArea: 'Neurology', fallbackImage: '/assets/therapeutic-neurology.jpg' },
+          'orthopaedics': { divisionName: 'Ortheon', therapeuticArea: 'Orthopaedics', fallbackImage: '/assets/therapeutic-orthopaedics.jpg' },
+          'orthopedic': { divisionName: 'Ortheon', therapeuticArea: 'Orthopaedics', fallbackImage: '/assets/therapeutic-orthopaedics.jpg' },
         };
+
+        const fallbackImageMap = Object.fromEntries(fallbackAreas.map((a) => [a.id, a.image]));
 
         // Map API objects to the format expected by components
         const formatted = json.data.map((item, idx) => {
           const slug = item.slug || `area-${item.id}`;
-          const mapInfo = divisionMap[slug] || divisionMap[item.name?.toLowerCase().replace(/\s+/g, '-')] || {};
+          const normalizedSlug = slug.toLowerCase().replace(/\s+/g, '-');
+          const normalizedName = (item.name || '').toLowerCase().replace(/['’]/g, '').replace(/\s+/g, '-');
+          const mapInfo = divisionMap[normalizedSlug] || divisionMap[normalizedName] || {};
+          const defaultImg = mapInfo.fallbackImage || fallbackImageMap[normalizedSlug] || '/assets/therapeutic-general-medicine.jpg';
+
           return {
             id: slug,
             dbId: item.id,
@@ -43,9 +49,10 @@ export function useTherapeuticAreas() {
             displayName: mapInfo.therapeuticArea || item.name || '',
             divisionName: item.division_name || mapInfo.divisionName || '',
             therapeuticArea: mapInfo.therapeuticArea || item.name || '',
-            heading: item.short_description || '',
-            description: item.full_description || item.short_description || '',
-            image: item.image_url || '/assets/therapeutic-general-medicine.jpg',
+            heading: item.heading || item.short_description || '',
+            description: item.description || item.full_description || item.short_description || '',
+            image: item.image_url || defaultImg,
+            image_url: item.image_url || defaultImg,
             isActive: item.is_active !== 0,
           };
         });

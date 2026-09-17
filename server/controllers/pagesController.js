@@ -77,7 +77,22 @@ export const updatePage = async (req, res, next) => {
 export const createPageSection = async (req, res, next) => {
   try {
     const { pageId } = req.params;
-    const { section_key, section_type, eyebrow, heading, subheading, body, items_json, cta_text, cta_url, image_url, display_order, is_active } = req.body;
+    const {
+      section_key,
+      section_type,
+      eyebrow,
+      heading,
+      subheading,
+      body,
+      items_json,
+      cta_text,
+      cta_url,
+      secondary_cta_text,
+      secondary_cta_url,
+      image_url,
+      display_order,
+      is_active,
+    } = req.body;
 
     if (!section_key || !section_key.trim()) {
       return res.status(400).json({ success: false, message: 'Section key identifier is required.' });
@@ -92,8 +107,8 @@ export const createPageSection = async (req, res, next) => {
 
     const result = await query(`
       INSERT INTO page_sections 
-        (page_id, section_key, section_type, eyebrow, heading, subheading, body, items_json, cta_text, cta_url, image_url, display_order, is_active)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (page_id, section_key, section_type, eyebrow, heading, subheading, body, items_json, cta_text, cta_url, secondary_cta_text, secondary_cta_url, image_url, display_order, is_active)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
       pageId,
       section_key.trim().toLowerCase().replace(/\s+/g, '_'),
@@ -105,6 +120,8 @@ export const createPageSection = async (req, res, next) => {
       items_json || null,
       cta_text || null,
       cta_url || null,
+      secondary_cta_text || null,
+      secondary_cta_url || null,
       image_url || null,
       order,
       is_active !== undefined ? (is_active ? 1 : 0) : 1
@@ -123,7 +140,21 @@ export const createPageSection = async (req, res, next) => {
 export const updatePageSection = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { eyebrow, heading, subheading, body, items_json, cta_text, cta_url, image_url, is_active, display_order, section_type } = req.body;
+    const {
+      eyebrow,
+      heading,
+      subheading,
+      body,
+      items_json,
+      cta_text,
+      cta_url,
+      secondary_cta_text,
+      secondary_cta_url,
+      image_url,
+      is_active,
+      display_order,
+      section_type,
+    } = req.body;
 
     const updates = [];
     const params = [];
@@ -135,6 +166,8 @@ export const updatePageSection = async (req, res, next) => {
     if (items_json !== undefined) { updates.push('items_json = ?'); params.push(items_json); }
     if (cta_text !== undefined) { updates.push('cta_text = ?'); params.push(cta_text); }
     if (cta_url !== undefined) { updates.push('cta_url = ?'); params.push(cta_url); }
+    if (secondary_cta_text !== undefined) { updates.push('secondary_cta_text = ?'); params.push(secondary_cta_text); }
+    if (secondary_cta_url !== undefined) { updates.push('secondary_cta_url = ?'); params.push(secondary_cta_url); }
     if (image_url !== undefined) { updates.push('image_url = ?'); params.push(image_url); }
     if (is_active !== undefined) { updates.push('is_active = ?'); params.push(is_active ? 1 : 0); }
     if (display_order !== undefined) { updates.push('display_order = ?'); params.push(display_order); }

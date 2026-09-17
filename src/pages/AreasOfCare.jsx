@@ -175,66 +175,44 @@ export default function AreasOfCare() {
       )}
 
       {/* =========================================================================
-          SECTION 2 — BROWSE BY SPECIALTY (Sticky Navigation with Scrollspy)
+          SECTION 2 — SPECIALTY NAVIGATION (Sticky Navigation with Scrollspy)
           ========================================================================= */}
       <nav
         aria-label="Browse by specialty"
-        className="sticky top-[72px] z-30 bg-brand-ivory/95 backdrop-blur-md border-y border-brand-border py-4 shadow-sm"
+        className="sticky top-[72px] z-30 bg-brand-ivory/95 backdrop-blur-md border-y border-brand-border/80 py-3.5 sm:py-4 shadow-2xs"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="text-[11px] font-mono font-semibold uppercase tracking-widest text-brand-muted">
-                BROWSE BY SPECIALTY
-              </span>
-            </div>
-
-            {/* Horizontal Specialty Links */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none no-scrollbar">
-              {areasList.map((area) => {
-                const isActive = activeSpecialty === area.id;
-                const label = area.divisionName && area.therapeuticArea 
-                  ? `${area.divisionName} — ${area.therapeuticArea}` 
-                  : area.displayName;
-                return (
-                  <button
-                    key={area.id}
-                    onClick={() => scrollToSpecialty(area.id)}
-                    className={`px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition-all duration-200 cursor-pointer shrink-0 font-medium ${
-                      isActive
-                        ? 'bg-brand-dark text-white shadow-sm'
-                        : 'text-brand-muted hover:text-brand-dark hover:bg-brand-surface'
-                    }`}
-                  >
-                    <span>{label}</span>
-                  </button>
-                );
-              })}
-            </div>
+          {/* Horizontal Specialty Links */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none no-scrollbar">
+            {areasList.map((area) => {
+              const isActive = activeSpecialty === area.id;
+              const label = area.divisionName && area.therapeuticArea 
+                ? `${area.divisionName} — ${area.therapeuticArea}` 
+                : area.displayName;
+              return (
+                <button
+                  key={area.id}
+                  onClick={() => scrollToSpecialty(area.id)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition-all duration-200 cursor-pointer shrink-0 font-medium ${
+                    isActive
+                      ? 'bg-brand-dark text-white shadow-sm'
+                      : 'text-brand-muted hover:text-brand-dark hover:bg-brand-surface'
+                  }`}
+                >
+                  <span>{label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </nav>
 
       {/* =========================================================================
-          SECTION 3 — OUR PORTFOLIO (Alternating Editorial Sections)
+          SECTION 3 — SPECIALTIES PORTFOLIO (Alternating Editorial Divisions)
           ========================================================================= */}
-      <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-24 sm:space-y-32">
-        {/* Section Header */}
-        {portfolioSec.is_active && (
-          <div className="max-w-3xl space-y-4">
-            <ScrollReveal>
-              <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight">
-                {portfolioSec.title || 'Explore by area of care.'}
-              </h2>
-              <p className="text-base sm:text-lg text-brand-muted leading-relaxed">
-                {portfolioSec.body || 'Choose a specialty to discover the Onecore products and formulations within that area.'}
-              </p>
-            </ScrollReveal>
-          </div>
-        )}
-
+      <section className="pt-10 sm:pt-14 lg:pt-16 pb-20 sm:pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Alternating Editorial Sections */}
-        <div className="space-y-20 sm:space-y-28 lg:space-y-36">
+        <div className="space-y-16 sm:space-y-24 lg:space-y-28">
           {areasList.map((area, index) => {
             const isEven = index % 2 === 1;
 
@@ -242,7 +220,9 @@ export default function AreasOfCare() {
               <article
                 key={area.id}
                 id={area.id}
-                className="scroll-mt-36 pt-10 sm:pt-14 border-t border-brand-border/70"
+                className={`scroll-mt-32 ${
+                  index === 0 ? 'pt-0' : 'pt-12 sm:pt-16 lg:pt-20 border-t border-brand-border/70'
+                }`}
               >
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-16 items-stretch">
                   {/* Text Column */}

@@ -31,19 +31,60 @@ export default function Home() {
   const purposeSec = getSection('our_purpose', {
     eyebrow: 'OUR PURPOSE',
     title: 'Improve care through medicines and healthcare solutions that matter.',
+    items: [
+      {
+        title: 'OUR VISION',
+        desc: 'To be a trusted pharmaceutical company for patients and healthcare professionals across the areas of care we serve.'
+      },
+      {
+        title: 'OUR MISSION',
+        desc: 'To develop and deliver purposeful formulations that address real clinical needs, uphold dependable quality and expand responsibly into areas where we can make a meaningful difference.'
+      }
+    ]
   });
 
   const qualitySec = getSection('quality_assurance', {
     eyebrow: 'QUALITY ASSURANCE',
     title: 'Quality is part of the product from the beginning.',
     body: 'Medicines carry responsibility. That is why quality needs to be considered across manufacturing, testing, review and release, not treated as a final checkpoint.',
+    subheading: 'Our approach is centered on qualified manufacturing environments, appropriate quality controls and disciplined review before products reach the market.',
     image_url: '/assets/quality.jpg',
+    items: [
+      {
+        title: 'Consistent standards',
+        desc: 'Quality expectations aligned to the nature and regulatory requirements of each product.'
+      },
+      {
+        title: 'Responsible release',
+        desc: 'Review and controls designed to support product consistency and reliability.'
+      }
+    ]
   });
 
   const sustainabilitySec = getSection('sustainability', {
     eyebrow: 'SUSTAINABILITY',
     title: 'Better health and a healthier future belong together.',
     body: 'Our responsibility extends beyond the products we provide. As Onecore grows, we want responsible choices to become part of how we operate, how we source and how we work with our partners.',
+    items: [
+      {
+        eyebrow: 'RESPONSIBLE OPERATIONS',
+        title: 'Use resources thoughtfully.',
+        desc: 'Work toward more efficient use of energy, water and materials across the operations and manufacturing network that support our products.',
+        icon: 'Cpu'
+      },
+      {
+        eyebrow: 'PACKAGING',
+        title: 'Reduce what is unnecessary.',
+        desc: 'Evaluate packaging choices with the aim of reducing avoidable material use while protecting product quality, safety and stability.',
+        icon: 'Leaf'
+      },
+      {
+        eyebrow: 'RESPONSIBLE PARTNERSHIPS',
+        title: 'Grow with shared standards.',
+        desc: 'Build relationships with partners who share expectations around quality, compliance, ethical conduct and environmental responsibility.',
+        icon: 'Users'
+      }
+    ]
   });
 
   const lookingAheadSec = getSection('looking_ahead', {
@@ -80,14 +121,16 @@ export default function Home() {
     body: 'Explore the therapeutic areas and formulations that make up the Onecore portfolio.',
     cta_text: 'Explore areas of care',
     cta_url: '/areas-of-care',
+    secondary_cta_text: 'Connect With Us',
+    secondary_cta_url: '/contact',
   });
 
   // Map dynamic areas to division cards
   const divisions = (dynamicAreas && dynamicAreas.length > 0)
-    ? dynamicAreas.map(a => ({
+    ? dynamicAreas.map((a) => ({
         name: a.divisionName || a.displayName || a.title,
-        specialty: a.displayName || a.title,
-        image: a.image || '/assets/therapeutic-general-medicine.jpg',
+        specialty: a.therapeuticArea || a.displayName || a.title,
+        image: a.image || a.image_url || '/assets/therapeutic-general-medicine.jpg',
       }))
     : [
         { name: "CYTOS", specialty: "Oncology", image: "/assets/therapeutic-oncology.jpg" },
@@ -100,6 +143,12 @@ export default function Home() {
         { name: "NEURIX", specialty: "Neurology", image: "/assets/therapeutic-neurology.jpg" },
         { name: "ORTHEON", specialty: "Orthopaedics", image: "/assets/therapeutic-orthopaedics.jpg" },
       ];
+
+  const renderSustainabilityIcon = (iconName, idx) => {
+    if (iconName === 'Cpu' || idx === 0) return <Cpu className="w-5 h-5 stroke-[1.5]" />;
+    if (iconName === 'Leaf' || idx === 1) return <Leaf className="w-5 h-5 stroke-[1.5]" />;
+    return <Users className="w-5 h-5 stroke-[1.5]" />;
+  };
 
   return (
     <div className="w-full">
@@ -164,7 +213,7 @@ export default function Home() {
             <div className="max-w-3xl space-y-4">
               <ScrollReveal>
                 <SectionEyebrow>{areasSec.eyebrow || 'AREAS OF CARE'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight leading-tight">
+                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight leading-tight whitespace-pre-line">
                   {areasSec.title || 'Focused expertise. Purposeful healthcare.'}
                 </h2>
               </ScrollReveal>
@@ -224,37 +273,26 @@ export default function Home() {
             <div className="max-w-4xl space-y-6">
               <ScrollReveal>
                 <SectionEyebrow>{purposeSec.eyebrow || 'OUR PURPOSE'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-brand-dark tracking-tight leading-tight">
+                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-brand-dark tracking-tight leading-tight whitespace-pre-line">
                   {purposeSec.title || 'Improve care through medicines and healthcare solutions that matter.'}
                 </h2>
               </ScrollReveal>
             </div>
 
-            {/* Two Editorial Content Blocks */}
+            {/* Editorial Content Blocks */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 pt-8 border-t border-brand-border">
-              {/* Block 01: Vision */}
-              <ScrollReveal delay={0.1}>
-                <div className="relative pl-6 sm:pl-8 border-l-2 border-brand-sage/40 space-y-4">
-                  <h3 className="text-xl sm:text-2xl font-semibold text-brand-dark tracking-tight">
-                    OUR VISION
-                  </h3>
-                  <p className="text-base sm:text-lg text-brand-muted leading-relaxed">
-                    To be a trusted pharmaceutical company for patients and healthcare professionals across the areas of care we serve.
-                  </p>
-                </div>
-              </ScrollReveal>
-
-              {/* Block 02: Mission */}
-              <ScrollReveal delay={0.2}>
-                <div className="relative pl-6 sm:pl-8 border-l-2 border-brand-sage/40 space-y-4">
-                  <h3 className="text-xl sm:text-2xl font-semibold text-brand-dark tracking-tight">
-                    OUR MISSION
-                  </h3>
-                  <p className="text-base sm:text-lg text-brand-muted leading-relaxed">
-                    To develop and deliver purposeful formulations that address real clinical needs, uphold dependable quality and expand responsibly into areas where we can make a meaningful difference.
-                  </p>
-                </div>
-              </ScrollReveal>
+              {purposeSec.items.map((item, idx) => (
+                <ScrollReveal key={item.title || idx} delay={(idx + 1) * 0.1}>
+                  <div className="relative pl-6 sm:pl-8 border-l-2 border-brand-sage/40 space-y-4">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-brand-dark tracking-tight">
+                      {item.title}
+                    </h3>
+                    <p className="text-base sm:text-lg text-brand-muted leading-relaxed">
+                      {item.desc || item.description || item.text}
+                    </p>
+                  </div>
+                </ScrollReveal>
+              ))}
             </div>
           </div>
         </section>
@@ -271,7 +309,7 @@ export default function Home() {
               <div className="lg:col-span-7 space-y-8">
                 <ScrollReveal>
                   <SectionEyebrow isDark>{qualitySec.eyebrow || 'QUALITY ASSURANCE'}</SectionEyebrow>
-                  <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-white tracking-tight leading-tight">
+                  <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-white tracking-tight leading-tight whitespace-pre-line">
                     {qualitySec.title || 'Quality is part of the product from the beginning.'}
                   </h2>
                 </ScrollReveal>
@@ -281,31 +319,26 @@ export default function Home() {
                     <p>
                       {qualitySec.body || 'Medicines carry responsibility. That is why quality needs to be considered across manufacturing, testing, review and release, not treated as a final checkpoint.'}
                     </p>
-                    <p>
-                      Our approach is centered on qualified manufacturing environments, appropriate quality controls and disciplined review before products reach the market.
-                    </p>
+                    {qualitySec.subheading && (
+                      <p>
+                        {qualitySec.subheading}
+                      </p>
+                    )}
                   </div>
                 </ScrollReveal>
 
-                {/* Two Principles */}
+                {/* Principles */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4 border-t border-brand-border-dark">
-                  <ScrollReveal delay={0.15}>
-                    <div className="space-y-2">
-                      <h3 className="text-lg font-medium text-white">Consistent standards</h3>
-                      <p className="text-sm text-gray-400 leading-relaxed">
-                        Quality expectations aligned to the nature and regulatory requirements of each product.
-                      </p>
-                    </div>
-                  </ScrollReveal>
-
-                  <ScrollReveal delay={0.2}>
-                    <div className="space-y-2">
-                      <h3 className="text-lg font-medium text-white">Responsible release</h3>
-                      <p className="text-sm text-gray-400 leading-relaxed">
-                        Review and controls designed to support product consistency and reliability.
-                      </p>
-                    </div>
-                  </ScrollReveal>
+                  {qualitySec.items.map((principle, idx) => (
+                    <ScrollReveal key={principle.title || idx} delay={0.15 + idx * 0.05}>
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-medium text-white">{principle.title}</h3>
+                        <p className="text-sm text-gray-400 leading-relaxed">
+                          {principle.desc || principle.description || principle.text}
+                        </p>
+                      </div>
+                    </ScrollReveal>
+                  ))}
                 </div>
               </div>
 
@@ -343,7 +376,7 @@ export default function Home() {
             <div className="max-w-3xl space-y-6">
               <ScrollReveal>
                 <SectionEyebrow>{sustainabilitySec.eyebrow || 'SUSTAINABILITY'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight">
+                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight whitespace-pre-line">
                   {sustainabilitySec.title || 'Better health and a healthier future belong together.'}
                 </h2>
                 <p className="text-base sm:text-lg text-brand-muted leading-relaxed whitespace-pre-line">
@@ -352,61 +385,28 @@ export default function Home() {
               </ScrollReveal>
             </div>
 
-            {/* 3 Clean Columns */}
+            {/* Columns */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 pt-8 border-t border-brand-border">
-              {/* Column 1 */}
-              <ScrollReveal delay={0.05}>
-                <div className="space-y-4">
-                  <div className="w-10 h-10 rounded-full bg-brand-surface border border-brand-border flex items-center justify-center text-brand-sage">
-                    <Cpu className="w-5 h-5 stroke-[1.5]" />
+              {sustainabilitySec.items.map((col, idx) => (
+                <ScrollReveal key={col.title || idx} delay={0.05 + idx * 0.05}>
+                  <div className="space-y-4">
+                    <div className="w-10 h-10 rounded-full bg-brand-surface border border-brand-border flex items-center justify-center text-brand-sage">
+                      {renderSustainabilityIcon(col.icon, idx)}
+                    </div>
+                    {col.eyebrow && (
+                      <span className="text-xs font-semibold uppercase tracking-widest text-brand-sage block">
+                        {col.eyebrow}
+                      </span>
+                    )}
+                    <h3 className="text-xl font-medium text-brand-dark tracking-tight">
+                      {col.title}
+                    </h3>
+                    <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
+                      {col.desc || col.description || col.text}
+                    </p>
                   </div>
-                  <span className="text-xs font-semibold uppercase tracking-widest text-brand-sage block">
-                    RESPONSIBLE OPERATIONS
-                  </span>
-                  <h3 className="text-xl font-medium text-brand-dark tracking-tight">
-                    Use resources thoughtfully.
-                  </h3>
-                  <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
-                    Work toward more efficient use of energy, water and materials across the operations and manufacturing network that support our products.
-                  </p>
-                </div>
-              </ScrollReveal>
-
-              {/* Column 2 */}
-              <ScrollReveal delay={0.1}>
-                <div className="space-y-4">
-                  <div className="w-10 h-10 rounded-full bg-brand-surface border border-brand-border flex items-center justify-center text-brand-sage">
-                    <Leaf className="w-5 h-5 stroke-[1.5]" />
-                  </div>
-                  <span className="text-xs font-semibold uppercase tracking-widest text-brand-sage block">
-                    PACKAGING
-                  </span>
-                  <h3 className="text-xl font-medium text-brand-dark tracking-tight">
-                    Reduce what is unnecessary.
-                  </h3>
-                  <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
-                    Evaluate packaging choices with the aim of reducing avoidable material use while protecting product quality, safety and stability.
-                  </p>
-                </div>
-              </ScrollReveal>
-
-              {/* Column 3 */}
-              <ScrollReveal delay={0.15}>
-                <div className="space-y-4">
-                  <div className="w-10 h-10 rounded-full bg-brand-surface border border-brand-border flex items-center justify-center text-brand-sage">
-                    <Users className="w-5 h-5 stroke-[1.5]" />
-                  </div>
-                  <span className="text-xs font-semibold uppercase tracking-widest text-brand-sage block">
-                    RESPONSIBLE PARTNERSHIPS
-                  </span>
-                  <h3 className="text-xl font-medium text-brand-dark tracking-tight">
-                    Grow with shared standards.
-                  </h3>
-                  <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
-                    Build relationships with partners who share expectations around quality, compliance, ethical conduct and environmental responsibility.
-                  </p>
-                </div>
-              </ScrollReveal>
+                </ScrollReveal>
+              ))}
             </div>
           </div>
         </section>
@@ -442,7 +442,7 @@ export default function Home() {
                           {item.title}
                         </h3>
                         <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
-                          {item.desc}
+                          {item.desc || item.description || item.text}
                         </p>
                       </div>
                     </ScrollReveal>
@@ -464,17 +464,17 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
               <ScrollReveal>
                 <SectionEyebrow>{newsSec.eyebrow || 'LATEST FROM ONECORE'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight">
+                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight whitespace-pre-line">
                   {newsSec.title || 'News & perspectives.'}
                 </h2>
               </ScrollReveal>
 
               <ScrollReveal delay={0.1}>
                 <Link
-                  to="/news"
+                  to={newsSec.cta_url || '/news'}
                   className="inline-flex items-center gap-2 text-sm font-semibold text-brand-dark hover:text-brand-sage group transition-colors"
                 >
-                  <span>View all news</span>
+                  <span>{newsSec.cta_text || 'View all news'}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                 </Link>
               </ScrollReveal>
@@ -531,13 +531,13 @@ export default function Home() {
         <section className="py-24 sm:py-32 bg-brand-surface/80 border-t border-brand-border text-center">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <ScrollReveal>
-              <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-brand-dark tracking-tight leading-tight max-w-3xl mx-auto">
+              <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-brand-dark tracking-tight leading-tight max-w-3xl mx-auto whitespace-pre-line">
                 {finalCtaSec.title || 'Purposeful healthcare, across every area we serve.'}
               </h2>
             </ScrollReveal>
 
             <ScrollReveal delay={0.1}>
-              <p className="text-lg sm:text-xl text-brand-muted font-normal max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg sm:text-xl text-brand-muted font-normal max-w-2xl mx-auto leading-relaxed whitespace-pre-line">
                 {finalCtaSec.body || 'Explore the therapeutic areas and formulations that make up the Onecore portfolio.'}
               </p>
             </ScrollReveal>
@@ -551,12 +551,14 @@ export default function Home() {
                   <span>{finalCtaSec.cta_text || 'Explore areas of care'}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-white border border-brand-border text-brand-dark text-sm font-medium rounded-full hover:bg-brand-ivory hover:border-brand-muted/40 transition-all duration-200"
-                >
-                  <span>Connect With Us</span>
-                </Link>
+                {finalCtaSec.secondary_cta_text && (
+                  <Link
+                    to={finalCtaSec.secondary_cta_url || '/contact'}
+                    className="inline-flex items-center gap-2 px-8 py-4 bg-white border border-brand-border text-brand-dark text-sm font-medium rounded-full hover:bg-brand-ivory hover:border-brand-muted/40 transition-all duration-200"
+                  >
+                    <span>{finalCtaSec.secondary_cta_text}</span>
+                  </Link>
+                )}
               </div>
             </ScrollReveal>
           </div>

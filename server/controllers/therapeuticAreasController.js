@@ -18,10 +18,10 @@ export const getTherapeuticAreas = async (req, res, next) => {
     // Fetch tags for each area
     for (const area of areas) {
       const tags = await query(
-        'SELECT id, name, display_order FROM therapeutic_area_tags WHERE therapeutic_area_id = ? ORDER BY display_order ASC, id ASC',
+        'SELECT MIN(id) as id, name, MIN(display_order) as display_order FROM therapeutic_area_tags WHERE therapeutic_area_id = ? GROUP BY name ORDER BY MIN(display_order) ASC, MIN(id) ASC',
         [area.id]
       );
-      area.tags = tags.map((t) => t.name);
+      area.tags = [...new Set(tags.map((t) => t.name))];
       area.tagObjects = tags;
     }
 

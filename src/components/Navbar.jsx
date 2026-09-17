@@ -24,7 +24,13 @@ export default function Navbar() {
         links = mainNavLinks;
       }
     }
-    const filtered = links.filter((l) => l.is_active !== false);
+    const filtered = links.filter(
+      (l) =>
+        l.is_active !== false &&
+        !l.path?.includes('for-professionals') &&
+        !l.path?.includes('healthcare-professional') &&
+        !l.name?.toLowerCase().includes('healthcare professional')
+    );
 
     // Ensure "About" is moved to the front (immediately after logo)
     const aboutIndex = filtered.findIndex(

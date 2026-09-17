@@ -21,16 +21,31 @@ import ConfirmModal from '../../components/admin/ConfirmModal';
 import MediaSelectorModal from '../../components/admin/MediaSelectorModal';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 
+const DIVISION_MAP = {
+  'womens-health': 'Femme',
+  'paediatrics': 'Pediaplus',
+  'pediatrics': 'Pediaplus',
+  'orthopaedics': 'Ortheon',
+  'orthopedic': 'Ortheon',
+  'neurology': 'Neurix',
+  'ophthalmology': 'Eyerix',
+  'dermatology': 'Vellis',
+  'ent': 'OTIRA',
+  'general-medicine': 'Omnara',
+  'general': 'Omnara',
+  'oncology': 'Cytos',
+};
+
 const SEED_AREAS = [
-  { id: 1, name: 'Orthopaedics', slug: 'orthopaedics', focus_title: 'Joint health, bone density and musculoskeletal recovery.', sort_order: 1, is_active: 1, tags: ['Joint Preservation', 'Bone Density', 'Cartilage Health'] },
-  { id: 2, name: 'Cardiology', slug: 'cardiology', focus_title: 'Cardiovascular maintenance, arterial integrity and lipid management.', sort_order: 2, is_active: 1, tags: ['Lipid Control', 'Arterial Support'] },
-  { id: 3, name: 'Neurology', slug: 'neurology', focus_title: 'Neuroprotection, peripheral nerve support and cognitive vitality.', sort_order: 3, is_active: 1, tags: ['Nerve Regeneration', 'Cognitive Health'] },
-  { id: 4, name: 'Oncology Support', slug: 'oncology-support', focus_title: 'Adjunctive nutritional and cellular recovery therapeutics.', sort_order: 4, is_active: 1, tags: ['Cellular Resilience', 'Nutritional Support'] },
-  { id: 5, name: 'Gastroenterology', slug: 'gastroenterology', focus_title: 'Mucosal lining protection, gut barrier integrity and microbiome balance.', sort_order: 5, is_active: 1, tags: ['Gut Barrier Integrity', 'Enzyme Support'] },
-  { id: 6, name: 'Pulmonology', slug: 'pulmonology', focus_title: 'Respiratory tract resilience and pulmonary tissue maintenance.', sort_order: 6, is_active: 1, tags: ['Airway Clearance', 'Oxidative Balance'] },
-  { id: 7, name: 'Endocrinology & Metabolism', slug: 'endocrinology-metabolism', focus_title: 'Glycaemic regulation, metabolic pathway support and hormonal balance.', sort_order: 7, is_active: 1, tags: ['Glycaemic Balance', 'Metabolic Health'] },
-  { id: 8, name: 'Dermatology & Wound Care', slug: 'dermatology-wound-care', focus_title: 'Skin barrier restoration, tissue healing and dermal protection.', sort_order: 8, is_active: 1, tags: ['Barrier Restoration', 'Tissue Regeneration'] },
-  { id: 9, name: 'Nephrology & Renal Care', slug: 'nephrology-renal-care', focus_title: 'Renal tissue support, electrolyte management and filtration integrity.', sort_order: 9, is_active: 1, tags: ['Renal Support', 'Electrolyte Balance'] },
+  { id: 1, name: 'Women’s Health', slug: 'womens-health', heading: 'Supporting women through different stages of care.', focus_title: 'Supporting women through different stages of care.', image_url: '/assets/therapeutic-womens-health.jpg', display_order: 1, is_active: 1, tags: ['Reproductive health', 'Fertility', 'Pregnancy related nutrition', 'Gynaecological care', 'Intimate health'] },
+  { id: 2, name: 'Paediatrics', slug: 'paediatrics', heading: 'Care designed around the needs of growing children.', focus_title: 'Care designed around the needs of growing children.', image_url: '/assets/therapeutic-paediatrics.jpg', display_order: 2, is_active: 1, tags: ['Child health', 'Nutrition', 'Paediatric medicines'] },
+  { id: 3, name: 'Orthopaedics', slug: 'orthopaedics', heading: 'Supporting movement, mobility and musculoskeletal care.', focus_title: 'Supporting movement, mobility and musculoskeletal care.', image_url: '/assets/therapeutic-orthopaedics.jpg', display_order: 3, is_active: 1, tags: ['Joint health', 'Bone health', 'Pain management', 'Mobility'] },
+  { id: 4, name: 'Neurology', slug: 'neurology', heading: 'A focused portfolio across neurological care.', focus_title: 'A focused portfolio across neurological care.', image_url: '/assets/therapeutic-neurology.jpg', display_order: 4, is_active: 1, tags: ['Neuropathic care', 'Neuro nutrition', 'CNS care'] },
+  { id: 5, name: 'Ophthalmology', slug: 'ophthalmology', heading: 'Specialised formulations for different areas of eye care.', focus_title: 'Specialised formulations for different areas of eye care.', image_url: '/assets/therapeutic-ophthalmology.jpg', display_order: 5, is_active: 1, tags: ['Ocular infection', 'Inflammation', 'Glaucoma care', 'Ocular lubrication'] },
+  { id: 6, name: 'Dermatology', slug: 'dermatology', heading: 'Formulations for medical and supportive skin care.', focus_title: 'Formulations for medical and supportive skin care.', image_url: '/assets/therapeutic-dermatology.jpg', display_order: 6, is_active: 1, tags: ['Acne', 'Fungal care', 'Inflammatory conditions', 'Pigmentation'] },
+  { id: 7, name: 'ENT', slug: 'ent', heading: 'Focused support across ear, nose and throat care.', focus_title: 'Focused support across ear, nose and throat care.', image_url: '/assets/therapeutic-ent.jpg', display_order: 7, is_active: 1, tags: ['ENT care', 'Allergy', 'Infection management'] },
+  { id: 8, name: 'General Medicine', slug: 'general-medicine', heading: 'Everyday therapies across a broad range of clinical needs.', focus_title: 'Everyday therapies across a broad range of clinical needs.', image_url: '/assets/therapeutic-general-medicine.jpg', display_order: 8, is_active: 1, tags: ['Gastrointestinal care', 'Anti infectives', 'Pain management', 'Allergy care'] },
+  { id: 9, name: 'Oncology', slug: 'oncology', heading: 'Specialised therapies within cancer care.', focus_title: 'Specialised therapies within cancer care.', image_url: '/assets/therapeutic-oncology.jpg', display_order: 9, is_active: 1, tags: ['Specialised therapies', 'Oncology care', 'Supportive care'] },
 ];
 
 // ─── Inline Area Editor ────────────────────────────────────────────────────────
@@ -47,9 +62,20 @@ function AreaEditorPanel({ area, onSave, onCancel, onOpenMedia }) {
   });
 
   const set = (key) => (e) => setForm((p) => ({ ...p, [key]: e.target.value }));
+  const division = area?.slug ? DIVISION_MAP[area.slug.toLowerCase()] : (area?.name ? DIVISION_MAP[area.name.toLowerCase().replace(/\s+/g, '-')] : null);
 
   return (
     <div className="bg-brand-navy-dark/60 border border-brand-teal/20 rounded-xl p-5 space-y-4">
+      {division && (
+        <div className="flex items-center gap-2 pb-2 border-b border-white/5">
+          <span className="text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded bg-brand-teal/10 border border-brand-teal/30 text-brand-teal font-semibold">
+            Division: {division}
+          </span>
+          <span className="text-xs text-brand-slate/60">
+            {form.name || area?.name}
+          </span>
+        </div>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-[11px] font-mono uppercase tracking-wider text-brand-slate/70 mb-1.5">Therapeutic Area Name *</label>
@@ -72,21 +98,39 @@ function AreaEditorPanel({ area, onSave, onCancel, onOpenMedia }) {
           <input type="text" value={form.tags} onChange={set('tags')} placeholder="Joint Preservation, Bone Density, Cartilage Health" className="w-full bg-brand-navy border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-brand-slate/30 focus:outline-none focus:border-brand-teal/50" />
         </div>
         <div className="md:col-span-2">
-          <label className="block text-[11px] font-mono uppercase tracking-wider text-brand-slate/70 mb-1.5">Image URL</label>
+          <label className="block text-[11px] font-mono uppercase tracking-wider text-brand-slate/70 mb-1.5">Featured Image / Division Card Image</label>
           <div className="flex gap-2">
             <input type="text" value={form.image_url} onChange={set('image_url')} placeholder="/assets/therapeutic-area.jpg" className="flex-1 bg-brand-navy border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-brand-slate/30 focus:outline-none focus:border-brand-teal/50" />
             <button
               type="button"
               onClick={() => onOpenMedia((url) => setForm((p) => ({ ...p, image_url: url })))}
-              className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-brand-navy border border-white/10 hover:border-brand-teal/40 rounded-lg text-xs text-brand-slate hover:text-white transition-all"
+              className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-brand-navy border border-white/10 hover:border-brand-teal/40 rounded-lg text-xs text-brand-slate hover:text-white transition-all cursor-pointer"
             >
               <ImageIcon size={13} />
-              Library
+              Choose from Library
             </button>
+            {form.image_url && (
+              <button
+                type="button"
+                onClick={() => setForm((p) => ({ ...p, image_url: '' }))}
+                className="shrink-0 flex items-center gap-1 px-2.5 py-2 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 rounded-lg text-xs text-red-400 transition-all cursor-pointer"
+                title="Remove Image"
+              >
+                <X size={13} />
+                Clear
+              </button>
+            )}
           </div>
           {form.image_url && (
-            <div className="mt-2 h-20 w-32 rounded-lg overflow-hidden border border-white/10">
-              <img src={form.image_url} alt="" className="w-full h-full object-cover" />
+            <div className="mt-3 flex items-start gap-3 p-2 bg-brand-navy/60 border border-white/10 rounded-lg">
+              <div className="h-20 w-32 rounded-md overflow-hidden bg-black/40 border border-white/10 shrink-0">
+                <img src={form.image_url} alt="" className="w-full h-full object-cover" />
+              </div>
+              <div className="text-xs text-brand-slate/70 space-y-1">
+                <p className="text-white font-medium">Image Preview</p>
+                <p className="text-[11px] font-mono text-brand-teal truncate max-w-xs">{form.image_url}</p>
+                <p className="text-[10px] text-brand-slate/50">Used on Home page division card & Areas of Care section</p>
+              </div>
             </div>
           )}
         </div>
@@ -298,6 +342,14 @@ export default function AdminTherapeuticAreas() {
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
+                    {(() => {
+                      const divName = area.slug ? DIVISION_MAP[area.slug.toLowerCase()] : (area.name ? DIVISION_MAP[area.name.toLowerCase().replace(/\s+/g, '-')] : null);
+                      return divName ? (
+                        <span className="text-[10px] font-mono font-bold tracking-wider px-2 py-0.5 rounded bg-brand-teal/15 text-brand-teal border border-brand-teal/30 uppercase">
+                          {divName}
+                        </span>
+                      ) : null;
+                    })()}
                     <span className="text-xs font-semibold text-white">{area.name}</span>
                     {area.is_active === 0 && (
                       <span className="text-[10px] font-mono text-amber-400/70 bg-amber-500/10 px-1.5 py-0.5 rounded">Hidden</span>
