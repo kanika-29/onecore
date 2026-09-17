@@ -16,6 +16,18 @@ export function useTherapeuticAreas() {
         const json = await res.json();
         if (!isMounted || !json.success || !Array.isArray(json.data) || json.data.length === 0) return;
 
+        const divisionSlugMap = {
+          'femme': 'femme', 'womens-health': 'femme', 'women-health': 'femme',
+          'pediaplus': 'pediaplus', 'paediatrics': 'pediaplus', 'pediatrics': 'pediaplus',
+          'ortheon': 'ortheon', 'orthopaedics': 'ortheon', 'orthopedic': 'ortheon',
+          'neurix': 'neurix', 'neurology': 'neurix',
+          'eyerix': 'eyerix', 'ophthalmology': 'eyerix',
+          'vellis': 'vellis', 'dermatology': 'vellis',
+          'otira': 'otira', 'ent': 'otira',
+          'omnara': 'omnara', 'general-medicine': 'omnara', 'general': 'omnara',
+          'cytos': 'cytos', 'oncology': 'cytos'
+        };
+
         const divisionMap = {
           'oncology': { divisionName: 'Cytos', therapeuticArea: 'Oncology', fallbackImage: '/assets/therapeutic-oncology.jpg' },
           'paediatrics': { divisionName: 'Pediaplus', therapeuticArea: 'Pediatrics', fallbackImage: '/assets/therapeutic-paediatrics.jpg' },
@@ -35,14 +47,16 @@ export function useTherapeuticAreas() {
 
         // Map API objects to the format expected by components
         const formatted = json.data.map((item, idx) => {
-          const slug = item.slug || `area-${item.id}`;
-          const normalizedSlug = slug.toLowerCase().replace(/\s+/g, '-');
+          const rawSlug = item.slug || `area-${item.id}`;
+          const normalizedSlug = rawSlug.toLowerCase().replace(/\s+/g, '-');
           const normalizedName = (item.name || '').toLowerCase().replace(/['’]/g, '').replace(/\s+/g, '-');
           const mapInfo = divisionMap[normalizedSlug] || divisionMap[normalizedName] || {};
           const defaultImg = mapInfo.fallbackImage || fallbackImageMap[normalizedSlug] || '/assets/therapeutic-general-medicine.jpg';
+          const cleanSlug = divisionSlugMap[normalizedSlug] || divisionSlugMap[normalizedName] || mapInfo.divisionName?.toLowerCase() || normalizedSlug;
 
           return {
-            id: slug,
+            id: cleanSlug,
+            slug: cleanSlug,
             dbId: item.id,
             num: String(idx + 1).padStart(2, '0'),
             title: item.name?.toUpperCase() || '',

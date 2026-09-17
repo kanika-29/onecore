@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowDown, Check, FileText, Download, Building2, UserCheck, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import SectionEyebrow from '../components/SectionEyebrow';
 import ScrollReveal from '../components/ScrollReveal';
@@ -201,13 +202,13 @@ export default function AreasOfCare() {
                     {/* Refined Editorial CTA Link */}
                     <ScrollReveal delay={0.1}>
                       <div className="pt-8 sm:pt-12 lg:pt-0">
-                        <button
-                          onClick={scrollToCatalogueForm}
+                        <Link
+                          to={`/areas-of-care/${area.slug || area.id}`}
                           className="inline-flex items-center gap-2.5 text-base sm:text-lg font-normal text-brand-dark hover:text-brand-sage transition-colors group cursor-pointer"
                         >
-                          <span>Request {area.divisionName || area.displayName} Dossier</span>
+                          <span>Request {area.divisionName || area.displayName} Dossier →</span>
                           <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
-                        </button>
+                        </Link>
                       </div>
                     </ScrollReveal>
                   </div>

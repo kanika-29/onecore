@@ -7,6 +7,8 @@ import About from './pages/About';
 import QualityManufacturing from './pages/QualityManufacturing';
 import PatientsCaregivers from './pages/PatientsCaregivers';
 import AreasOfCare from './pages/AreasOfCare';
+import AreaOfCareDetail from './pages/AreaOfCareDetail';
+import FemmeProductDetail from './pages/FemmeProductDetail';
 import ProductOneFlexo from './pages/ProductOneFlexo';
 import News from './pages/News';
 import Contact from './pages/Contact';
@@ -170,6 +172,8 @@ function AppRoutes() {
           <Route path="/quality-manufacturing" element={<QualityManufacturing />} />
           <Route path="/patients-caregivers" element={<PatientsCaregivers />} />
           <Route path="/areas-of-care" element={<AreasOfCare />} />
+          <Route path="/areas-of-care/femme/:productSlug" element={<FemmeProductDetail />} />
+          <Route path="/areas-of-care/:slug" element={<AreaOfCareDetail />} />
           <Route path="/areas-of-care/orthopaedics/oneflexo" element={<ProductOneFlexo />} />
           <Route path="/news" element={<News />} />
           <Route path="/contact" element={<Contact />} />
