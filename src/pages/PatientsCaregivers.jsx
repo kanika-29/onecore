@@ -154,25 +154,32 @@ export default function PatientsCaregivers() {
     ]
   });
 
-  // Section 6: How Onecore Approaches Patients & Professionals
-  const howWeWorkSec = getSection('how_we_work', {
-    eyebrow: 'HOW WE WORK',
-    title: 'Connecting patient needs with clinical realities.',
+  // Section 6: Treatment Journey
+  const treatmentJourneySec = getSection('treatment_journey', {
+    eyebrow: 'THE TREATMENT JOURNEY',
+    title: 'A prescription begins in the clinic. \nCare continues beyond it.',
+    body: 'Healthcare professionals make treatment decisions in the clinical setting. Patients then carry those decisions into everyday life.\n\nWe believe a responsible pharmaceutical company should understand both parts of that journey and support them with medicines and information people can depend on.',
+    image_url: '/assets/treatment-journey.jpg',
     items: [
       {
-        icon: 'Stethoscope',
-        title: 'Purposeful Formulations',
-        desc: 'We develop formulations designed to support real treatment regimens, prioritizing patient adherence and ease of administration.'
+        num: '01',
+        title: 'Healthcare professional',
+        desc: 'Clinical assessment, diagnosis and evidence-based therapeutic evaluation.'
       },
       {
-        icon: 'ShieldCheck',
-        title: 'Reliable Information',
-        desc: 'Accurate, accessible and transparent product specifications that help clinicians prescribe and patients understand.'
+        num: '02',
+        title: 'Treatment decision',
+        desc: 'Selecting appropriate formulation, dosage schedule and treatment guidance.'
       },
       {
-        icon: 'HeartHandshake',
-        title: 'Open Safety Channels',
-        desc: 'Direct, responsive pharmacovigilance channels ensuring patient concerns and clinician reports receive prompt review.'
+        num: '03',
+        title: 'Patient',
+        desc: 'Understanding administration instructions, storage conditions and safety facts.'
+      },
+      {
+        num: '04',
+        title: 'Everyday care',
+        desc: 'Managing treatment adherence and monitoring recovery in home routine.'
       }
     ]
   });

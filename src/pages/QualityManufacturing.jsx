@@ -10,6 +10,10 @@ import { useCmsPage } from '../hooks/useCmsPage';
 export default function QualityManufacturing() {
   const { getSection } = useCmsPage('quality-manufacturing');
 
+  useEffect(() => {
+    document.title = "Quality & Manufacturing | Onecore Pharma";
+  }, []);
+
   const heroSec = getSection('hero', {
     eyebrow: 'QUALITY & MANUFACTURING',
     title: 'Quality & Manufacturing',
@@ -62,44 +66,32 @@ export default function QualityManufacturing() {
     ]
   });
 
-  const testingSec = getSection('quality_assurance', {
-    eyebrow: 'TESTING & CONTROLS',
-    title: 'Testing across the product lifecycle.',
-    body: 'Analytical and stability testing protocols ensure every batch maintains clinical potency and purity.',
-    image_url: '/assets/quality.jpg',
+  const assuranceSec = getSection('assurance_steps', {
+    eyebrow: 'QUALITY ASSURANCE',
+    title: 'Controls throughout the lifecycle.',
+    subtitle: 'Key assurance stages designed to support formulation reliability from raw ingredient selection to clinical availability.',
     items: [
       {
-        title: 'Raw Material Testing',
-        desc: 'Identification and assay verification before formulation.'
+        title: "Raw material and supplier oversight",
+        desc: "Disciplined evaluation and verification of starting materials, active pharmaceutical ingredients and qualified supply partners.",
       },
       {
-        title: 'Finished Product Release',
-        desc: 'Comprehensive analytical screening against monograph standards.'
-      }
-    ]
-  });
-
-  const pillarsSec = getSection('quality_pillars', {
-    eyebrow: 'QUALITY PILLARS',
-    title: 'Four pillars of our quality culture.',
-    items: [
-      {
-        icon: 'Microscope',
-        title: "Scientific rigor",
-        desc: "Analytical method validation, stability studies, and precise quality control protocols.",
+        title: "Defined specifications",
+        desc: "Clear chemical, physical and stability benchmarks established for every formulation across its shelf life.",
       },
       {
-        icon: 'ShieldCheck',
-        title: "cGMP compliance",
-        desc: "Stringent manufacturing guidelines covering facilities, personnel hygiene, and equipment validation.",
+        title: "Manufacturing process controls",
+        desc: "Structured in-process monitoring and calibrated equipment parameters designed to ensure batch consistency.",
       },
       {
-        icon: 'Layers',
-        title: "Traceability & audit trail",
-        desc: "End-to-end batch records, vendor qualification, and transparent documentation for every lot produced.",
+        title: "Testing and quality checks",
+        desc: "Rigorous analytical and microbiological testing conducted to verify identity, purity, potency and dosage uniformity.",
       },
       {
-        icon: 'FileCheck',
+        title: "Documentation and traceability",
+        desc: "Complete batch records, systematic tracking and full audit trails maintained throughout production and storage.",
+      },
+      {
         title: "Responsible product release",
         desc: "Independent quality review and systematic verification before any product batch is authorized for clinical distribution.",
       },

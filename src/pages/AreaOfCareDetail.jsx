@@ -178,26 +178,23 @@ const categoryData = {
     subtitle: "Neurology",
     image: "/assets/therapeutic-neurology.jpg",
     products: [
-      "Neurox",
-      "Neurox-Plus",
-      "Neurox-G",
-      "Neurox-NT",
-      "Neurox-M",
-      "Neurox-OD",
-      "Neurox-PG",
-      "Neurox-TH",
-      "Neurica",
-      "Neurica-Plus",
-      "Neurica-M",
-      "Neurica-G",
-      "Neurovit",
-      "Neurovit-Plus",
-      "Neurocalm",
-      "Neurocalm-Plus",
-      "Cerebro",
-      "Cerebro-Plus",
-      "Nurocore",
-      "Nurocore-Plus"
+      "Epinerve-Forte",
+      "Nervia",
+      "Epi-Plus",
+      "Nervia-PG",
+      "Nervia-NX",
+      "Citimind",
+      "Epinerve-2500",
+      "Epinerve-C",
+      "Citimind P4",
+      "Pulsorex",
+      "Onepred",
+      "Nervia-G",
+      "Nervia-Plus",
+      "Citalom-C",
+      "Zolpicore",
+      "Onepam",
+      "Neurorelax"
     ]
   },
   neurology: {
@@ -205,26 +202,47 @@ const categoryData = {
     subtitle: "Neurology",
     image: "/assets/therapeutic-neurology.jpg",
     products: [
-      "Neurox",
-      "Neurox-Plus",
-      "Neurox-G",
-      "Neurox-NT",
-      "Neurox-M",
-      "Neurox-OD",
-      "Neurox-PG",
-      "Neurox-TH",
-      "Neurica",
-      "Neurica-Plus",
-      "Neurica-M",
-      "Neurica-G",
-      "Neurovit",
-      "Neurovit-Plus",
-      "Neurocalm",
-      "Neurocalm-Plus",
-      "Cerebro",
-      "Cerebro-Plus",
-      "Nurocore",
-      "Nurocore-Plus"
+      "Epinerve-Forte",
+      "Nervia",
+      "Epi-Plus",
+      "Nervia-PG",
+      "Nervia-NX",
+      "Citimind",
+      "Epinerve-2500",
+      "Epinerve-C",
+      "Citimind P4",
+      "Pulsorex",
+      "Onepred",
+      "Nervia-G",
+      "Nervia-Plus",
+      "Citalom-C",
+      "Zolpicore",
+      "Onepam",
+      "Neurorelax"
+    ]
+  },
+  neuro: {
+    title: "Neurix",
+    subtitle: "Neurology",
+    image: "/assets/therapeutic-neurology.jpg",
+    products: [
+      "Epinerve-Forte",
+      "Nervia",
+      "Epi-Plus",
+      "Nervia-PG",
+      "Nervia-NX",
+      "Citimind",
+      "Epinerve-2500",
+      "Epinerve-C",
+      "Citimind P4",
+      "Pulsorex",
+      "Onepred",
+      "Nervia-G",
+      "Nervia-Plus",
+      "Citalom-C",
+      "Zolpicore",
+      "Onepam",
+      "Neurorelax"
     ]
   },
   eyerix: {
@@ -232,26 +250,33 @@ const categoryData = {
     subtitle: "Ophthalmology",
     image: "/assets/therapeutic-ophthalmology.jpg",
     products: [
-      "Eyerix Tears",
-      "Eyerix-LS",
-      "Eyerix-PF",
-      "Eyerix-DX",
-      "Optiriv",
-      "Optiriv-D",
-      "Optiriv-Plus",
-      "Optiriv-G",
-      "Tearsone",
-      "Tearsone-Plus",
-      "Visicare",
-      "Visicare-D",
-      "Ocuriv",
-      "Ocuriv-Plus",
-      "Catariv",
-      "Glaura",
-      "Glaura-P",
-      "Lubrimax",
-      "Macushield",
-      "Eyecore-D"
+      "Moxyone-M",
+      "Moxyone",
+      "Moxyone-MK",
+      "Moxyone-MP",
+      "Lotnova",
+      "Lotnova-T",
+      "Lotnova-M",
+      "Tobraeye",
+      "Angelcent-TM",
+      "Brincore TM",
+      "Femacore",
+      "Olgerix",
+      "Ecoliq",
+      "Cortear",
+      "Cortear Plus",
+      "Eyovex",
+      "Tearix",
+      "Eyfen",
+      "Ocuvion",
+      "Brincore",
+      "Gaticent",
+      "Brimovis",
+      "Flurbirix",
+      "Brincore-TM",
+      "Moxyone-DM",
+      "Natmore",
+      "Ikarix"
     ]
   },
   ophthalmology: {
@@ -259,26 +284,101 @@ const categoryData = {
     subtitle: "Ophthalmology",
     image: "/assets/therapeutic-ophthalmology.jpg",
     products: [
-      "Eyerix Tears",
-      "Eyerix-LS",
-      "Eyerix-PF",
-      "Eyerix-DX",
-      "Optiriv",
-      "Optiriv-D",
-      "Optiriv-Plus",
-      "Optiriv-G",
-      "Tearsone",
-      "Tearsone-Plus",
-      "Visicare",
-      "Visicare-D",
-      "Ocuriv",
-      "Ocuriv-Plus",
-      "Catariv",
-      "Glaura",
-      "Glaura-P",
-      "Lubrimax",
-      "Macushield",
-      "Eyecore-D"
+      "Moxyone-M",
+      "Moxyone",
+      "Moxyone-MK",
+      "Moxyone-MP",
+      "Lotnova",
+      "Lotnova-T",
+      "Lotnova-M",
+      "Tobraeye",
+      "Angelcent-TM",
+      "Brincore TM",
+      "Femacore",
+      "Olgerix",
+      "Ecoliq",
+      "Cortear",
+      "Cortear Plus",
+      "Eyovex",
+      "Tearix",
+      "Eyfen",
+      "Ocuvion",
+      "Brincore",
+      "Gaticent",
+      "Brimovis",
+      "Flurbirix",
+      "Brincore-TM",
+      "Moxyone-DM",
+      "Natmore",
+      "Ikarix"
+    ]
+  },
+  ocular: {
+    title: "Eyerix",
+    subtitle: "Ophthalmology",
+    image: "/assets/therapeutic-ophthalmology.jpg",
+    products: [
+      "Moxyone-M",
+      "Moxyone",
+      "Moxyone-MK",
+      "Moxyone-MP",
+      "Lotnova",
+      "Lotnova-T",
+      "Lotnova-M",
+      "Tobraeye",
+      "Angelcent-TM",
+      "Brincore TM",
+      "Femacore",
+      "Olgerix",
+      "Ecoliq",
+      "Cortear",
+      "Cortear Plus",
+      "Eyovex",
+      "Tearix",
+      "Eyfen",
+      "Ocuvion",
+      "Brincore",
+      "Gaticent",
+      "Brimovis",
+      "Flurbirix",
+      "Brincore-TM",
+      "Moxyone-DM",
+      "Natmore",
+      "Ikarix"
+    ]
+  },
+  'eye-care': {
+    title: "Eyerix",
+    subtitle: "Ophthalmology",
+    image: "/assets/therapeutic-ophthalmology.jpg",
+    products: [
+      "Moxyone-M",
+      "Moxyone",
+      "Moxyone-MK",
+      "Moxyone-MP",
+      "Lotnova",
+      "Lotnova-T",
+      "Lotnova-M",
+      "Tobraeye",
+      "Angelcent-TM",
+      "Brincore TM",
+      "Femacore",
+      "Olgerix",
+      "Ecoliq",
+      "Cortear",
+      "Cortear Plus",
+      "Eyovex",
+      "Tearix",
+      "Eyfen",
+      "Ocuvion",
+      "Brincore",
+      "Gaticent",
+      "Brimovis",
+      "Flurbirix",
+      "Brincore-TM",
+      "Moxyone-DM",
+      "Natmore",
+      "Ikarix"
     ]
   },
   vellis: {
@@ -351,6 +451,76 @@ const categoryData = {
       "Ketoconazole + Zinc Pyrithione Shampoo"
     ]
   },
+  derma: {
+    title: "Vellis",
+    subtitle: "Dermatology",
+    image: "/assets/therapeutic-dermatology.jpg",
+    products: [
+      "Itrafite",
+      "Lulifite",
+      "Tracore (topical)",
+      "Yuvizee",
+      "Ebacore",
+      "Tracore (oral)",
+      "Acnozoe",
+      "Dazzon",
+      "Coresoft",
+      "Velibact",
+      "Camycore",
+      "Defazone",
+      "Fexocore",
+      "Zion",
+      "Glukozoe",
+      "Oxyvive",
+      "Melacore",
+      "Clindaone-AD",
+      "Clobtos-AD",
+      "Fungione",
+      "Fusi-one",
+      "Velliglow",
+      "Trakomin",
+      "Azure-C",
+      "Nicotinamide + Clindamycin Gel",
+      "Clobetasol + Miconazole Cream",
+      "Diclofenac Combination Pain Relief Gel",
+      "Ketoconazole + Zinc Pyrithione Shampoo"
+    ]
+  },
+  skin: {
+    title: "Vellis",
+    subtitle: "Dermatology",
+    image: "/assets/therapeutic-dermatology.jpg",
+    products: [
+      "Itrafite",
+      "Lulifite",
+      "Tracore (topical)",
+      "Yuvizee",
+      "Ebacore",
+      "Tracore (oral)",
+      "Acnozoe",
+      "Dazzon",
+      "Coresoft",
+      "Velibact",
+      "Camycore",
+      "Defazone",
+      "Fexocore",
+      "Zion",
+      "Glukozoe",
+      "Oxyvive",
+      "Melacore",
+      "Clindaone-AD",
+      "Clobtos-AD",
+      "Fungione",
+      "Fusi-one",
+      "Velliglow",
+      "Trakomin",
+      "Azure-C",
+      "Nicotinamide + Clindamycin Gel",
+      "Clobetasol + Miconazole Cream",
+      "Diclofenac Combination Pain Relief Gel",
+      "Ketoconazole + Zinc Pyrithione Shampoo"
+    ]
+  },
   otira: {
     title: "OTIRA",
     subtitle: "ENT",
@@ -369,6 +539,23 @@ const categoryData = {
     ]
   },
   ent: {
+    title: "OTIRA",
+    subtitle: "ENT",
+    image: "/assets/therapeutic-ent.jpg",
+    products: [
+      "Flutiriv",
+      "Deftos",
+      "Flutiriv NS",
+      "Onerest",
+      "Mentira 625/1000",
+      "Flutiriv AZ",
+      "Bilariv-M",
+      "Bilariv",
+      "Otivy",
+      "Histocore"
+    ]
+  },
+  'ear-nose-throat': {
     title: "OTIRA",
     subtitle: "ENT",
     image: "/assets/therapeutic-ent.jpg",
@@ -474,6 +661,36 @@ const categoryData = {
       "Bilariv-M",
       "Throfree"
     ]
+  },
+  'internal-medicine': {
+    title: "OMNARA",
+    subtitle: "General",
+    image: "/assets/therapeutic-general-medicine.jpg",
+    products: [
+      "Stomazo-40",
+      "Stomazo-D",
+      "Doxicent 100/200",
+      "Doxicent CV",
+      "Frecox",
+      "Frecox-SP",
+      "Frecox-TH",
+      "Nervia-NX",
+      "Mesolac",
+      "Goodfate-O",
+      "Omnagut",
+      "Rabefort-20",
+      "Rabefort-DSR",
+      "Rabefort-L",
+      "Rabefort-IT",
+      "Pantazon-40",
+      "Pantazon-DSR",
+      "Omnacare",
+      "Cefnara-250",
+      "Cefnara-500",
+      "Cefnara-CV",
+      "Bilariv-M",
+      "Throfree"
+    ]
   }
 };
 
@@ -522,6 +739,7 @@ export default function AreaOfCareDetail() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {currentCategory.products.map((productName, index) => {
               const isFemme = slug?.toLowerCase() === 'femme' || slug?.toLowerCase() === 'womens-health';
+              const isPediatrics = slug?.toLowerCase() === 'pediaplus' || slug?.toLowerCase() === 'pediatrics' || slug?.toLowerCase() === 'paediatrics';
               const productSlug = productName.toLowerCase().trim().replace(/\s+/g, '-');
 
               if (isFemme) {
@@ -529,6 +747,159 @@ export default function AreaOfCareDetail() {
                   <Link
                     key={index}
                     to={`/areas-of-care/femme/${productSlug}`}
+                    className="bg-brand-surface/60 border border-brand-border p-5 rounded-sm shadow-2xs transition-all duration-200 hover:border-brand-dark hover:bg-brand-surface group flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-mono font-medium text-brand-sage">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-base font-medium text-brand-dark tracking-tight group-hover:text-brand-sage transition-colors">
+                        {productName}
+                      </span>
+                    </div>
+                    <ChevronRight size={16} className="text-brand-muted group-hover:text-brand-dark transition-colors shrink-0" />
+                  </Link>
+                );
+              }
+
+              if (isPediatrics) {
+                const targetAreaSlug = slug?.toLowerCase() === 'pediatrics' ? 'pediatrics' : (slug?.toLowerCase() === 'paediatrics' ? 'paediatrics' : 'pediaplus');
+                return (
+                  <Link
+                    key={index}
+                    to={`/areas-of-care/${targetAreaSlug}/${productSlug}`}
+                    className="bg-brand-surface/60 border border-brand-border p-5 rounded-sm shadow-2xs transition-all duration-200 hover:border-brand-dark hover:bg-brand-surface group flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-mono font-medium text-brand-sage">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-base font-medium text-brand-dark tracking-tight group-hover:text-brand-sage transition-colors">
+                        {productName}
+                      </span>
+                    </div>
+                    <ChevronRight size={16} className="text-brand-muted group-hover:text-brand-dark transition-colors shrink-0" />
+                  </Link>
+                );
+              }
+
+              const isOrthopaedics = slug?.toLowerCase() === 'ortheon' || slug?.toLowerCase() === 'orthopaedics' || slug?.toLowerCase() === 'orthopedic' || slug?.toLowerCase() === 'orthopedics';
+              if (isOrthopaedics) {
+                const targetAreaSlug = slug?.toLowerCase() === 'ortheon' ? 'ortheon' : 'orthopaedics';
+                return (
+                  <Link
+                    key={index}
+                    to={`/areas-of-care/${targetAreaSlug}/${productSlug}`}
+                    className="bg-brand-surface/60 border border-brand-border p-5 rounded-sm shadow-2xs transition-all duration-200 hover:border-brand-dark hover:bg-brand-surface group flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-mono font-medium text-brand-sage">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-base font-medium text-brand-dark tracking-tight group-hover:text-brand-sage transition-colors">
+                        {productName}
+                      </span>
+                    </div>
+                    <ChevronRight size={16} className="text-brand-muted group-hover:text-brand-dark transition-colors shrink-0" />
+                  </Link>
+                );
+              }
+
+              const isNeurology = slug?.toLowerCase() === 'neurix' || slug?.toLowerCase() === 'neurology' || slug?.toLowerCase() === 'neuro';
+              if (isNeurology) {
+                const targetAreaSlug = slug?.toLowerCase() === 'neurix' ? 'neurix' : 'neurology';
+                return (
+                  <Link
+                    key={index}
+                    to={`/areas-of-care/${targetAreaSlug}/${productSlug}`}
+                    className="bg-brand-surface/60 border border-brand-border p-5 rounded-sm shadow-2xs transition-all duration-200 hover:border-brand-dark hover:bg-brand-surface group flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-mono font-medium text-brand-sage">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-base font-medium text-brand-dark tracking-tight group-hover:text-brand-sage transition-colors">
+                        {productName}
+                      </span>
+                    </div>
+                    <ChevronRight size={16} className="text-brand-muted group-hover:text-brand-dark transition-colors shrink-0" />
+                  </Link>
+                );
+              }
+
+              const isOphthalmology = slug?.toLowerCase() === 'eyerix' || slug?.toLowerCase() === 'ophthalmology' || slug?.toLowerCase() === 'ocular' || slug?.toLowerCase() === 'eye-care';
+              if (isOphthalmology) {
+                const targetAreaSlug = slug?.toLowerCase() === 'eyerix' ? 'eyerix' : 'ophthalmology';
+                return (
+                  <Link
+                    key={index}
+                    to={`/areas-of-care/${targetAreaSlug}/${productSlug}`}
+                    className="bg-brand-surface/60 border border-brand-border p-5 rounded-sm shadow-2xs transition-all duration-200 hover:border-brand-dark hover:bg-brand-surface group flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-mono font-medium text-brand-sage">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-base font-medium text-brand-dark tracking-tight group-hover:text-brand-sage transition-colors">
+                        {productName}
+                      </span>
+                    </div>
+                    <ChevronRight size={16} className="text-brand-muted group-hover:text-brand-dark transition-colors shrink-0" />
+                  </Link>
+                );
+              }
+
+              const isDermatology = slug?.toLowerCase() === 'vellis' || slug?.toLowerCase() === 'dermatology' || slug?.toLowerCase() === 'derma' || slug?.toLowerCase() === 'skin';
+              if (isDermatology) {
+                const targetAreaSlug = slug?.toLowerCase() === 'vellis' ? 'vellis' : 'dermatology';
+                return (
+                  <Link
+                    key={index}
+                    to={`/areas-of-care/${targetAreaSlug}/${productSlug}`}
+                    className="bg-brand-surface/60 border border-brand-border p-5 rounded-sm shadow-2xs transition-all duration-200 hover:border-brand-dark hover:bg-brand-surface group flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-mono font-medium text-brand-sage">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-base font-medium text-brand-dark tracking-tight group-hover:text-brand-sage transition-colors">
+                        {productName}
+                      </span>
+                    </div>
+                    <ChevronRight size={16} className="text-brand-muted group-hover:text-brand-dark transition-colors shrink-0" />
+                  </Link>
+                );
+              }
+
+              const isEnt = slug?.toLowerCase() === 'otira' || slug?.toLowerCase() === 'ent' || slug?.toLowerCase() === 'ear-nose-throat';
+              if (isEnt) {
+                const targetAreaSlug = slug?.toLowerCase() === 'otira' ? 'otira' : 'ent';
+                return (
+                  <Link
+                    key={index}
+                    to={`/areas-of-care/${targetAreaSlug}/${productSlug}`}
+                    className="bg-brand-surface/60 border border-brand-border p-5 rounded-sm shadow-2xs transition-all duration-200 hover:border-brand-dark hover:bg-brand-surface group flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-mono font-medium text-brand-sage">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-base font-medium text-brand-dark tracking-tight group-hover:text-brand-sage transition-colors">
+                        {productName}
+                      </span>
+                    </div>
+                    <ChevronRight size={16} className="text-brand-muted group-hover:text-brand-dark transition-colors shrink-0" />
+                  </Link>
+                );
+              }
+
+              const isGeneralMedicine = slug?.toLowerCase() === 'omnara' || slug?.toLowerCase() === 'general-medicine' || slug?.toLowerCase() === 'general' || slug?.toLowerCase() === 'internal-medicine';
+              if (isGeneralMedicine) {
+                const targetAreaSlug = slug?.toLowerCase() === 'omnara' ? 'omnara' : 'general-medicine';
+                return (
+                  <Link
+                    key={index}
+                    to={`/areas-of-care/${targetAreaSlug}/${productSlug}`}
                     className="bg-brand-surface/60 border border-brand-border p-5 rounded-sm shadow-2xs transition-all duration-200 hover:border-brand-dark hover:bg-brand-surface group flex items-center justify-between"
                   >
                     <div className="flex items-center gap-3">
