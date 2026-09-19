@@ -49,8 +49,8 @@ export const areasOfCare = [
     title: "PEDIAPLUS — PEDIATRICS",
     heading: "Care designed around the needs of growing children.",
     description: "A portfolio spanning paediatric therapeutic and nutritional needs, with formulations and dosage formats suited to different stages of childhood care.",
-    image: "/assets/therapeutic-paediatrics.jpg",
-    heroImage: "/assets/therapeutic-paediatrics.jpg",
+    image: "/assets/pediaplus.jpg",
+    heroImage: "/assets/pediaplus.jpg",
     keyTherapeuticInfo: [
       "Paediatric Micronutrient & Growth Support",
       "Childhood Infection & Antipyretic Formulations",
@@ -64,7 +64,7 @@ export const areasOfCare = [
         brand_name: "Pediaplus DROPS",
         slug: "pediaplus-multi",
         short_description: "Pediatric multivitamin and essential mineral drops formulated for infancy and early childhood.",
-        packshot_url: "/assets/therapeutic-paediatrics.jpg",
+        packshot_url: "/assets/pediaplus.jpg",
         status: "published"
       },
       {
@@ -72,7 +72,7 @@ export const areasOfCare = [
         brand_name: "Pediaplus GROW",
         slug: "pediaplus-growth",
         short_description: "Balanced macronutrient and DHA suspension for physical and cognitive developmental milestones.",
-        packshot_url: "/assets/therapeutic-paediatrics.jpg",
+        packshot_url: "/assets/pediaplus.jpg",
         status: "published"
       }
     ]
@@ -88,8 +88,8 @@ export const areasOfCare = [
     title: "ORTHEON — ORTHOPAEDICS",
     heading: "Supporting movement, mobility and musculoskeletal care.",
     description: "Our orthopaedic portfolio spans joint health, bone health, mobility, pain management and musculoskeletal support.",
-    image: "/assets/therapeutic-orthopaedics.jpg",
-    heroImage: "/assets/therapeutic-orthopaedics.jpg",
+    image: "/assets/ortheon.jpg",
+    heroImage: "/assets/ortheon.jpg",
     keyTherapeuticInfo: [
       "Targeted Musculoskeletal & Joint Nourishment",
       "Native Type II Collagen & Hyaluronic Acid Formulations",
@@ -112,7 +112,7 @@ export const areasOfCare = [
         brand_name: "Ortheon D3 60K",
         slug: "ortheon-d3",
         short_description: "High-potency Cholecalciferol softgel capsules for corrective bone mineral treatment.",
-        packshot_url: "/assets/therapeutic-orthopaedics.jpg",
+        packshot_url: "/assets/ortheon.jpg",
         status: "published"
       }
     ]
@@ -128,8 +128,8 @@ export const areasOfCare = [
     title: "NEURIX — NEUROLOGY",
     heading: "A focused portfolio across neurological care.",
     description: "Onecore’s neurology portfolio includes prescription therapies and supportive formulations used across a range of neurological and neuro nutritional needs.",
-    image: "/assets/therapeutic-neurology.jpg",
-    heroImage: "/assets/therapeutic-neurology.jpg",
+    image: "/assets/neurix.jpg",
+    heroImage: "/assets/neurix.jpg",
     keyTherapeuticInfo: [
       "Peripheral Neuropathy & Nerve Conduction Support",
       "Active Methylcobalamin & Neurotropic B-Complex",
@@ -143,7 +143,7 @@ export const areasOfCare = [
         brand_name: "Neurix FORTE",
         slug: "neurix-forte",
         short_description: "Neuro-restorative formulation combining Methylcobalamin, Alpha Lipoic Acid, and Pregabalin.",
-        packshot_url: "/assets/therapeutic-neurology.jpg",
+        packshot_url: "/assets/neurix.jpg",
         status: "published"
       },
       {
@@ -151,7 +151,7 @@ export const areasOfCare = [
         brand_name: "Neurix GABA",
         slug: "neurix-gaba",
         short_description: "Targeted central agent for neuropathic pain and nerve hyper-excitability relief.",
-        packshot_url: "/assets/therapeutic-neurology.jpg",
+        packshot_url: "/assets/neurix.jpg",
         status: "published"
       }
     ]
@@ -167,8 +167,8 @@ export const areasOfCare = [
     title: "EYERIX — OPHTHALMOLOGY",
     heading: "Specialised formulations for different areas of eye care.",
     description: "Our ophthalmology range includes products used across ocular infection, inflammation, glaucoma related care, lubrication and other ophthalmic needs.",
-    image: "/assets/therapeutic-ophthalmology.jpg",
-    heroImage: "/assets/therapeutic-ophthalmology.jpg",
+    image: "/assets/eyerix.jpg",
+    heroImage: "/assets/eyerix.jpg",
     keyTherapeuticInfo: [
       "Dry Eye Disease & Corneal Surface Lubrication",
       "Ocular Anti-Infective & Anti-Inflammatory Eye Drops",
@@ -182,7 +182,7 @@ export const areasOfCare = [
         brand_name: "Eyerix TEARS",
         slug: "eyerix-tears",
         short_description: "Preservative-free Sodium Hyaluronate artificial tear drops for chronic dry eye relief.",
-        packshot_url: "/assets/therapeutic-ophthalmology.jpg",
+        packshot_url: "/assets/eyerix.jpg",
         status: "published"
       },
       {
@@ -190,7 +190,7 @@ export const areasOfCare = [
         brand_name: "Eyerix VISION",
         slug: "eyerix-lutein",
         short_description: "Carotenoid Macular Complex featuring Lutein, Zeaxanthin, and Astaxanthin for retinal health.",
-        packshot_url: "/assets/therapeutic-ophthalmology.jpg",
+        packshot_url: "/assets/eyerix.jpg",
         status: "published"
       }
     ]
@@ -206,8 +206,8 @@ export const areasOfCare = [
     title: "VELLIS — DERMATOLOGY",
     heading: "Formulations for medical and supportive skin care.",
     description: "The dermatology portfolio spans prescription and supportive formulations across fungal infections, acne, inflammatory skin conditions, pigmentation and skin health.",
-    image: "/assets/therapeutic-dermatology.jpg",
-    heroImage: "/assets/therapeutic-dermatology.jpg",
+    image: "/assets/vellis.webp",
+    heroImage: "/assets/vellis.webp",
     keyTherapeuticInfo: [
       "Broad-Spectrum Topical & Systemic Antifungals",
       "Acne Vulgaris Management & Barrier Repair",
@@ -221,7 +221,7 @@ export const areasOfCare = [
         brand_name: "Vellis DERM Cream",
         slug: "vellis-derm",
         short_description: "Targeted topical antifungal and anti-inflammatory dermatological application.",
-        packshot_url: "/assets/therapeutic-dermatology.jpg",
+        packshot_url: "/assets/vellis.webp",
         status: "published"
       },
       {
@@ -229,7 +229,7 @@ export const areasOfCare = [
         brand_name: "Vellis ACNE Cleanser",
         slug: "vellis-clean",
         short_description: "Salicylic acid and Niacinamide medicated face cleanser for blemish-prone skin.",
-        packshot_url: "/assets/therapeutic-dermatology.jpg",
+        packshot_url: "/assets/vellis.webp",
         status: "published"
       }
     ]
@@ -245,8 +245,8 @@ export const areasOfCare = [
     title: "OTIRA — ENT",
     heading: "Focused support across ear, nose and throat care.",
     description: "A portfolio developed around common and specialised needs encountered across ENT practice.",
-    image: "/assets/therapeutic-ent.jpg",
-    heroImage: "/assets/therapeutic-ent.jpg",
+    image: "/assets/otira.jpg",
+    heroImage: "/assets/otira.jpg",
     keyTherapeuticInfo: [
       "Allergic Rhinitis & Nasal Decongestant Sprays",
       "Otitis Externa & Media Antibacterial Ear Drops",
@@ -260,7 +260,7 @@ export const areasOfCare = [
         brand_name: "OTIRA NASAL Spray",
         slug: "otira-spray",
         short_description: "Isotonic sea mineral and Fluticasone aqueous nasal spray for seasonal rhinitis.",
-        packshot_url: "/assets/therapeutic-ent.jpg",
+        packshot_url: "/assets/otira.jpg",
         status: "published"
       },
       {
@@ -268,7 +268,7 @@ export const areasOfCare = [
         brand_name: "OTIRA OTIC Drops",
         slug: "otira-ear",
         short_description: "Combination Ciprofloxacin and Hydrocortisone ear drops for painful acute otitis.",
-        packshot_url: "/assets/therapeutic-ent.jpg",
+        packshot_url: "/assets/otira.jpg",
         status: "published"
       }
     ]
@@ -323,8 +323,8 @@ export const areasOfCare = [
     title: "CYTOS — ONCOLOGY",
     heading: "Specialised therapies within cancer care.",
     description: "Onecore’s oncology portfolio brings together specialised prescription products used across selected areas of cancer treatment and supportive care.",
-    image: "/assets/therapeutic-oncology.jpg",
-    heroImage: "/assets/therapeutic-oncology.jpg",
+    image: "/assets/cytos.jpg",
+    heroImage: "/assets/cytos.jpg",
     keyTherapeuticInfo: [
       "Chemotherapy Support & Antiemetics",
       "Targeted Oncology Adjuvant Therapies",
@@ -338,7 +338,7 @@ export const areasOfCare = [
         brand_name: "Cytos SUPPORT",
         slug: "cytos-onco",
         short_description: "Specialized high-protein nutritional supplement for oncology patients.",
-        packshot_url: "/assets/therapeutic-oncology.jpg",
+        packshot_url: "/assets/cytos.jpg",
         status: "published"
       }
     ]

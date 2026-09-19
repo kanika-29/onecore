@@ -29,38 +29,13 @@ export default function PatientsCaregivers() {
     }
   };
 
-  const handleModalSubmit = async (e) => {
+  const handleModalSubmit = (e) => {
     e.preventDefault();
-    const formEl = e.currentTarget;
-    const inputs = formEl.querySelectorAll('input, textarea');
-    const name = inputs[0]?.value || '';
-    const email = inputs[1]?.value || '';
-    const productRef = inputs[2]?.value || '';
-    const summary = inputs[3]?.value || '';
-
-    try {
-      await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fullName: name,
-          email: email,
-          phone: '',
-          organisation: productRef ? `Product Ref: ${productRef}` : '',
-          contactType: activeSafetyModal === 'professional' ? 'Healthcare Professional' : 'Patient / Caregiver',
-          natureOfEnquiry: 'Patient Safety & Adverse Event Report',
-          message: `Product/Batch Reference: ${productRef}\n\nObservation Summary:\n${summary}`,
-        }),
-      });
-    } catch (err) {
-      console.warn('Safety report submission error:', err);
-    }
-
     setModalSubmitted(true);
     setTimeout(() => {
       setModalSubmitted(false);
       setActiveSafetyModal(null);
-    }, 4000);
+    }, 2500);
   };
 
   // Section 1: Hero

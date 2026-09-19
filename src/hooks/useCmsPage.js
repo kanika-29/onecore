@@ -1,91 +1,32 @@
 import { useState, useEffect } from 'react';
+import { pagesContent } from '../data/pagesContent';
 
 /**
- * Hook to load dynamic CMS page content and sections from MySQL via Express API.
- * Gracefully falls back to hardcoded defaults on load / network error.
+ * Hook to load page content and sections statically from pagesContent data.
+ * Gracefully provides instant rendering with zero network dependencies in static frontend mode.
  */
 export function useCmsPage(pageKey, fallbackData = {}) {
-  const [page, setPage] = useState(null);
-  const [sections, setSections] = useState({});
-  const [loading, setLoading] = useState(true);
+  const staticPage = pagesContent[pageKey] || fallbackData;
+  const [page, setPage] = useState(staticPage);
+  const [sections, setSections] = useState(staticPage?.sections || {});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
+    const pageData = pagesContent[pageKey] || fallbackData;
+    setPage(pageData);
+    setSections(pageData?.sections || {});
 
-    async function fetchPage() {
-      try {
-        const res = await fetch(`/api/pages/${pageKey}`);
-        if (!res.ok) return;
-
-        const json = await res.json();
-        if (!isMounted || !json.success || !json.data) return;
-
-        const pageData = json.data;
-        setPage(pageData);
-
-        // Update SEO Meta
-        if (pageData.seo_title) {
-          document.title = pageData.seo_title;
-        }
-        if (pageData.seo_description) {
-          const metaDesc = document.querySelector('meta[name="description"]');
-          if (metaDesc) {
-            metaDesc.setAttribute('content', pageData.seo_description);
-          }
-        }
-
-        // Map sections by section_key
-        if (Array.isArray(pageData.sections)) {
-          const secMap = {};
-          pageData.sections.forEach((sec) => {
-            let parsedItems = [];
-            if (sec.items_json) {
-              try {
-                parsedItems = typeof sec.items_json === 'string'
-                  ? JSON.parse(sec.items_json)
-                  : sec.items_json;
-              } catch (e) {
-                parsedItems = [];
-              }
-            }
-
-            const headingVal = sec.heading || sec.title || '';
-            const subheadingVal = sec.subheading || sec.subtitle || '';
-
-            secMap[sec.section_key] = {
-              id: sec.id,
-              section_key: sec.section_key,
-              heading: headingVal,
-              title: headingVal,
-              subheading: subheadingVal,
-              subtitle: subheadingVal,
-              eyebrow: sec.eyebrow || '',
-              body: sec.body || '',
-              image_url: sec.image_url || '',
-              poster_url: sec.poster_url || sec.image_url || '',
-              video_url: sec.video_url || '',
-              cta_text: sec.cta_text || '',
-              cta_url: sec.cta_url || '',
-              secondary_cta_text: sec.secondary_cta_text || '',
-              secondary_cta_url: sec.secondary_cta_url || '',
-              is_active: sec.is_active !== 0,
-              items: Array.isArray(parsedItems) ? parsedItems : [],
-            };
-          });
-          setSections(secMap);
-        }
-      } catch (err) {
-        console.warn(`CMS Fetch failed for page [${pageKey}], using fallback:`, err);
-      } finally {
-        if (isMounted) setLoading(false);
+    // Update SEO Meta
+    if (pageData?.seo_title) {
+      document.title = pageData.seo_title;
+    }
+    if (pageData?.seo_description) {
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute('content', pageData.seo_description);
       }
     }
-
-    fetchPage();
-
-    return () => {
-      isMounted = false;
-    };
+    setLoading(false);
   }, [pageKey]);
 
   /**
@@ -115,13 +56,17 @@ export function useCmsPage(pageKey, fallbackData = {}) {
         items: fallback.items || [],
       };
     }
+
+    const titleVal = sec.title || sec.heading || fallbackTitle;
+    const subVal = sec.subtitle || sec.subheading || fallbackSubtitle;
+
     return {
-      id: sec.id,
-      section_key: sec.section_key,
-      title: sec.title || fallbackTitle,
-      heading: sec.heading || fallbackTitle,
-      subtitle: sec.subtitle || fallbackSubtitle,
-      subheading: sec.subheading || fallbackSubtitle,
+      id: sec.id || key,
+      section_key: key,
+      title: titleVal,
+      heading: titleVal,
+      subtitle: subVal,
+      subheading: subVal,
       eyebrow: sec.eyebrow || fallback.eyebrow || '',
       body: sec.body || fallback.body || '',
       image_url: sec.image_url || fallback.image_url || '',
@@ -131,7 +76,7 @@ export function useCmsPage(pageKey, fallbackData = {}) {
       cta_url: sec.cta_url || fallback.cta_url || '',
       secondary_cta_text: sec.secondary_cta_text || fallback.secondary_cta_text || '',
       secondary_cta_url: sec.secondary_cta_url || fallback.secondary_cta_url || '',
-      is_active: sec.is_active,
+      is_active: sec.is_active !== false,
       items: sec.items && sec.items.length > 0 ? sec.items : fallback.items || [],
     };
   };
@@ -143,3 +88,4 @@ export function useCmsPage(pageKey, fallbackData = {}) {
     loading,
   };
 }
+

@@ -220,12 +220,9 @@ export default function Contact() {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-    try {
-      await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+    // Simulate static form submission
+    setTimeout(() => {
+      setIsSubmitting(false);
       setIsSubmitted(true);
       setFormData({
         fullName: '',
@@ -237,14 +234,9 @@ export default function Contact() {
         message: '',
         consent: false,
       });
-    } catch (err) {
-      console.warn('Enquiry submission error:', err);
-      // Still show success or handle gracefully
-      setIsSubmitted(true);
-    } finally {
-      setIsSubmitting(false);
-    }
+    }, 400);
   };
+
 
   const renderChannelIcon = (ch, idx) => {
     const upper = (ch || '').toUpperCase();

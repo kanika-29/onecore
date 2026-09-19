@@ -62,7 +62,7 @@ const categoryData = {
   pediaplus: {
     title: "Pediaplus",
     subtitle: "Pediatrics",
-    image: "/assets/therapeutic-paediatrics.jpg",
+    image: "/assets/pediaplus.jpg",
     products: [
       "Glypocal-LP",
       "Zincolys Syrup",
@@ -82,7 +82,7 @@ const categoryData = {
   pediatrics: {
     title: "Pediaplus",
     subtitle: "Pediatrics",
-    image: "/assets/therapeutic-paediatrics.jpg",
+    image: "/assets/pediaplus.jpg",
     products: [
       "Glypocal-LP",
       "Zincolys Syrup",
@@ -102,7 +102,7 @@ const categoryData = {
   paediatrics: {
     title: "Pediaplus",
     subtitle: "Pediatrics",
-    image: "/assets/therapeutic-paediatrics.jpg",
+    image: "/assets/pediaplus.jpg",
     products: [
       "Glypocal-LP",
       "Zincolys Syrup",
@@ -122,7 +122,7 @@ const categoryData = {
   ortheon: {
     title: "Ortheon",
     subtitle: "Orthopaedics",
-    image: "/assets/therapeutic-orthopaedics.jpg",
+    image: "/assets/ortheon.jpg",
     products: [
       "Jorelax",
       "DuoDK",
@@ -140,7 +140,7 @@ const categoryData = {
   orthopaedics: {
     title: "Ortheon",
     subtitle: "Orthopaedics",
-    image: "/assets/therapeutic-orthopaedics.jpg",
+    image: "/assets/ortheon.jpg",
     products: [
       "Jorelax",
       "DuoDK",
@@ -158,7 +158,7 @@ const categoryData = {
   orthopedic: {
     title: "Ortheon",
     subtitle: "Orthopaedics",
-    image: "/assets/therapeutic-orthopaedics.jpg",
+    image: "/assets/ortheon.jpg",
     products: [
       "Jorelax",
       "DuoDK",
@@ -176,7 +176,7 @@ const categoryData = {
   neurix: {
     title: "Neurix",
     subtitle: "Neurology",
-    image: "/assets/therapeutic-neurology.jpg",
+    image: "/assets/neurix.jpg",
     products: [
       "Epinerve-Forte",
       "Nervia",
@@ -200,7 +200,7 @@ const categoryData = {
   neurology: {
     title: "Neurix",
     subtitle: "Neurology",
-    image: "/assets/therapeutic-neurology.jpg",
+    image: "/assets/neurix.jpg",
     products: [
       "Epinerve-Forte",
       "Nervia",
@@ -224,7 +224,7 @@ const categoryData = {
   neuro: {
     title: "Neurix",
     subtitle: "Neurology",
-    image: "/assets/therapeutic-neurology.jpg",
+    image: "/assets/neurix.jpg",
     products: [
       "Epinerve-Forte",
       "Nervia",
@@ -248,7 +248,7 @@ const categoryData = {
   eyerix: {
     title: "Eyerix",
     subtitle: "Ophthalmology",
-    image: "/assets/therapeutic-ophthalmology.jpg",
+    image: "/assets/eyerix.jpg",
     products: [
       "Moxyone-M",
       "Moxyone",
@@ -282,7 +282,7 @@ const categoryData = {
   ophthalmology: {
     title: "Eyerix",
     subtitle: "Ophthalmology",
-    image: "/assets/therapeutic-ophthalmology.jpg",
+    image: "/assets/eyerix.jpg",
     products: [
       "Moxyone-M",
       "Moxyone",
@@ -316,7 +316,7 @@ const categoryData = {
   ocular: {
     title: "Eyerix",
     subtitle: "Ophthalmology",
-    image: "/assets/therapeutic-ophthalmology.jpg",
+    image: "/assets/eyerix.jpg",
     products: [
       "Moxyone-M",
       "Moxyone",
@@ -350,7 +350,7 @@ const categoryData = {
   'eye-care': {
     title: "Eyerix",
     subtitle: "Ophthalmology",
-    image: "/assets/therapeutic-ophthalmology.jpg",
+    image: "/assets/eyerix.jpg",
     products: [
       "Moxyone-M",
       "Moxyone",
@@ -384,7 +384,7 @@ const categoryData = {
   vellis: {
     title: "Vellis",
     subtitle: "Dermatology",
-    image: "/assets/therapeutic-dermatology.jpg",
+    image: "/assets/vellis.webp",
     products: [
       "Itrafite",
       "Lulifite",
@@ -419,7 +419,7 @@ const categoryData = {
   dermatology: {
     title: "Vellis",
     subtitle: "Dermatology",
-    image: "/assets/therapeutic-dermatology.jpg",
+    image: "/assets/vellis.webp",
     products: [
       "Itrafite",
       "Lulifite",
@@ -454,7 +454,7 @@ const categoryData = {
   derma: {
     title: "Vellis",
     subtitle: "Dermatology",
-    image: "/assets/therapeutic-dermatology.jpg",
+    image: "/assets/vellis.webp",
     products: [
       "Itrafite",
       "Lulifite",
@@ -489,7 +489,7 @@ const categoryData = {
   skin: {
     title: "Vellis",
     subtitle: "Dermatology",
-    image: "/assets/therapeutic-dermatology.jpg",
+    image: "/assets/vellis.webp",
     products: [
       "Itrafite",
       "Lulifite",
@@ -524,7 +524,7 @@ const categoryData = {
   otira: {
     title: "OTIRA",
     subtitle: "ENT",
-    image: "/assets/therapeutic-ent.jpg",
+    image: "/assets/otira.jpg",
     products: [
       "Flutiriv",
       "Deftos",
@@ -541,7 +541,7 @@ const categoryData = {
   ent: {
     title: "OTIRA",
     subtitle: "ENT",
-    image: "/assets/therapeutic-ent.jpg",
+    image: "/assets/otira.jpg",
     products: [
       "Flutiriv",
       "Deftos",
@@ -558,7 +558,7 @@ const categoryData = {
   'ear-nose-throat': {
     title: "OTIRA",
     subtitle: "ENT",
-    image: "/assets/therapeutic-ent.jpg",
+    image: "/assets/otira.jpg",
     products: [
       "Flutiriv",
       "Deftos",
@@ -691,8 +691,48 @@ const categoryData = {
       "Bilariv-M",
       "Throfree"
     ]
+  },
+  cytos: {
+    title: "Cytos",
+    subtitle: "Oncology",
+    image: "/assets/cytos.jpg",
+    products: [
+      "Cytos SUPPORT",
+      "Oncora-4",
+      "Oncora-8",
+      "Leuco-Boost",
+      "Aprecore",
+      "Nausex-IV"
+    ]
+  },
+  oncology: {
+    title: "Cytos",
+    subtitle: "Oncology",
+    image: "/assets/cytos.jpg",
+    products: [
+      "Cytos SUPPORT",
+      "Oncora-4",
+      "Oncora-8",
+      "Leuco-Boost",
+      "Aprecore",
+      "Nausex-IV"
+    ]
+  },
+  'cancer-care': {
+    title: "Cytos",
+    subtitle: "Oncology",
+    image: "/assets/cytos.jpg",
+    products: [
+      "Cytos SUPPORT",
+      "Oncora-4",
+      "Oncora-8",
+      "Leuco-Boost",
+      "Aprecore",
+      "Nausex-IV"
+    ]
   }
 };
+
 
 export default function AreaOfCareDetail() {
   const { slug } = useParams();

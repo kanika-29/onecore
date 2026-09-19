@@ -91,32 +91,17 @@ export default function AreasOfCare() {
     formState.country.trim() !== '' &&
     formState.consent === true;
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     if (!isFormValid) return;
 
     setIsSubmitting(true);
-    try {
-      await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fullName: formState.fullName,
-          email: formState.workEmail,
-          organisation: formState.organisation,
-          contactType: formState.role,
-          natureOfEnquiry: 'Catalogue request',
-          message: `Catalogue request for country: ${formState.country}`,
-          consent: formState.consent,
-        }),
-      });
-    } catch (err) {
-      console.warn('Catalogue submission error:', err);
-    } finally {
+    setTimeout(() => {
       setIsSubmitting(false);
       setFormSubmitted(true);
-    }
+    }, 400);
   };
+
 
   return (
     <div className="w-full">
@@ -136,7 +121,7 @@ export default function AreasOfCare() {
           ========================================================================= */}
       <nav
         aria-label="Browse by specialty"
-        className="sticky top-[72px] z-30 bg-brand-ivory/95 backdrop-blur-md border-y border-brand-border/80 py-3.5 sm:py-4 shadow-2xs"
+        className="sticky top-0 z-40 bg-brand-ivory/95 backdrop-blur-md border-y border-brand-border/80 py-3.5 sm:py-4 shadow-2xs"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Horizontal Specialty Links */}

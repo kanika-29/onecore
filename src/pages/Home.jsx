@@ -134,15 +134,15 @@ export default function Home() {
         image: a.image || a.image_url || '/assets/therapeutic-general-medicine.jpg',
       }))
     : [
-        { name: "CYTOS", specialty: "Oncology", image: "/assets/therapeutic-oncology.jpg" },
-        { name: "PEDIAPLUS", specialty: "Paediatrics", image: "/assets/therapeutic-paediatrics.jpg" },
-        { name: "OTIRA", specialty: "ENT", image: "/assets/therapeutic-ent.jpg" },
+        { name: "CYTOS", specialty: "Oncology", image: "/assets/cytos.jpg" },
+        { name: "PEDIAPLUS", specialty: "Paediatrics", image: "/assets/pediaplus.jpg" },
+        { name: "OTIRA", specialty: "ENT", image: "/assets/otira.jpg" },
         { name: "FEMME", specialty: "Women’s Health", image: "/assets/therapeutic-womens-health.jpg" },
         { name: "OMNARA", specialty: "General Medicine", image: "/assets/therapeutic-general-medicine.jpg" },
-        { name: "VELLIS", specialty: "Dermatology", image: "/assets/therapeutic-dermatology.jpg" },
-        { name: "EYERIX", specialty: "Ophthalmology", image: "/assets/therapeutic-ophthalmology.jpg" },
-        { name: "NEURIX", specialty: "Neurology", image: "/assets/therapeutic-neurology.jpg" },
-        { name: "ORTHEON", specialty: "Orthopaedics", image: "/assets/therapeutic-orthopaedics.jpg" },
+        { name: "VELLIS", specialty: "Dermatology", image: "/assets/vellis.webp" },
+        { name: "EYERIX", specialty: "Ophthalmology", image: "/assets/eyerix.jpg" },
+        { name: "NEURIX", specialty: "Neurology", image: "/assets/neurix.jpg" },
+        { name: "ORTHEON", specialty: "Orthopaedics", image: "/assets/ortheon.jpg" },
       ];
 
   const renderSustainabilityIcon = (iconName, idx) => {
