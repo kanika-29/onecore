@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Search, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSettings } from '../hooks/useSettings';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function Navbar() {
   const { siteSettings } = useSettings();
@@ -11,7 +12,7 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const logoUrl = siteSettings.logo_url || '/assets/onecore-logo.png';
+  const logoUrl = assetUrl(siteSettings.logo_url || '/assets/onecore-logo.png');
 
   // Specific left and right navigation groups as required
   const leftNavLinks = [

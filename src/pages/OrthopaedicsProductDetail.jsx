@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getOrthopaedicsProductBySlug } from '../data/orthopaedicsProducts';
+import { assetUrl } from '../utils/assetUrl';
 
 // Helper to parse Mechanism into 3 steps for the dark flow section
 function parseMechanismSteps(mechanismText) {
@@ -221,7 +222,7 @@ export default function OrthopaedicsProductDetail() {
           {isOneFlexo ? (
             <div className="w-full max-w-[280px] flex flex-col items-center justify-center">
               <img
-                src={product.image}
+                src={assetUrl(product.image)}
                 alt="OneFLEXO Packshot"
                 className="max-h-[380px] w-auto object-contain drop-shadow-xl"
               />

@@ -3,12 +3,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { footerLinks } from '../data/navigation';
 import { ArrowUpRight } from 'lucide-react';
 import { useSettings } from '../hooks/useSettings';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function Footer() {
   const location = useLocation();
   const { siteSettings } = useSettings();
 
-  const logoUrl = siteSettings.logo_url || '/assets/onecore-logo.png';
+  const logoUrl = assetUrl(siteSettings.logo_url || '/assets/onecore-logo.png');
   const tagline = siteSettings.footer_tagline || 'Healthcare centered on people.';
   const copyright = siteSettings.copyright_text || '© 2026 Onecore Pharma Pvt. Ltd.';
 

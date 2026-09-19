@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, useLocation, Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -23,21 +23,27 @@ import Privacy from './pages/Privacy';
 import Disclaimer from './pages/Disclaimer';
 import NotFound from './pages/NotFound';
 
-import { AdminAuthProvider } from './context/AdminAuthContext';
-import ProtectedRoute from './components/admin/ProtectedRoute';
-import AdminLogin from './pages/admin/AdminLogin';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminEnquiries from './pages/admin/AdminEnquiries';
-import AdminPages from './pages/admin/AdminPages';
-import AdminPageEditor from './pages/admin/AdminPageEditor';
-import AdminTherapeuticAreas from './pages/admin/AdminTherapeuticAreas';
-import AdminProducts from './pages/admin/AdminProducts';
-import AdminProductEditor from './pages/admin/AdminProductEditor';
-import AdminNews from './pages/admin/AdminNews';
-import AdminNewsEditor from './pages/admin/AdminNewsEditor';
-import AdminMedia from './pages/admin/AdminMedia';
-import AdminSettings from './pages/admin/AdminSettings';
-import AdminUsers from './pages/admin/AdminUsers';
+function AdminStaticNotice() {
+  return (
+    <div className="min-h-screen bg-[#141A17] flex flex-col items-center justify-center p-6 text-center text-white">
+      <div className="max-w-md bg-white/5 border border-white/10 p-8 rounded-xl space-y-4 backdrop-blur-md">
+        <span className="text-xs uppercase tracking-widest text-[#B5C9BE] font-semibold">ONECORE PHARMA</span>
+        <h2 className="text-2xl font-serif font-medium text-white">Static Mode Active</h2>
+        <p className="text-sm text-gray-300 leading-relaxed">
+          The website is running in decoupled static mode on GitHub Pages. All portfolio products, therapeutic areas, and company content are statically served without backend dependencies.
+        </p>
+        <div className="pt-2">
+          <Link
+            to="/"
+            className="inline-block px-6 py-2.5 bg-[#8DA596] text-[#141A17] font-semibold text-xs uppercase tracking-wider rounded-sm hover:bg-[#A3B8AC] transition-colors"
+          >
+            ← Return to Website
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -63,110 +69,7 @@ function AppRoutes() {
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   if (isAdminRoute) {
-    return (
-      <AdminAuthProvider>
-        <Routes>
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/enquiries"
-            element={
-              <ProtectedRoute>
-                <AdminEnquiries />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/pages"
-            element={
-              <ProtectedRoute>
-                <AdminPages />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/pages/:pageKey"
-            element={
-              <ProtectedRoute>
-                <AdminPageEditor />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/therapeutic-areas"
-            element={
-              <ProtectedRoute>
-                <AdminTherapeuticAreas />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/products"
-            element={
-              <ProtectedRoute>
-                <AdminProducts />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/products/:id"
-            element={
-              <ProtectedRoute>
-                <AdminProductEditor />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/news"
-            element={
-              <ProtectedRoute>
-                <AdminNews />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/news/:id"
-            element={
-              <ProtectedRoute>
-                <AdminNewsEditor />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/media"
-            element={
-              <ProtectedRoute>
-                <AdminMedia />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/settings"
-            element={
-              <ProtectedRoute allowedRoles={['Super Admin', 'Admin']}>
-                <AdminSettings />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/users"
-            element={
-              <ProtectedRoute allowedRoles={['Super Admin']}>
-                <AdminUsers />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/admin/*" element={<NotFound />} />
-        </Routes>
-      </AdminAuthProvider>
-    );
+    return <AdminStaticNotice />;
   }
 
   return (
@@ -221,9 +124,10 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ScrollToTop />
       <AppRoutes />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
+

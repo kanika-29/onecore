@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function PageBanner({
   title,
@@ -7,8 +8,8 @@ export default function PageBanner({
   imageAlt = 'Onecore Pharma',
   className = '',
 }) {
-  const fallbackImage = '/assets/hero-healthcare.jpg';
-  const bgImage = imageUrl || fallbackImage;
+  const fallbackImage = assetUrl('/assets/hero-healthcare.jpg');
+  const bgImage = assetUrl(imageUrl) || fallbackImage;
 
   return (
     <section className={`relative w-full overflow-hidden rounded-b-[2rem] sm:rounded-b-[2.75rem] lg:rounded-b-[3.5rem] shadow-md ${className}`}>

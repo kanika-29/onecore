@@ -4,22 +4,10 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: './',
   server: {
-  port: 3000,
-  open: false,
-  allowedHosts: [
-    '.ngrok-free.dev',
-    '.ngrok-free.app',
-  ],
-  proxy: {
-      '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-      },
-      '/uploads': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-      },
-    },
+    port: 3000,
+    open: false,
   },
 })
+

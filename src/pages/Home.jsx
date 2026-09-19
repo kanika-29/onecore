@@ -8,6 +8,7 @@ import PageBanner from '../components/PageBanner';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { useTherapeuticAreas } from '../hooks/useTherapeuticAreas';
 import { useNews } from '../hooks/useNews';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function Home() {
   const { getSection } = useCmsPage('home');
@@ -191,7 +192,7 @@ export default function Home() {
                     {/* Card Image */}
                     <div className="relative aspect-[16/10] overflow-hidden bg-brand-surface border-b border-brand-sage/15">
                       <img
-                        src={item.image}
+                        src={assetUrl(item.image)}
                         alt={`${item.name} — ${item.specialty}`}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                         loading="lazy"

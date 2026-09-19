@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function FallbackImage({
   src,
@@ -9,13 +10,14 @@ export default function FallbackImage({
 }) {
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const resolvedSrc = assetUrl(src);
 
   return (
     <div className={`relative overflow-hidden bg-brand-surface border border-brand-border/60 ${aspectRatio} ${className}`}>
       {!hasError ? (
         <>
           <img
-            src={src}
+            src={resolvedSrc}
             alt={alt}
             onError={() => setHasError(true)}
             onLoad={() => setIsLoaded(true)}
