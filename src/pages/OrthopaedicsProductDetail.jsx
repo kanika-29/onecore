@@ -91,21 +91,19 @@ function parseUsedForItems(usedForText) {
   }));
 }
 
-// Helper to parse Direction into numbered steps
+// Helper to parse Direction into numbered steps (01 and 02)
 function parseDirectionSteps(directionText) {
   if (!directionText) return [];
 
   const sentences = directionText
     .split(/\.\s+/)
     .map(s => s.trim())
-    .filter(s => s.length > 0);
+    .filter(s => s.length > 0 && !s.toLowerCase().startsWith('use as prescribed'));
 
-  return sentences.map((sentence, idx) => {
-    let title = "Administration Instruction";
+  return sentences.slice(0, 2).map((sentence, idx) => {
+    let title = "Administration Guidance";
     if (idx === 0) title = "Dosing & Schedule";
     else if (idx === 1) title = "Administration Advice";
-    else if (idx === 2) title = "Duration & Safety";
-    else title = "Medical Supervision";
 
     const cleanSentence = sentence.endsWith('.') ? sentence : sentence + '.';
 
@@ -283,7 +281,7 @@ export default function OrthopaedicsProductDetail() {
             When it is used
           </a>
           <a href="#directions" className="text-xs uppercase tracking-wider font-semibold text-[#514b53] hover:text-[#5b2a70] transition-colors whitespace-nowrap">
-            Direction of use
+            Administration
           </a>
           {hasPrecautions && (
             <a href="#precautions" className="text-xs uppercase tracking-wider font-semibold text-[#514b53] hover:text-[#5b2a70] transition-colors whitespace-nowrap">
@@ -303,11 +301,8 @@ export default function OrthopaedicsProductDetail() {
             <h2 className="font-serif text-4xl sm:text-5xl font-normal leading-tight max-w-3xl">
               How the formula operates in the body.
             </h2>
-            <p className="text-base sm:text-lg text-[#cbc6ce] leading-relaxed max-w-3xl">
-              {product.mechanism}
-            </p>
 
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto_1fr] items-start gap-6 max-w-4xl">
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto_1fr] items-start gap-6 max-w-4xl pt-2">
               {mechanismSteps.map((step, idx) => (
                 <React.Fragment key={idx}>
                   <div className="border-t border-[#5c5760] pt-6 min-h-[180px]">
@@ -362,11 +357,11 @@ export default function OrthopaedicsProductDetail() {
         </div>
       </section>
 
-      {/* 8. DIRECTION OF USE */}
+      {/* 8. ADMINISTRATION & DOSAGE */}
       <section id="directions" className="bg-white text-[#232126] py-20 px-6 sm:px-16">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           <div className="lg:col-span-3 text-xs font-bold tracking-[0.19em] uppercase text-[#5b2a70] pt-2">
-            DIRECTION OF USE
+            ADMINISTRATION
           </div>
           <div className="lg:col-span-9 space-y-8">
             <h2 className="font-serif text-4xl sm:text-5xl font-normal leading-tight max-w-3xl">
@@ -432,18 +427,6 @@ export default function OrthopaedicsProductDetail() {
           </div>
         </section>
       )}
-
-      {/* 10. SAFETY / INFORMATION STRIP */}
-      <div className="bg-[#5b2a70] text-white py-8 px-6 sm:px-16">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div className="font-serif text-2xl sm:text-3xl text-white">
-            Information should follow the approved local label.
-          </div>
-          <div className="text-xs sm:text-sm text-[#eadfeb] max-w-xl leading-relaxed">
-            For OneCore products, indication, dosage and precaution content should be market specific. Consult a registered medical practitioner for prescribing guidance.
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

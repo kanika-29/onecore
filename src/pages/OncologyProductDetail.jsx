@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getFemmeProductBySlug } from '../data/femmeProducts';
+import { getOncologyProductBySlug } from '../data/oncologyProducts';
 
 // Helper to parse Mechanism into 3 steps for the dark flow section
 function parseMechanismSteps(mechanismText) {
@@ -33,18 +33,18 @@ function parseMechanismSteps(mechanismText) {
     return [
       {
         num: "01",
-        title: "Active Delivery",
+        title: "Target Pathway",
         desc: parts[0].endsWith('.') ? parts[0] : parts[0] + '.'
       },
       {
         num: "02",
-        title: "Pathway Action",
+        title: "Cellular Response",
         desc: parts[1].endsWith('.') ? parts[1] : parts[1] + '.'
       },
       {
         num: "03",
         title: "Therapeutic Outcome",
-        desc: "Supports intended physiological balance and target symptom management."
+        desc: "Supports oncology care protocols, symptom control and patient quality of life."
       }
     ];
   } else {
@@ -57,12 +57,12 @@ function parseMechanismSteps(mechanismText) {
       {
         num: "02",
         title: "Target Pathway",
-        desc: "Operates through specific cellular receptors and metabolic coenzymes."
+        desc: "Acts on specific receptors, cell cycle pathways, and biological targets."
       },
       {
         num: "03",
         title: "Therapeutic Effect",
-        desc: "Helps produce the intended clinical outcome as evaluated by healthcare professionals."
+        desc: "Helps achieve the intended clinical oncology outcome under oncologist supervision."
       }
     ];
   }
@@ -73,10 +73,10 @@ function parseUsedForItems(usedForText) {
   if (!usedForText) return [];
 
   const items = usedForText
-    .replace(/^Used (?:for|when|in) /i, '')
-    .split(/(?:,|\band\b|\bor\b)/)
+    .replace(/^Used (?:for|when|in|as) /i, '')
+    .split(/(?:;|,|\band\b|\bor\b|—)/)
     .map(i => i.trim())
-    .filter(i => i.length > 3 && !i.match(/^(?:for|or|and)$/i));
+    .filter(i => i.length > 3 && !i.match(/^(?:for|or|and|not for parenteral|not as a stand-alone)$/i));
 
   const finalItems = items.slice(0, 4);
 
@@ -97,11 +97,11 @@ function parseDirectionSteps(directionText) {
   const sentences = directionText
     .split(/\.\s+/)
     .map(s => s.trim())
-    .filter(s => s.length > 0 && !s.toLowerCase().startsWith('use as prescribed'));
+    .filter(s => s.length > 0 && !s.toLowerCase().startsWith('use as prescribed') && !s.toLowerCase().startsWith('administer under'));
 
   return sentences.slice(0, 2).map((sentence, idx) => {
     let title = "Administration Guidance";
-    if (idx === 0) title = "Dosing & Schedule";
+    if (idx === 0) title = "Dosage & Protocol";
     else if (idx === 1) title = "Administration Advice";
 
     const cleanSentence = sentence.endsWith('.') ? sentence : sentence + '.';
@@ -119,26 +119,26 @@ function parsePrecautionsAccordions(precautionsArray) {
   if (!precautionsArray || precautionsArray.length === 0) return [];
 
   const defaultTitles = [
-    "General Tolerability & Precautions",
-    "Clinical Warnings & Considerations",
-    "Interactions & Administration Warnings",
-    "Special Patient Population Guidance",
-    "Monitoring & Safety Protocols"
+    "General Clinical Considerations",
+    "Adverse Event Monitoring & Safety",
+    "Drug Interactions & Concomitant Therapy",
+    "Special Patient Populations",
+    "Institutional & Oncology Protocols"
   ];
 
   return precautionsArray.map((text, idx) => {
     let title = defaultTitles[idx] || `Safety Consideration ${idx + 1}`;
     const lower = text.toLowerCase();
-    if (lower.includes("kidney") || lower.includes("renal") || lower.includes("stone")) {
-      title = "Renal & Kidney Safety";
-    } else if (lower.includes("antibiotic") || lower.includes("levothyroxine") || lower.includes("warfarin")) {
-      title = "Drug Interactions & Separations";
-    } else if (lower.includes("b12") || lower.includes("folate") || lower.includes("anaemia")) {
-      title = "Deficiency & Haematologic Warnings";
-    } else if (lower.includes("bleeding") || lower.includes("liver") || lower.includes("thrombosis")) {
-      title = "Bleeding, Liver & Disease Risk";
-    } else if (lower.includes("pregnancy") || lower.includes("hyperstimulation") || lower.includes("gynaecologist")) {
-      title = "Pregnancy & Specialist Protocols";
+    if (lower.includes("neutropen") || lower.includes("blood") || lower.includes("chemo")) {
+      title = "Chemotherapy & Hematologic Monitoring";
+    } else if (lower.includes("interaction") || lower.includes("cyp3a4") || lower.includes("apomorphine")) {
+      title = "Interactions & Regimen Adjustments";
+    } else if (lower.includes("renal") || lower.includes("hepatic") || lower.includes("liver")) {
+      title = "Renal & Hepatic Considerations";
+    } else if (lower.includes("qt") || lower.includes("cardiac") || lower.includes("ecg")) {
+      title = "Cardiovascular & ECG Precautions";
+    } else if (lower.includes("pregnant") || lower.includes("contracept")) {
+      title = "Pregnancy & Contraception Guidance";
     }
 
     return {
@@ -148,13 +148,13 @@ function parsePrecautionsAccordions(precautionsArray) {
   });
 }
 
-export default function FemmeProductDetail() {
+export default function OncologyProductDetail() {
   const { productSlug } = useParams();
-  const product = getFemmeProductBySlug(productSlug);
+  const product = getOncologyProductBySlug(productSlug);
 
   useEffect(() => {
     if (product) {
-      document.title = `${product.name} — Femme | Onecore Pharma`;
+      document.title = `${product.name} — Cytos Oncology | Onecore Pharma`;
     } else {
       document.title = "Product Not Found | Onecore Pharma";
     }
@@ -164,19 +164,19 @@ export default function FemmeProductDetail() {
     return (
       <div className="w-full bg-[#f7f5f1] text-[#232126] min-h-screen">
         <div className="border-b border-[#d9d4cf] py-3 px-6 text-xs text-[#777078]">
-          <Link to="/areas-of-care/femme" className="hover:text-[#232126]">Therapeutic Areas › Femme</Link>
+          <Link to="/areas-of-care/cytos" className="hover:text-[#232126]">Therapeutic Areas › Cytos</Link>
         </div>
         <div className="max-w-4xl mx-auto px-4 py-20 text-center space-y-6">
           <h1 className="font-serif text-4xl text-[#232126]">Product Not Found</h1>
           <p className="text-base text-[#625d64]">
-            The requested Femme product "<span className="font-mono">{productSlug}</span>" could not be found.
+            The requested Oncology product "<span className="font-mono">{productSlug}</span>" could not be found.
           </p>
           <div className="pt-4">
             <Link
-              to="/areas-of-care/femme"
+              to="/areas-of-care/cytos"
               className="inline-block border border-[#232126] px-6 py-3 text-xs uppercase tracking-wider font-semibold hover:bg-[#232126] hover:text-white transition-colors"
             >
-              ← Back to Femme Products
+              ← Back to Cytos Products
             </Link>
           </div>
         </div>
@@ -191,12 +191,12 @@ export default function FemmeProductDetail() {
 
   return (
     <div className="w-full bg-white text-[#232126] font-sans antialiased">
-      {/* 2. CONTEXT / BREADCRUMB BAR (NO HERO BANNER ABOVE) */}
+      {/* CONTEXT / BREADCRUMB BAR */}
       <div className="w-full border-b border-[#d9d4cf] bg-white py-3 px-6 sm:px-12 flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs text-[#777078] gap-2">
         <div className="flex items-center gap-1.5 flex-wrap">
           <Link to="/areas-of-care" className="hover:text-[#232126] transition-colors">Therapeutic Areas</Link>
           <span>›</span>
-          <Link to="/areas-of-care/femme" className="hover:text-[#232126] transition-colors">Femme</Link>
+          <Link to="/areas-of-care/cytos" className="hover:text-[#232126] transition-colors">Cytos</Link>
           <span>›</span>
           <span className="text-[#232126] font-medium">{product.name}</span>
         </div>
@@ -206,34 +206,33 @@ export default function FemmeProductDetail() {
         </div>
       </div>
 
-      {/* 3. PRODUCT HERO (SPLIT SCREEN 43% / 57%) */}
+      {/* PRODUCT HERO (SPLIT SCREEN 43% / 57%) */}
       <div className="w-full bg-[#f7f5f1] grid grid-cols-1 lg:grid-cols-12 min-h-[640px]">
         {/* LEFT 43% */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-[#e9e5df] to-[#f1eee9] p-8 sm:p-14 lg:p-16 flex flex-col items-center justify-center relative min-h-[420px]">
-          {/* Packshot Container matching reference packaging aesthetic */}
-          <div className="w-[220px] sm:w-[260px] bg-white border border-[#d4cfc9] rounded-[16px] shadow-lg p-6 flex flex-col items-center relative min-h-[340px]">
-            <div className="w-full text-center pb-4 border-b border-[#eeeae6]">
-              <span className="text-[10px] tracking-[0.2em] font-bold text-[#5b2a70] uppercase">ONECORE</span>
+        <div className="lg:col-span-5 bg-gradient-to-br from-[#e5e9ec] to-[#f0f3f5] p-8 sm:p-14 lg:p-16 flex flex-col items-center justify-center relative min-h-[420px]">
+          <div className="w-[220px] sm:w-[260px] bg-white border border-[#cfd6dc] rounded-[16px] shadow-lg p-6 flex flex-col items-center relative min-h-[340px]">
+            <div className="w-full text-center pb-4 border-b border-[#e6ebef]">
+              <span className="text-[10px] tracking-[0.2em] font-bold text-[#1f4e5b] uppercase">ONECORE</span>
             </div>
             <div className="my-auto py-8 text-center space-y-2">
               <h3 className="font-serif text-3xl text-[#232126] font-normal tracking-tight">{product.name}</h3>
-              <p className="text-[11px] text-[#5f5862] leading-relaxed max-w-[200px] mx-auto">
+              <p className="text-[11px] text-[#556066] leading-relaxed max-w-[200px] mx-auto">
                 {product.composition}
               </p>
             </div>
-            <div className="w-full pt-3 border-t border-[#eeeae6] text-center">
-              <span className="text-[9px] font-mono uppercase tracking-widest text-[#887e8c]">GYNAECOLOGY</span>
+            <div className="w-full pt-3 border-t border-[#e6ebef] text-center">
+              <span className="text-[9px] font-mono uppercase tracking-widest text-[#788891]">ONCOLOGY</span>
             </div>
           </div>
           <div className="absolute bottom-4 left-6 bg-white/90 backdrop-blur-xs px-3 py-1.5 rounded-xs text-[11px] text-[#736d74] border border-[#e5e1dc]">
-            Prescription Medicine
+            Specialty Medicine
           </div>
         </div>
 
         {/* RIGHT 57% */}
         <div className="lg:col-span-7 p-8 sm:p-14 lg:p-20 flex flex-col justify-center">
-          <div className="text-[11px] tracking-[0.2em] uppercase font-bold text-[#5b2a70]">
-            FEMME · WOMEN'S HEALTH
+          <div className="text-[11px] tracking-[0.2em] uppercase font-bold text-[#1f4e5b]">
+            CYTOS · ONCOLOGY
           </div>
           <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl tracking-tight text-[#232126] font-normal my-4 leading-[0.98]">
             {product.name}
@@ -245,7 +244,7 @@ export default function FemmeProductDetail() {
             {product.description}
           </p>
           <div className="border-t border-[#beb8b3] mt-8 pt-6 max-w-2xl">
-            <small className="block text-[10px] tracking-[0.15em] uppercase text-[#887e8c] font-semibold mb-2">
+            <small className="block text-[10px] tracking-[0.15em] uppercase text-[#788891] font-semibold mb-2">
               PRODUCT AT A GLANCE
             </small>
             <span className="font-serif text-xl sm:text-2xl leading-snug text-[#232126]">
@@ -255,25 +254,16 @@ export default function FemmeProductDetail() {
         </div>
       </div>
 
-      {/* 5. STICKY ANCHOR NAVIGATION */}
-      <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-t border-[#eeeae6] border-b border-[#d9d4cf] px-6 sm:px-12">
-        <div className="max-w-6xl mx-auto flex gap-8 overflow-x-auto py-4">
-          <a href="#mechanism" className="text-xs uppercase tracking-wider font-semibold text-[#514b53] hover:text-[#5b2a70] transition-colors whitespace-nowrap">
-            How it works
-          </a>
-          <a href="#used" className="text-xs uppercase tracking-wider font-semibold text-[#514b53] hover:text-[#5b2a70] transition-colors whitespace-nowrap">
-            When it is used
-          </a>
-          <a href="#directions" className="text-xs uppercase tracking-wider font-semibold text-[#514b53] hover:text-[#5b2a70] transition-colors whitespace-nowrap">
-            Administration
-          </a>
-          <a href="#precautions" className="text-xs uppercase tracking-wider font-semibold text-[#514b53] hover:text-[#5b2a70] transition-colors whitespace-nowrap">
-            Precautions
-          </a>
-        </div>
+      {/* STICKY ANCHOR NAVIGATION */}
+      <div className="sticky top-0 z-30 bg-white border-b border-[#d9d4cf] px-6 sm:px-12 py-3 flex gap-6 sm:gap-10 overflow-x-auto text-xs uppercase tracking-widest font-semibold text-[#777078] scrollbar-none">
+        <a href="#overview" className="hover:text-[#1f4e5b] transition-colors whitespace-nowrap">Overview</a>
+        <a href="#mechanism" className="hover:text-[#1f4e5b] transition-colors whitespace-nowrap">Mechanism of Action</a>
+        <a href="#indications" className="hover:text-[#1f4e5b] transition-colors whitespace-nowrap">Therapeutic Role</a>
+        <a href="#directions" className="hover:text-[#1f4e5b] transition-colors whitespace-nowrap">Administration</a>
+        <a href="#precautions" className="hover:text-[#1f4e5b] transition-colors whitespace-nowrap">Safety Profile</a>
       </div>
 
-      {/* 6. MECHANISM OF WORK (DARK SECTION) */}
+      {/* SECTION: MECHANISM OF ACTION */}
       <section id="mechanism" className="bg-[#232126] text-white py-20 px-6 sm:px-16">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           <div className="lg:col-span-3 text-xs font-bold tracking-[0.19em] uppercase text-[#cfbfd6] pt-2">
@@ -304,45 +294,34 @@ export default function FemmeProductDetail() {
         </div>
       </section>
 
-      {/* 7. WHEN IS IT USED? (NEUTRAL/STONE SECTION) */}
-      <section id="used" className="bg-[#ebe7e1] text-[#232126] py-20 px-6 sm:px-16">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-          <div className="lg:col-span-3 text-xs font-bold tracking-[0.19em] uppercase text-[#5b2a70] pt-2">
-            WHEN IS IT USED?
+      {/* SECTION: THERAPEUTIC INDICATIONS */}
+      <section id="indications" className="py-16 sm:py-24 px-6 sm:px-12 lg:px-20 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-[11px] tracking-[0.2em] uppercase font-bold text-[#1f4e5b] mb-3">
+            CLINICAL APPLICATION
           </div>
-          <div className="lg:col-span-9 space-y-8">
-            <h2 className="font-serif text-4xl sm:text-5xl font-normal leading-tight max-w-3xl">
-              Targeted clinical indications & support.
-            </h2>
-            <p className="text-base sm:text-lg text-[#625d64] leading-relaxed max-w-3xl">
-              {product.usedFor}
-            </p>
+          <h2 className="font-serif text-3xl sm:text-4xl text-[#232126] font-normal mb-6">
+            Therapeutic Role & Indications
+          </h2>
+          <p className="text-[#575159] text-base sm:text-lg max-w-3xl mb-12 leading-relaxed">
+            {product.usedFor}
+          </p>
 
-            {usedForItems.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-b border-[#bdb7b2] my-8">
-                {usedForItems.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="p-6 border-b sm:border-b-0 border-[#c9c3be] last:border-0 lg:border-r"
-                  >
-                    <div className="text-[10px] tracking-widest text-[#8d818f] font-mono uppercase">
-                      {item.num}
-                    </div>
-                    <strong className="block font-serif text-xl font-normal mt-3 text-[#232126] leading-snug">
-                      {item.title}
-                    </strong>
-                  </div>
-                ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {usedForItems.map((item, index) => (
+              <div key={index} className="bg-[#f7f5f1] border border-[#e5e1dc] p-6 rounded-xs flex flex-col justify-between min-h-[140px]">
+                <span className="text-xs font-mono text-[#788891] mb-4">{item.num}</span>
+                <span className="font-serif text-lg text-[#232126] leading-snug">{item.title}</span>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 8. ADMINISTRATION & DOSAGE */}
+      {/* SECTION: ADMINISTRATION & DOSAGE */}
       <section id="directions" className="bg-white text-[#232126] py-20 px-6 sm:px-16">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-          <div className="lg:col-span-3 text-xs font-bold tracking-[0.19em] uppercase text-[#5b2a70] pt-2">
+          <div className="lg:col-span-3 text-xs font-bold tracking-[0.19em] uppercase text-[#1f4e5b] pt-2">
             ADMINISTRATION
           </div>
           <div className="lg:col-span-9 space-y-8">
@@ -356,57 +335,52 @@ export default function FemmeProductDetail() {
                   key={idx}
                   className="grid grid-cols-[56px_1fr] sm:grid-cols-[72px_1fr] gap-6 py-6 border-t border-[#d9d4cf] last:border-b"
                 >
-                  <div className="font-serif text-3xl text-[#a58fad]">{step.num}</div>
+                  <div className="font-serif text-3xl text-[#788891]">{step.num}</div>
                   <div>
                     <h3 className="font-serif text-2xl font-normal text-[#232126] mb-2">{step.title}</h3>
-                    <p className="text-base text-[#625d64] leading-relaxed">{step.desc}</p>
+                    <p className="text-base text-[#575159] leading-relaxed">{step.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 bg-[#efe9f2] border-l-4 border-[#5b2a70] p-5 text-sm leading-relaxed text-[#514b53] max-w-3xl">
-              <strong className="text-[#5b2a70] font-semibold">Important:</strong> Use only as directed by a healthcare professional and according to the locally approved product label. Follow physician instructions.
+            <div className="mt-8 bg-[#f0f4f7] border-l-4 border-[#1f4e5b] p-5 text-sm leading-relaxed text-[#575159] max-w-3xl">
+              <strong className="text-[#1f4e5b] font-semibold">Important:</strong> Use only as directed by an oncologist or healthcare professional and according to the locally approved product label.
             </div>
           </div>
         </div>
       </section>
 
-      {/* 9. PRECAUTIONS */}
-      <section id="precautions" className="bg-white text-[#232126] py-20 px-6 sm:px-16 border-t border-[#eeeae6]">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-          <div className="lg:col-span-3 text-xs font-bold tracking-[0.19em] uppercase text-[#5b2a70] pt-2">
-            PRECAUTIONS
+      {/* SECTION: PRECAUTIONS & SAFETY */}
+      <section id="precautions" className="py-16 sm:py-24 px-6 sm:px-12 lg:px-20 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-[11px] tracking-[0.2em] uppercase font-bold text-[#1f4e5b] mb-3">
+            SAFETY & TOLERABILITY
           </div>
-          <div className="lg:col-span-9 space-y-6">
-            <h2 className="font-serif text-4xl sm:text-5xl font-normal leading-tight max-w-3xl">
-              Important safety information.
-            </h2>
-            <p className="text-base text-[#625d64] max-w-3xl mb-8">
-              Review critical safety instructions, clinical considerations, and contraindications.
-            </p>
+          <h2 className="font-serif text-3xl sm:text-4xl text-[#232126] font-normal mb-6">
+            Precautions & Clinical Considerations
+          </h2>
 
-            <div className="max-w-3xl">
-              {precautionsAccordions.map((item, idx) => (
-                <details
-                  key={idx}
-                  className="border-t border-[#d9d4cf] last:border-b group"
-                  open={idx === 0}
-                >
-                  <summary className="cursor-pointer py-6 flex justify-between items-center font-serif text-xl sm:text-2xl text-[#232126] list-none select-none">
-                    <span>{item.title}</span>
-                    <span className="font-sans text-2xl text-[#756d77] group-open:hidden">+</span>
-                    <span className="font-sans text-2xl text-[#756d77] hidden group-open:block">×</span>
-                  </summary>
-                  <p className="pb-6 text-base text-[#625d64] leading-relaxed max-w-2xl">
-                    {item.content}
-                  </p>
-                </details>
-              ))}
-            </div>
+          <div className="space-y-4 max-w-3xl">
+            {precautionsAccordions.map((item, index) => (
+              <div key={index} className="border border-[#d9d4cf] rounded-xs p-6 bg-[#fbfaf8]">
+                <h3 className="font-serif text-lg text-[#232126] font-normal mb-2">{item.title}</h3>
+                <p className="text-xs sm:text-sm text-[#575159] leading-relaxed">{item.content}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* FOOTER CTA */}
+      <div className="border-t border-[#d9d4cf] py-12 px-6 sm:px-12 bg-[#f7f5f1] text-center">
+        <Link
+          to="/areas-of-care/cytos"
+          className="inline-block border border-[#232126] px-8 py-3 text-xs uppercase tracking-wider font-semibold hover:bg-[#232126] hover:text-white transition-colors"
+        >
+          ← Back to Cytos Portfolio
+        </Link>
+      </div>
     </div>
   );
 }

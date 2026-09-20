@@ -16,6 +16,7 @@ import OphthalmologyProductDetail from './pages/OphthalmologyProductDetail';
 import DermatologyProductDetail from './pages/DermatologyProductDetail';
 import EntProductDetail from './pages/EntProductDetail';
 import GeneralMedicineProductDetail from './pages/GeneralMedicineProductDetail';
+import OncologyProductDetail from './pages/OncologyProductDetail';
 import ProductOneFlexo from './pages/ProductOneFlexo';
 import News from './pages/News';
 import Contact from './pages/Contact';
@@ -108,6 +109,9 @@ function AppRoutes() {
           <Route path="/areas-of-care/general-medicine/:productSlug" element={<GeneralMedicineProductDetail />} />
           <Route path="/areas-of-care/general/:productSlug" element={<GeneralMedicineProductDetail />} />
           <Route path="/areas-of-care/internal-medicine/:productSlug" element={<GeneralMedicineProductDetail />} />
+          <Route path="/areas-of-care/cytos/:productSlug" element={<OncologyProductDetail />} />
+          <Route path="/areas-of-care/oncology/:productSlug" element={<OncologyProductDetail />} />
+          <Route path="/areas-of-care/cancer-care/:productSlug" element={<OncologyProductDetail />} />
           <Route path="/areas-of-care/:slug" element={<AreaOfCareDetail />} />
           <Route path="/areas-of-care/orthopaedics/oneflexo" element={<ProductOneFlexo />} />
           <Route path="/news" element={<News />} />

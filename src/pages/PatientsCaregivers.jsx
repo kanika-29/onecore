@@ -131,28 +131,24 @@ export default function PatientsCaregivers() {
 
   // Section 6: Treatment Journey
   const treatmentJourneySec = getSection('treatment_journey', {
-    eyebrow: 'THE TREATMENT JOURNEY',
+    eyebrow: 'TREATMENT JOURNEY',
     title: 'A prescription begins in the clinic. \nCare continues beyond it.',
     body: 'Healthcare professionals make treatment decisions in the clinical setting. Patients then carry those decisions into everyday life.\n\nWe believe a responsible pharmaceutical company should understand both parts of that journey and support them with medicines and information people can depend on.',
     image_url: '/assets/treatment-journey.jpg',
     items: [
       {
-        num: '01',
         title: 'Healthcare professional',
         desc: 'Clinical assessment, diagnosis and evidence-based therapeutic evaluation.'
       },
       {
-        num: '02',
         title: 'Treatment decision',
         desc: 'Selecting appropriate formulation, dosage schedule and treatment guidance.'
       },
       {
-        num: '03',
         title: 'Patient',
         desc: 'Understanding administration instructions, storage conditions and safety facts.'
       },
       {
-        num: '04',
         title: 'Everyday care',
         desc: 'Managing treatment adherence and monitoring recovery in home routine.'
       }
@@ -163,7 +159,6 @@ export default function PatientsCaregivers() {
   const safetySec = getSection('patient_safety', {
     eyebrow: 'PATIENT SAFETY',
     title: 'Safety information deserves a clear way to reach us.',
-    subheading: 'For medical emergencies, patients should seek immediate medical attention from an appropriate healthcare service.',
     body: 'If a patient, caregiver or healthcare professional becomes aware of a suspected side effect or product quality concern involving a Onecore product, that information can be reported for appropriate review.',
     items: [
       {
@@ -181,15 +176,6 @@ export default function PatientsCaregivers() {
         modal_type: 'professional'
       }
     ]
-  });
-
-  // Section 8: Final CTA
-  const finalCtaSec = getSection('final_cta', {
-    eyebrow: 'ONECORE SUPPORT',
-    title: 'Here for the people who use our medicines and the professionals who care for them.',
-    body: 'Find product information, access professional resources or report a safety or quality concern.',
-    cta_text: 'Contact Onecore',
-    cta_url: '/contact',
   });
 
   return (
@@ -376,13 +362,9 @@ export default function PatientsCaregivers() {
                   <div className="relative rounded-sm overflow-hidden border border-brand-border">
                     <FallbackImage
                       src={forPatientsSec.image_url || '/assets/patients-caregivers.jpg'}
-                      alt="Patient and caregiver discussing medicine and treatment guidelines with a healthcare clinician"
-                      aspectRatio="aspect-[4/3] sm:aspect-[1/1] lg:aspect-[4/5]"
+                      alt="Elderly Indian patient in wheelchair with a healthcare caregiver in blue scrubs"
+                      aspectRatio="aspect-[16/10] sm:aspect-[4/3] lg:aspect-[4/3]"
                     />
-                    <div className="p-4 bg-brand-ivory border-t border-brand-border">
-                      <p className="text-xs font-medium text-brand-dark">Direct Consultation Guidance</p>
-                      <p className="text-xs text-brand-muted mt-0.5">Always consult your treating physician or pharmacist regarding treatment adjustments.</p>
-                    </div>
                   </div>
                 </ScrollReveal>
               </div>
@@ -481,11 +463,11 @@ export default function PatientsCaregivers() {
           ========================================================================= */}
       {treatmentJourneySec.is_active && (
         <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="space-y-16">
+          <div className="space-y-16 sm:space-y-20">
             {/* Header */}
-            <div className="max-w-4xl space-y-6">
+            <div className="max-w-3xl space-y-6">
               <ScrollReveal>
-                <SectionEyebrow>{treatmentJourneySec.eyebrow || 'THE TREATMENT JOURNEY'}</SectionEyebrow>
+                <SectionEyebrow>{treatmentJourneySec.eyebrow || 'TREATMENT JOURNEY'}</SectionEyebrow>
                 <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight leading-tight whitespace-pre-line">
                   {treatmentJourneySec.title}
                 </h2>
@@ -498,42 +480,46 @@ export default function PatientsCaregivers() {
               </ScrollReveal>
             </div>
 
-            {/* Visual Journey */}
+            {/* Editorial Progressive Journey Flow */}
             <ScrollReveal delay={0.15}>
-              <div className="p-8 sm:p-12 bg-brand-surface border border-brand-border rounded-sm">
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
+              <div className="pt-4 pb-2 border-t border-brand-border/90">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
                   {treatmentJourneySec.items.map((step, idx) => (
-                    <React.Fragment key={step.title || idx}>
-                      <div className="space-y-3 relative flex flex-col justify-start">
-                        <h3 className="text-lg font-medium text-brand-dark">{step.title}</h3>
-                        <p className="text-xs sm:text-sm text-brand-muted leading-relaxed">
+                    <div key={step.title || idx} className="relative flex flex-col justify-between pt-6 space-y-4">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-xl font-light text-brand-dark tracking-tight">
+                            {step.title}
+                          </h3>
+                          {idx < treatmentJourneySec.items.length - 1 && (
+                            <div className="hidden lg:flex text-brand-sage/60 items-center">
+                              <ArrowRight className="w-4 h-4" />
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-sm text-brand-muted leading-relaxed">
                           {step.desc || step.description || step.text}
                         </p>
-                        {idx < treatmentJourneySec.items.length - 1 && (
-                          <div className="hidden lg:flex absolute -right-5 top-3 text-brand-sage/70 items-center pointer-events-none">
-                            <ArrowRight className="w-4 h-4" />
-                          </div>
-                        )}
                       </div>
 
                       {idx < treatmentJourneySec.items.length - 1 && (
-                        <div className="flex lg:hidden justify-center py-1 text-brand-sage/70">
+                        <div className="flex lg:hidden justify-center py-2 text-brand-sage/60">
                           <ArrowDown className="w-4 h-4" />
                         </div>
                       )}
-                    </React.Fragment>
+                    </div>
                   ))}
                 </div>
               </div>
             </ScrollReveal>
 
-            {/* Treatment Journey Split Photography Asset */}
+            {/* Doctor-Patient Consultation Photography Asset */}
             <ScrollReveal delay={0.2}>
-              <div className="overflow-hidden rounded-sm border border-brand-border">
+              <div className="overflow-hidden rounded-sm border border-brand-border shadow-sm">
                 <FallbackImage
                   src={treatmentJourneySec.image_url || '/assets/treatment-journey.jpg'}
-                  alt="Continuous healthcare journey connecting professional clinical care with daily life"
-                  aspectRatio="aspect-[21/9] sm:aspect-[16/7]"
+                  alt="Indian doctor in consultation with an elderly patient in a clinical healthcare environment"
+                  aspectRatio="aspect-[16/9]"
                 />
               </div>
             </ScrollReveal>
@@ -597,51 +583,6 @@ export default function PatientsCaregivers() {
                 </ScrollReveal>
               ))}
             </div>
-
-            {/* Emergency Guidance Disclaimer */}
-            {safetySec.subheading && (
-              <ScrollReveal delay={0.15}>
-                <div className="p-6 bg-brand-surface border border-brand-border/80 rounded-sm text-center max-w-3xl mx-auto">
-                  <p className="text-xs sm:text-sm text-brand-muted">
-                    {safetySec.subheading}
-                  </p>
-                </div>
-              </ScrollReveal>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* =========================================================================
-          SECTION 8 — ONECORE SUPPORT (FINAL CTA)
-          ========================================================================= */}
-      {finalCtaSec.is_active && (
-        <section className="py-24 sm:py-32 bg-brand-ivory border-t border-brand-border text-center">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            <ScrollReveal>
-              <SectionEyebrow className="justify-center">{finalCtaSec.eyebrow || 'ONECORE SUPPORT'}</SectionEyebrow>
-              <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-brand-dark tracking-tight leading-tight max-w-3xl mx-auto whitespace-pre-line">
-                {finalCtaSec.title}
-              </h2>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.1}>
-              <p className="text-lg sm:text-xl text-brand-muted font-normal max-w-2xl mx-auto leading-relaxed whitespace-pre-line">
-                {finalCtaSec.body}
-              </p>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.15}>
-              <div className="pt-4 flex justify-center">
-                <Link
-                  to={finalCtaSec.cta_url || '/contact'}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-brand-dark text-white text-sm font-semibold tracking-wide rounded-full hover:bg-brand-sage transition-all duration-300 shadow-sm group"
-                >
-                  <span>{finalCtaSec.cta_text || 'Contact Onecore'}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-            </ScrollReveal>
           </div>
         </section>
       )}

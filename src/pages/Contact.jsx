@@ -118,38 +118,6 @@ export default function Contact() {
     ]
   });
 
-  const processSec = getSection('process_steps', {
-    eyebrow: 'WHAT HAPPENS NEXT',
-    title: 'Your message goes to the team best placed to respond.',
-    items: [
-      {
-        num: '01',
-        stage: 'STAGE 1',
-        title: '01 — Submit',
-        desc: 'Tell us who you are and the nature of your enquiry.'
-      },
-      {
-        num: '02',
-        stage: 'STAGE 2',
-        title: '02 — Route',
-        desc: 'Your message is directed to the relevant Onecore function.'
-      },
-      {
-        num: '03',
-        stage: 'STAGE 3',
-        title: '03 — Respond',
-        desc: 'The appropriate team can contact you if a response or further information is required.'
-      }
-    ]
-  });
-
-  const finalCtaSec = getSection('final_cta', {
-    eyebrow: 'ONECORE PHARMA',
-    title: 'Healthcare centered on people.',
-    cta_text: 'Explore Onecore',
-    cta_url: '/about',
-  });
-
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -284,7 +252,7 @@ export default function Contact() {
 
                 return (
                   <ScrollReveal key={channelName} delay={0.05 * (idx + 1)}>
-                    <div className="bg-brand-ivory p-8 sm:p-10 border border-brand-border rounded-sm h-full flex flex-col justify-between space-y-6 group hover:border-brand-sage/40 transition-colors shadow-sm">
+                    <div className="bg-brand-ivory p-6 sm:p-8 lg:p-6 xl:p-8 border border-brand-border rounded-sm h-full flex flex-col justify-between space-y-6 group hover:border-brand-sage/40 transition-colors shadow-sm overflow-hidden">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-mono font-semibold uppercase tracking-widest text-brand-sage">
@@ -295,19 +263,19 @@ export default function Contact() {
                         {idx === 0 ? (
                           <a
                             href={`mailto:${channelVal}`}
-                            className="editorial-heading text-2xl sm:text-3xl font-light text-brand-dark hover:text-brand-sage transition-colors block break-words"
+                            className="editorial-heading text-lg sm:text-xl md:text-2xl lg:text-lg xl:text-[1.35rem] 2xl:text-2xl font-light text-brand-dark hover:text-brand-sage transition-colors block whitespace-nowrap tracking-tight"
                           >
                             {channelVal}
                           </a>
                         ) : idx === 1 ? (
                           <a
                             href={`tel:${String(channelVal).replace(/[^0-9+]/g, '')}`}
-                            className="editorial-heading text-3xl sm:text-4xl font-light font-mono text-brand-dark hover:text-brand-sage transition-colors block"
+                            className="editorial-heading text-2xl sm:text-3xl lg:text-2xl xl:text-3xl font-light font-mono text-brand-dark hover:text-brand-sage transition-colors block whitespace-nowrap"
                           >
                             {channelVal}
                           </a>
                         ) : (
-                          <span className="editorial-heading text-3xl sm:text-4xl font-light text-brand-dark block">
+                          <span className="editorial-heading text-2xl sm:text-3xl lg:text-2xl xl:text-3xl font-light text-brand-dark block whitespace-nowrap">
                             {channelVal}
                           </span>
                         )}
@@ -708,81 +676,8 @@ export default function Contact() {
         </section>
       )}
 
-      {/* =========================================================================
-          SECTION 6 — WHAT HAPPENS NEXT
-          ========================================================================= */}
-      {processSec.is_active && (
-        <section className="py-20 sm:py-28 bg-brand-surface/70 border-t border-brand-border">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-            <div className="max-w-3xl space-y-4">
-              <ScrollReveal>
-                <SectionEyebrow>{processSec.eyebrow || 'WHAT HAPPENS NEXT'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight whitespace-pre-line">
-                  {processSec.title || 'Your message goes to the team best placed to respond.'}
-                </h2>
-              </ScrollReveal>
-            </div>
 
-            {/* Minimal 3-Step Process */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-              {processSec.items.map((step, idx) => (
-                <ScrollReveal key={step.title || idx} delay={0.05 * (idx + 1)}>
-                  <div className="p-8 bg-brand-ivory border border-brand-border rounded-sm space-y-4 h-full">
-                    <div className="flex items-center justify-between">
-                      <span className="text-3xl font-light font-mono text-brand-sage">
-                        {step.num || String(idx + 1).padStart(2, '0')}
-                      </span>
-                      {step.stage && (
-                        <span className="text-xs font-mono font-semibold text-brand-muted uppercase">
-                          {step.stage}
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="text-xl font-medium text-brand-dark">{step.title}</h3>
-                    <p className="text-sm text-brand-muted leading-relaxed">
-                      {step.desc || step.description || step.text}
-                    </p>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
-      {/* =========================================================================
-          SECTION 7 — FINAL CTA (Brand Section)
-          ========================================================================= */}
-      {finalCtaSec.is_active && (
-        <section className="py-24 sm:py-32 bg-brand-dark text-white border-t border-brand-border-dark text-center">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            <ScrollReveal>
-              {finalCtaSec.eyebrow && (
-                <div className="inline-flex items-center gap-2 mb-4">
-                  <span className="text-xs font-mono font-semibold tracking-widest uppercase text-brand-sage-light">
-                    {finalCtaSec.eyebrow}
-                  </span>
-                </div>
-              )}
-              <h2 className="editorial-heading text-4xl sm:text-5xl lg:text-6xl font-light text-white tracking-tight leading-tight max-w-3xl mx-auto whitespace-pre-line">
-                {finalCtaSec.title || 'Healthcare centered on people.'}
-              </h2>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.1}>
-              <div className="pt-4 flex justify-center">
-                <Link
-                  to={finalCtaSec.cta_url || '/about'}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-brand-sage-light text-brand-dark hover:bg-white text-xs font-semibold uppercase tracking-wider rounded-full transition-all duration-300 shadow-sm group"
-                >
-                  <span>{finalCtaSec.cta_text || 'Explore Onecore'}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-            </ScrollReveal>
-          </div>
-        </section>
-      )}
     </div>
   );
 }
