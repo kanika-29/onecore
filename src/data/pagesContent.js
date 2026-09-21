@@ -9,12 +9,16 @@ export const pagesContent = {
     seo_description: 'Onecore Pharma is a pharmaceutical company focused on purposeful formulations, dependable quality, and the needs of patients and healthcare professionals.',
     sections: {
       hero: {
-        eyebrow: 'ABOUT ONECORE',
         title: 'Committed to better tomorrow',
+        image_url: '/assets/hero-healthcare.jpg',
+      },
+      about_onecore: {
+        eyebrow: 'ABOUT ONECORE',
+        title: 'Healthcare is personal.\nOur approach should be too.',
         body: 'Onecore Pharma is a pharmaceutical company focused on purposeful formulations, dependable quality and the needs of patients and healthcare professionals.',
         cta_text: 'Discover Onecore',
         cta_url: '/about',
-        image_url: '/assets/hero-healthcare.jpg',
+        image_url: '/assets/about-facility.jpg',
       },
       areas_of_care: {
         eyebrow: 'AREAS OF CARE',

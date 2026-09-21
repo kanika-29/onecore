@@ -17,12 +17,17 @@ export default function Home() {
 
   // Fallbacks matching approved design & copy
   const heroSec = getSection('hero', {
-    eyebrow: 'ABOUT ONECORE',
     title: 'Committed to better tomorrow',
+    image_url: '/assets/hero-healthcare.jpg',
+  });
+
+  const aboutSec = getSection('about_onecore', {
+    eyebrow: 'ABOUT ONECORE',
+    title: 'Healthcare is personal. \nOur approach should be too.',
     body: 'Onecore Pharma is a pharmaceutical company focused on purposeful formulations, dependable quality and the needs of patients and healthcare professionals.',
     cta_text: 'Discover Onecore',
     cta_url: '/about',
-    image_url: '/assets/hero-healthcare.jpg',
+    image_url: '/assets/about-facility.jpg',
   });
 
   const areasSec = getSection('areas_of_care', {
@@ -163,6 +168,57 @@ export default function Home() {
           imageUrl={heroSec.image_url || '/assets/hero-healthcare.jpg'}
           imageAlt="Onecore Pharma - Committed to better tomorrow"
         />
+      )}
+
+      {/* =========================================================================
+          SECTION 1.5 — ABOUT ONECORE (REVIVED EDITORIAL SECTION)
+          ========================================================================= */}
+      {aboutSec.is_active && (
+        <section className="py-20 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            {/* Left Column: Heading & Copy */}
+            <div className="lg:col-span-7 space-y-8">
+              <ScrollReveal>
+                <SectionEyebrow>{aboutSec.eyebrow || 'ABOUT ONECORE'}</SectionEyebrow>
+                <h2 className="editorial-heading text-4xl sm:text-5xl lg:text-6xl font-light text-brand-dark tracking-tight leading-[1.08] whitespace-pre-line mt-3">
+                  {aboutSec.title || 'Healthcare is personal. \nOur approach should be too.'}
+                </h2>
+              </ScrollReveal>
+
+              <ScrollReveal delay={0.1}>
+                <p className="text-lg sm:text-xl text-brand-muted font-normal max-w-2xl leading-relaxed whitespace-pre-line">
+                  {aboutSec.body || 'Onecore Pharma is a pharmaceutical company focused on purposeful formulations, dependable quality and the needs of patients and healthcare professionals.'}
+                </p>
+              </ScrollReveal>
+
+              <ScrollReveal delay={0.15}>
+                <div className="pt-2 flex flex-wrap items-center gap-4">
+                  <Link
+                    to={aboutSec.cta_url || '/about'}
+                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-dark text-white text-sm font-semibold tracking-wide rounded-full hover:bg-brand-sage transition-all duration-300 shadow-sm group"
+                  >
+                    <span>{aboutSec.cta_text || 'Discover Onecore'}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </ScrollReveal>
+            </div>
+
+            {/* Right Column: Hero Visual Asset */}
+            <div className="lg:col-span-5">
+              <ScrollReveal delay={0.15} direction="left">
+                <div className="relative rounded-sm overflow-hidden border border-brand-border shadow-sm">
+                  <FallbackImage
+                    src={aboutSec.image_url || '/assets/about-facility.jpg'}
+                    alt="Onecore Pharma clinical and research environment"
+                    aspectRatio="aspect-[4/3]"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </ScrollReveal>
+            </div>
+          </div>
+        </section>
       )}
 
       {/* =========================================================================
