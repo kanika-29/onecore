@@ -260,7 +260,7 @@ export default function AreasOfCare() {
           SEARCH RESULTS ACTIVE BANNER (When query is present)
           ========================================================================= */}
       {searchQuery.trim() && (
-        <section className="bg-[#FFF1F0] border-b border-[#F5C2C0] py-4 px-4 sm:px-8">
+        <section className="bg-white border-b border-[#E5E3DC] py-4 px-4 sm:px-8">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold uppercase tracking-wider text-[#D52B1E]">
@@ -269,8 +269,8 @@ export default function AreasOfCare() {
               <span className="text-sm font-serif font-bold text-[#121212]">
                 "{searchQuery}"
               </span>
-              <span className="text-xs text-[#777777] bg-white px-2.5 py-0.5 rounded-full border border-[#E5E3DC]">
-                {searchResults.length} {searchResults.length === 1 ? 'Formulation Found' : 'Formulations Found'}
+              <span className="text-xs text-[#777777] font-medium">
+                ({searchResults.length} {searchResults.length === 1 ? 'Formulation Found' : 'Formulations Found'})
               </span>
             </div>
             <button
@@ -323,8 +323,8 @@ export default function AreasOfCare() {
           {/* Formulations Grid */}
           {directoryProducts.length === 0 ? (
             <div className="py-20 text-center bg-white rounded-3xl border border-[#E5E3DC] p-8 space-y-4 max-w-xl mx-auto">
-              <div className="w-12 h-12 rounded-full bg-[#FFF1F0] text-[#D52B1E] flex items-center justify-center mx-auto">
-                <Search className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-full bg-[#FAF9F6] border border-[#E5E3DC] text-[#121212] flex items-center justify-center mx-auto">
+                <Search className="w-5 h-5" />
               </div>
               <h3 className="text-xl font-serif font-bold text-[#121212]">
                 No matching formulations found
@@ -350,9 +350,9 @@ export default function AreasOfCare() {
                     className="bg-white rounded-3xl border border-[#E5E3DC] hover:border-[#121212] transition-all duration-300 p-6 flex flex-col justify-between group shadow-xs hover:shadow-md"
                   >
                     <div>
-                      {/* Division Badge & Specialty Tag */}
+                      {/* Division & Specialty Tag */}
                       <div className="flex items-center justify-between gap-2 mb-3">
-                        <span className="text-[11px] font-bold tracking-wider uppercase text-[#D52B1E] bg-[#FFF1F0] px-2.5 py-0.5 rounded-full border border-[#F5C2C0]">
+                        <span className="text-xs font-semibold tracking-wider uppercase text-[#D52B1E]">
                           {product.division}
                         </span>
                         <span className="text-[11px] text-[#777777] truncate font-medium">
@@ -474,8 +474,8 @@ export default function AreasOfCare() {
                               {area.divisionName || area.displayName}
                             </span>
                             {formulationCount > 0 && (
-                              <span className="text-[11px] font-semibold text-[#777777] bg-white border border-[#E5E3DC] px-2.5 py-0.5 rounded-full">
-                                {formulationCount} Formulations
+                              <span className="text-xs font-mono text-[#777777]">
+                                ({formulationCount} Formulations)
                               </span>
                             )}
                           </div>
@@ -586,8 +586,8 @@ export default function AreasOfCare() {
           <div className="bg-white border border-[#E5E3DC] p-6 sm:p-12 rounded-[28px] shadow-sm">
             {formSubmitted ? (
               <div className="py-12 text-center space-y-4">
-                <div className="w-14 h-14 rounded-full bg-[#FFF1F0] text-[#D52B1E] flex items-center justify-center mx-auto">
-                  <CheckCircle2 size={28} />
+                <div className="w-14 h-14 rounded-full bg-[#FAF9F6] border border-[#E5E3DC] text-[#00A859] flex items-center justify-center mx-auto">
+                  <CheckCircle2 size={26} />
                 </div>
                 <h3 className="text-2xl font-serif font-medium text-[#121212]">
                   Dossier Request Transmitted

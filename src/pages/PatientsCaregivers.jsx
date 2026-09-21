@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowDown, ArrowUpRight, ShieldCheck, FileText, AlertCircle, CheckCircle2, UserCheck, Stethoscope, HeartHandshake, Home as HomeIcon } from 'lucide-react';
-import SectionEyebrow from '../components/SectionEyebrow';
+import { ArrowRight, ArrowDown, CheckCircle2, ShieldCheck, X } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
-import FallbackImage from '../components/FallbackImage';
-import PageBanner from '../components/PageBanner';
 import { useCmsPage } from '../hooks/useCmsPage';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function PatientsCaregivers() {
   const { getSection } = useCmsPage('patients-caregivers');
@@ -43,9 +41,9 @@ export default function PatientsCaregivers() {
     eyebrow: 'PATIENTS & PROFESSIONALS',
     title: 'Patients & Caregivers',
     body: 'Patients live the experience of a health condition. Healthcare professionals bring the knowledge and judgement needed to manage it.\n\nAt Onecore, both perspectives matter. Our role is to support them with dependable products, clear information and responsible communication.',
-    cta_text: 'For patients',
+    cta_text: 'For Patients & Families',
     cta_url: '#for-patients',
-    secondary_cta_text: 'For healthcare professionals',
+    secondary_cta_text: 'For Healthcare Professionals',
     secondary_cta_url: '#for-professionals',
     image_url: '/assets/patients-caregivers.jpg',
   });
@@ -53,7 +51,7 @@ export default function PatientsCaregivers() {
   // Section 2: Two Perspectives
   const perspectivesSec = getSection('two_perspectives', {
     eyebrow: 'TWO PERSPECTIVES',
-    title: 'Different experiences. \nThe same goal.',
+    title: 'Different experiences. The same goal.',
     body: 'Good healthcare depends on understanding both the person living with a condition and the professional responsible for treating it.\n\nWe want Onecore to stay close to both. That means listening to patient needs, respecting clinical practice and making sure our products and information remain relevant to real healthcare.',
     image_url: '/assets/two-perspectives.jpg',
   });
@@ -61,7 +59,7 @@ export default function PatientsCaregivers() {
   // Section 3: Our Role
   const roleSec = getSection('our_role', {
     eyebrow: 'OUR ROLE',
-    title: 'Listen carefully. \nSupport responsibly. \nKeep the person behind the medicine in view.',
+    title: 'Listen carefully. Support responsibly. Keep the person behind the medicine in view.',
     items: [
       {
         title: 'See the person, not only the condition.',
@@ -86,23 +84,23 @@ export default function PatientsCaregivers() {
     eyebrow: 'FOR PATIENTS AND CAREGIVERS',
     title: 'You should be able to understand the medicines that are part of your care.',
     body: 'Clear information helps patients and caregivers take a more informed role in the treatment journey.\n\nOnecore provides factual information about its products and encourages patients to speak with their doctor or pharmacist when they have questions about their individual treatment.',
-    cta_text: 'Product information',
+    cta_text: 'Product Information',
     cta_url: '/areas-of-care',
-    secondary_cta_text: 'Report a concern',
+    secondary_cta_text: 'Report a Safety Concern',
     secondary_cta_url: '#patient-safety',
     image_url: '/assets/patients-caregivers.jpg',
     items: [
       {
-        title: 'FIND INFORMATION ABOUT YOUR MEDICINE',
-        desc: 'Access product names, compositions, dosage forms and other factual product information.'
+        title: 'Find information about your medicine',
+        desc: 'Access product names, active salt compositions, dosage forms and factual patient guidance across specialties.'
       },
       {
-        title: 'USE MEDICINES RESPONSIBLY',
-        desc: 'Follow the instructions provided by your healthcare professional and the information supplied with your medicine.'
+        title: 'Use medicines responsibly',
+        desc: 'Follow the instructions provided by your healthcare professional and the clinical guide supplied with your medicine.'
       },
       {
-        title: 'SHARE SAFETY CONCERNS',
-        desc: 'Report a suspected side effect or product quality concern involving a Onecore product.'
+        title: 'Share safety concerns',
+        desc: 'Report a suspected side effect or product quality observation involving a Onecore product for clinical review.'
       }
     ]
   });
@@ -115,16 +113,16 @@ export default function PatientsCaregivers() {
     image_url: '/assets/healthcare-professionals.jpg',
     items: [
       {
-        title: 'SCIENTIFIC COMPOSITIONS & DOSAGE FORMS',
-        desc: 'Review product listings, active ingredients and available delivery formats across therapeutic specialties.'
+        title: 'Scientific Compositions & Dosage Forms',
+        desc: 'Review product listings, active ingredients, pharmacokinetic profiles, and available delivery formats across therapeutic specialties.'
       },
       {
-        title: 'CLINICAL SAFETY REPORTING',
-        desc: 'Submit adverse drug observations, product quality feedback or pharmacovigilance reports directly.'
+        title: 'Clinical Safety Reporting',
+        desc: 'Submit adverse drug observations, product quality feedback, or pharmacovigilance reports directly to our safety committee.'
       },
       {
-        title: 'MEDICAL & FORMULATION DIALOGUE',
-        desc: 'Connect with our medical and quality teams for product inquiries, documentation and clinical details.'
+        title: 'Medical & Formulation Dialogue',
+        desc: 'Connect with our medical affairs and quality assurance teams for technical product monographs, documentation, and clinical inquiries.'
       }
     ]
   });
@@ -132,143 +130,193 @@ export default function PatientsCaregivers() {
   // Section 6: Treatment Journey
   const treatmentJourneySec = getSection('treatment_journey', {
     eyebrow: 'TREATMENT JOURNEY',
-    title: 'A prescription begins in the clinic. \nCare continues beyond it.',
+    title: 'A prescription begins in the clinic. Care continues beyond it.',
     body: 'Healthcare professionals make treatment decisions in the clinical setting. Patients then carry those decisions into everyday life.\n\nWe believe a responsible pharmaceutical company should understand both parts of that journey and support them with medicines and information people can depend on.',
     image_url: '/assets/treatment-journey.jpg',
     items: [
       {
-        title: 'Healthcare professional',
-        desc: 'Clinical assessment, diagnosis and evidence-based therapeutic evaluation.'
+        stage: '01',
+        title: 'Healthcare Professional',
+        desc: 'Clinical assessment, diagnostic evaluation, and evidence-based therapeutic selection.'
       },
       {
-        title: 'Treatment decision',
-        desc: 'Selecting appropriate formulation, dosage schedule and treatment guidance.'
+        stage: '02',
+        title: 'Treatment Decision',
+        desc: 'Selecting appropriate formulation, dosage schedule, and patient-specific regimen guidance.'
       },
       {
-        title: 'Patient',
-        desc: 'Understanding administration instructions, storage conditions and safety facts.'
+        stage: '03',
+        title: 'Patient Understanding',
+        desc: 'Clear comprehension of administration directions, storage conditions, and factual precautions.'
       },
       {
-        title: 'Everyday care',
-        desc: 'Managing treatment adherence and monitoring recovery in home routine.'
+        stage: '04',
+        title: 'Everyday Care',
+        desc: 'Managing treatment adherence, family support, and monitoring recovery in everyday life.'
       }
     ]
   });
 
   // Section 7: Patient Safety
   const safetySec = getSection('patient_safety', {
-    eyebrow: 'PATIENT SAFETY',
+    eyebrow: 'PATIENT SAFETY & PHARMACOVIGILANCE',
     title: 'Safety information deserves a clear way to reach us.',
-    body: 'If a patient, caregiver or healthcare professional becomes aware of a suspected side effect or product quality concern involving a Onecore product, that information can be reported for appropriate review.',
+    body: 'If a patient, caregiver or healthcare professional becomes aware of a suspected side effect or product quality concern involving a Onecore product, that information can be reported directly for immediate clinical review.',
     items: [
       {
         eyebrow: 'PATIENTS AND CAREGIVERS',
-        title: 'Report a concern',
-        desc: 'Tell us about a suspected side effect or quality concern involving a Onecore product.',
-        cta_text: 'Patient reporting',
+        title: 'Report a Patient Concern',
+        desc: 'Tell us about a suspected side effect, packaging irregularity, or quality observation involving a Onecore product.',
+        cta_text: 'Patient Reporting Desk',
         modal_type: 'patient'
       },
       {
         eyebrow: 'HEALTHCARE PROFESSIONALS',
-        title: 'Report safety information',
-        desc: 'Submit suspected adverse event or product quality information for appropriate review.',
-        cta_text: 'Professional reporting',
+        title: 'Clinical Safety Information',
+        desc: 'Submit suspected adverse drug reactions, therapeutic non-responsiveness, or quality observations for regulatory pharmacovigilance evaluation.',
+        cta_text: 'Professional Reporting Desk',
         modal_type: 'professional'
       }
     ]
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-[#FAF9F6] text-[#121212]">
+      
       {/* =========================================================================
-          SECTION 1 — HERO / BANNER
+          SECTION 1 — EDITORIAL HERO
+          Spacious, dignified typography with signature crimson accent
           ========================================================================= */}
-      {heroSec.is_active && (
-        <PageBanner
-          title="Patients & Caregivers"
-          imageUrl={heroSec.image_url || '/assets/patients-caregivers.jpg'}
-          imageAlt="Patients and Caregivers - Onecore Pharma"
-        />
-      )}
+      <section className="pt-28 sm:pt-36 pb-16 sm:pb-24 px-4 sm:px-8 border-b border-[#E5E3DC] bg-white">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          <div className="max-w-4xl space-y-6">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+              {heroSec.eyebrow || 'PATIENTS & CAREGIVERS'}
+            </span>
+
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-[#121212] tracking-tight leading-[1.05]">
+              Patients & Caregivers. <br />
+              <span className="italic font-normal text-[#D52B1E]">Partners in healthcare.</span>
+            </h1>
+
+            <p className="text-lg sm:text-2xl text-[#555555] font-light leading-relaxed font-sans max-w-3xl">
+              {heroSec.body || 'Patients live the experience of a health condition. Healthcare professionals bring the knowledge and judgement needed to manage it. At Onecore, both perspectives matter.'}
+            </p>
+
+            <div className="pt-2 flex flex-wrap items-center gap-4">
+              <a
+                href={heroSec.cta_url || '#for-patients'}
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-colors shadow-xs"
+              >
+                <span>{heroSec.cta_text || 'For Patients & Families'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+
+              <a
+                href={heroSec.secondary_cta_url || '#for-professionals'}
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#FAF9F6] hover:bg-[#EBE9E1] text-[#121212] text-xs font-semibold rounded-full transition-colors border border-[#E5E3DC]"
+              >
+                <span>{heroSec.secondary_cta_text || 'For Healthcare Professionals'}</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Stately Hero Photograph Frame */}
+          <div className="relative rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/9] lg:aspect-[21/9] bg-[#FAF9F6]">
+            <img
+              src={assetUrl(heroSec.image_url || '/assets/patients-caregivers.jpg')}
+              alt="Elderly Indian patient in wheelchair with compassionate healthcare caregiver"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute bottom-4 left-6 sm:bottom-6 sm:left-8 text-white text-xs tracking-wider uppercase font-mono">
+              Patient Lived Experience & Clinical Partnership
+            </div>
+          </div>
+
+        </div>
+      </section>
 
       {/* =========================================================================
           SECTION 2 — TWO PERSPECTIVES
+          Clean two-column editorial narrative
           ========================================================================= */}
       {perspectivesSec.is_active && (
-        <section className="py-20 sm:py-28 bg-brand-surface/70 border-y border-brand-border/80">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-              {/* Left Column: Heading & Body */}
-              <div className="lg:col-span-6 space-y-6">
-                <ScrollReveal>
-                  <SectionEyebrow>{perspectivesSec.eyebrow || 'TWO PERSPECTIVES'}</SectionEyebrow>
-                  <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight leading-tight whitespace-pre-line">
-                    {perspectivesSec.title}
-                  </h2>
-                  <div className="h-[2px] w-14 bg-brand-sage/40 mt-4" />
-                </ScrollReveal>
+        <section className="py-20 sm:py-28 px-4 sm:px-8 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            
+            <div className="lg:col-span-6 space-y-6">
+              <ScrollReveal>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                  {perspectivesSec.eyebrow || 'TWO PERSPECTIVES'}
+                </span>
+                <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
+                  Different experiences. <br />
+                  <span className="italic font-normal text-[#D52B1E]">The same goal.</span>
+                </h2>
+              </ScrollReveal>
 
-                <ScrollReveal delay={0.1}>
-                  <div className="space-y-4 text-brand-muted text-base sm:text-lg leading-relaxed pt-2 whitespace-pre-line">
-                    {perspectivesSec.body}
-                  </div>
-                </ScrollReveal>
-              </div>
-
-              {/* Right Column: Natural Healthcare Interaction Image */}
-              <div className="lg:col-span-6">
-                <ScrollReveal delay={0.15}>
-                  <div className="relative overflow-hidden rounded-sm border border-brand-border">
-                    <FallbackImage
-                      src={perspectivesSec.image_url || '/assets/two-perspectives.jpg'}
-                      alt="A healthcare professional interacting naturally and compassionately with a patient"
-                      aspectRatio="aspect-[4/3]"
-                    />
-                    <div className="bg-brand-ivory p-3.5 border-t border-brand-border flex items-center justify-between text-xs text-brand-muted">
-                      <span>Clinical consultation & dialogue</span>
-                      <span className="font-mono text-[11px] text-brand-sage">MUTUAL UNDERSTANDING</span>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              </div>
+              <ScrollReveal delay={0.1}>
+                <div className="space-y-4 text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans">
+                  {perspectivesSec.body.split('\n\n').map((para, pIdx) => (
+                    <p key={pIdx}>{para}</p>
+                  ))}
+                </div>
+              </ScrollReveal>
             </div>
+
+            <div className="lg:col-span-6">
+              <ScrollReveal delay={0.15}>
+                <div className="relative rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[4/3] bg-white">
+                  <img
+                    src={assetUrl(perspectivesSec.image_url || '/assets/two-perspectives.jpg')}
+                    alt="Clinical consultation and dialogue between Indian doctor and patient"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </ScrollReveal>
+            </div>
+
           </div>
         </section>
       )}
 
       {/* =========================================================================
-          SECTION 3 — OUR ROLE
+          SECTION 3 — OUR ROLE (3 Distinct Editorial Pillars)
           ========================================================================= */}
       {roleSec.is_active && (
-        <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="space-y-16">
-            {/* Eyebrow & Large Statement */}
-            <div className="max-w-4xl space-y-6">
+        <section className="py-20 sm:py-28 bg-white border-y border-[#E5E3DC] px-4 sm:px-8">
+          <div className="max-w-7xl mx-auto space-y-14">
+            <div className="max-w-3xl space-y-3">
               <ScrollReveal>
-                <SectionEyebrow>{roleSec.eyebrow || 'OUR ROLE'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-brand-dark tracking-tight leading-tight whitespace-pre-line">
-                  {roleSec.title}
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                  {roleSec.eyebrow || 'OUR ROLE'}
+                </span>
+                <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
+                  Listen carefully. Support responsibly. Keep the person behind the medicine in view.
                 </h2>
               </ScrollReveal>
             </div>
 
-            {/* Three Distinct Editorial Blocks */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 pt-8 border-t border-brand-border">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {roleSec.items.map((block, idx) => (
-                <ScrollReveal key={block.title || idx} delay={idx * 0.05}>
-                  <div className="group bg-brand-ivory hover:bg-brand-surface p-8 border border-brand-border rounded-sm h-full flex flex-col justify-between transition-all duration-300">
-                    <div className="space-y-4">
-                      <h3 className="text-xl font-medium text-brand-dark tracking-tight leading-snug">
+                <ScrollReveal key={block.title || idx} delay={idx * 0.08}>
+                  <div className="bg-[#FAF9F6] p-8 sm:p-10 rounded-3xl border border-[#E5E3DC] hover:border-[#121212] transition-all duration-300 h-full flex flex-col justify-between space-y-6">
+                    <div className="space-y-3">
+                      <span className="text-xs font-mono text-[#D52B1E] font-bold block">
+                        0{idx + 1}
+                      </span>
+                      <h3 className="text-xl font-serif font-bold text-[#121212] tracking-tight">
                         {block.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
+                      <p className="text-sm sm:text-base text-[#555555] leading-relaxed font-sans">
                         {block.desc || block.description || block.text}
                       </p>
                     </div>
-                    {(block.footer || block.detail) && (
-                      <div className="pt-6 mt-6 border-t border-brand-border/60 flex items-center justify-between text-xs text-brand-muted">
-                        <span>{block.footer || block.detail}</span>
-                        <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-brand-sage" />
+                    {block.footer && (
+                      <div className="pt-4 border-t border-[#E5E3DC] text-xs text-[#777777] font-medium">
+                        {block.footer}
                       </div>
                     )}
                   </div>
@@ -283,409 +331,358 @@ export default function PatientsCaregivers() {
           SECTION 4 — FOR PATIENTS AND CAREGIVERS
           ========================================================================= */}
       {forPatientsSec.is_active && (
-        <section id="for-patients" className="py-24 sm:py-32 bg-brand-surface/60 border-t border-brand-border scroll-mt-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-            {/* Header */}
-            <div className="max-w-4xl space-y-6">
-              <ScrollReveal>
-                <SectionEyebrow>{forPatientsSec.eyebrow || 'FOR PATIENTS AND CAREGIVERS'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight leading-tight whitespace-pre-line">
-                  {forPatientsSec.title}
-                </h2>
-              </ScrollReveal>
+        <section id="for-patients" className="py-20 sm:py-28 px-4 sm:px-8 max-w-7xl mx-auto space-y-16 scroll-mt-24">
+          <div className="max-w-3xl space-y-4">
+            <ScrollReveal>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                {forPatientsSec.eyebrow || 'FOR PATIENTS AND CAREGIVERS'}
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
+                You should be able to understand the medicines that are part of your care.
+              </h2>
+              <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-2">
+                Clear information helps patients and caregivers take a more informed role in the treatment journey. Onecore provides factual information about its products and encourages patients to speak with their doctor or pharmacist.
+              </p>
+            </ScrollReveal>
+          </div>
 
-              <ScrollReveal delay={0.1}>
-                <div className="space-y-3 text-base sm:text-lg text-brand-muted leading-relaxed whitespace-pre-line">
-                  {forPatientsSec.body}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            {/* Left Items List */}
+            <div className="lg:col-span-7 space-y-4">
+              {forPatientsSec.items.map((item, idx) => (
+                <ScrollReveal key={item.title || idx} delay={idx * 0.06}>
+                  <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#E5E3DC] hover:border-[#121212] transition-colors space-y-2">
+                    <h3 className="text-lg sm:text-xl font-serif font-bold text-[#121212]">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-[#555555] leading-relaxed font-sans">
+                      {item.desc || item.description || item.text}
+                    </p>
+                  </div>
+                </ScrollReveal>
+              ))}
+
+              <div className="pt-4 flex flex-wrap items-center gap-4">
+                <Link
+                  to={forPatientsSec.cta_url || '/areas-of-care'}
+                  className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#121212] hover:bg-[#D52B1E] text-white text-xs font-semibold rounded-full transition-colors"
+                >
+                  <span>{forPatientsSec.cta_text || 'Browse Formulations'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+
+                <button
+                  onClick={() => scrollToSection('patient-safety')}
+                  className="inline-flex items-center gap-2 px-8 py-3.5 bg-white hover:bg-[#FAF9F6] text-[#121212] text-xs font-semibold rounded-full transition-colors border border-[#E5E3DC] cursor-pointer"
+                >
+                  <span>{forPatientsSec.secondary_cta_text || 'Report a Concern'}</span>
+                  <ArrowDown className="w-4 h-4 text-[#D52B1E]" />
+                </button>
+              </div>
+            </div>
+
+            {/* Right Image */}
+            <div className="lg:col-span-5">
+              <ScrollReveal delay={0.15}>
+                <div className="rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[4/3] bg-white">
+                  <img
+                    src={assetUrl(forPatientsSec.image_url || '/assets/patients-caregivers.jpg')}
+                    alt="Elderly Indian patient with caring nurse"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </ScrollReveal>
             </div>
 
-            {/* Editorial Content Split: Info Areas + Image */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-              {/* Left Info Areas */}
-              <div className="lg:col-span-7 space-y-6">
-                <div className="border-t border-brand-border divide-y divide-brand-border bg-brand-ivory border-b rounded-sm">
-                  {forPatientsSec.items.map((item, idx) => (
-                    <ScrollReveal key={item.title || idx} delay={idx * 0.05}>
-                      <div className="p-6 sm:p-8 space-y-3">
-                        <h3 className="text-xl font-medium text-brand-dark tracking-tight">
-                          {item.title}
-                        </h3>
-                        <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
-                          {item.desc || item.description || item.text}
-                        </p>
-                      </div>
-                    </ScrollReveal>
-                  ))}
-                </div>
-
-                {/* CTAs */}
-                <ScrollReveal delay={0.2}>
-                  <div className="pt-4 flex flex-wrap items-center gap-4">
-                    {forPatientsSec.cta_url && (
-                      <Link
-                        to={forPatientsSec.cta_url}
-                        className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-dark text-white text-sm font-semibold rounded-full hover:bg-brand-sage transition-all duration-200 group"
-                      >
-                        <span>{forPatientsSec.cta_text || 'Product information'}</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </Link>
-                    )}
-
-                    {forPatientsSec.secondary_cta_url && (
-                      forPatientsSec.secondary_cta_url.startsWith('#') ? (
-                        <button
-                          onClick={() => scrollToSection(forPatientsSec.secondary_cta_url)}
-                          className="inline-flex items-center gap-2 px-6 py-3.5 bg-white border border-brand-border text-brand-dark text-sm font-medium rounded-full hover:bg-brand-surface transition-all duration-200 cursor-pointer group"
-                        >
-                          <span>{forPatientsSec.secondary_cta_text || 'Report a concern'}</span>
-                          <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform text-brand-sage" />
-                        </button>
-                      ) : (
-                        <Link
-                          to={forPatientsSec.secondary_cta_url}
-                          className="inline-flex items-center gap-2 px-6 py-3.5 bg-white border border-brand-border text-brand-dark text-sm font-medium rounded-full hover:bg-brand-surface transition-all duration-200 group"
-                        >
-                          <span>{forPatientsSec.secondary_cta_text || 'Report a concern'}</span>
-                          <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform text-brand-sage" />
-                        </Link>
-                      )
-                    )}
-                  </div>
-                </ScrollReveal>
-              </div>
-
-              {/* Right Healthcare Discussion Image */}
-              <div className="lg:col-span-5">
-                <ScrollReveal delay={0.2} direction="left">
-                  <div className="relative rounded-sm overflow-hidden border border-brand-border">
-                    <FallbackImage
-                      src={forPatientsSec.image_url || '/assets/patients-caregivers.jpg'}
-                      alt="Elderly Indian patient in wheelchair with a healthcare caregiver in blue scrubs"
-                      aspectRatio="aspect-[16/10] sm:aspect-[4/3] lg:aspect-[4/3]"
-                    />
-                  </div>
-                </ScrollReveal>
-              </div>
-            </div>
           </div>
         </section>
       )}
 
       {/* =========================================================================
-          SECTION 5 — FOR HEALTHCARE PROFESSIONALS
+          SECTION 5 — FOR HEALTHCARE PROFESSIONALS (Signature Lilly Dark Onyx)
           ========================================================================= */}
       {forProfessionalsSec.is_active && (
-        <section id="for-professionals" className="py-24 sm:py-32 bg-brand-dark text-white border-y border-brand-border-dark scroll-mt-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-            {/* Header */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <section id="for-professionals" className="py-20 sm:py-28 bg-[#121212] text-white scroll-mt-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-16">
+            
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-7 space-y-6">
                 <ScrollReveal>
-                  <SectionEyebrow isDark>{forProfessionalsSec.eyebrow || 'FOR HEALTHCARE PROFESSIONALS'}</SectionEyebrow>
-                  <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-white tracking-tight leading-tight whitespace-pre-line">
-                    {forProfessionalsSec.title}
+                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                    {forProfessionalsSec.eyebrow || 'FOR HEALTHCARE PROFESSIONALS'}
+                  </span>
+                  <h2 className="text-3xl sm:text-5xl font-serif font-light text-white tracking-tight leading-tight">
+                    Supporting clinical practice with clear product information.
                   </h2>
                 </ScrollReveal>
 
                 <ScrollReveal delay={0.1}>
-                  <div className="space-y-3 text-base sm:text-lg text-gray-300 leading-relaxed whitespace-pre-line">
+                  <p className="text-base sm:text-lg text-white/70 font-light leading-relaxed font-sans max-w-2xl">
                     {forProfessionalsSec.body}
-                  </div>
+                  </p>
                 </ScrollReveal>
               </div>
 
               <div className="lg:col-span-5">
                 <ScrollReveal delay={0.15}>
-                  <div className="overflow-hidden rounded-sm border border-brand-border-dark">
-                    <FallbackImage
-                      src={forProfessionalsSec.image_url || '/assets/healthcare-professionals.jpg'}
-                      alt="Medical specialist reviewing clinical product literature and prescribing documentation"
-                      aspectRatio="aspect-[16/10] sm:aspect-[4/3]"
+                  <div className="rounded-[28px] overflow-hidden border border-white/15 aspect-[4/3]">
+                    <img
+                      src={assetUrl(forProfessionalsSec.image_url || '/assets/healthcare-professionals.jpg')}
+                      alt="Doctor reviewing clinical monographs"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </ScrollReveal>
               </div>
             </div>
 
-            {/* Three Large Editorial Resources */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8 border-t border-brand-border-dark">
+            {/* Three Professional Resources */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8 border-t border-white/15">
               {forProfessionalsSec.items.map((item, idx) => (
-                <ScrollReveal key={item.title || idx} delay={idx * 0.05}>
-                  <div className="bg-brand-dark-surface p-8 border border-brand-border-dark rounded-sm h-full flex flex-col justify-between space-y-6 group hover:border-brand-sage-light/40 transition-colors">
-                    <div className="space-y-4">
-                      <h3 className="text-2xl font-light text-white tracking-tight">
+                <ScrollReveal key={item.title || idx} delay={idx * 0.06}>
+                  <div className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-white/30 transition-colors space-y-4 h-full flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <span className="text-xs font-mono text-[#D52B1E] font-bold block">
+                        0{idx + 1}
+                      </span>
+                      <h3 className="text-xl font-serif font-bold text-white tracking-tight">
                         {item.title}
                       </h3>
-                      <p className="text-sm text-gray-300 leading-relaxed">
+                      <p className="text-sm text-white/70 leading-relaxed font-sans">
                         {item.desc || item.description || item.text}
                       </p>
                     </div>
 
-                    <div className="pt-4 border-t border-brand-border-dark">
-                      {item.cta_url === '#prescribing-modal' ? (
-                        <button
-                          onClick={() => setActiveSafetyModal('prescribing')}
-                          className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-sage-light group-hover:text-white transition-colors cursor-pointer"
-                        >
-                          <span>{item.cta_text || 'View professional resources'}</span>
-                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                        </button>
-                      ) : item.cta_url === '#patient-safety' ? (
-                        <button
-                          onClick={() => scrollToSection('patient-safety')}
-                          className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-sage-light group-hover:text-white transition-colors cursor-pointer"
-                        >
-                          <span>{item.cta_text || 'Report safety information'}</span>
-                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                        </button>
-                      ) : (
-                        <Link
-                          to={item.cta_url || '/areas-of-care'}
-                          className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-sage-light group-hover:text-white transition-colors"
-                        >
-                          <span>{item.cta_text || 'View product information'}</span>
-                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                      )}
+                    <div className="pt-4 border-t border-white/10">
+                      <Link
+                        to={idx === 1 ? '#patient-safety' : '/areas-of-care'}
+                        onClick={(e) => {
+                          if (idx === 1) {
+                            e.preventDefault();
+                            scrollToSection('patient-safety');
+                          }
+                        }}
+                        className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#D52B1E] hover:text-white transition-colors"
+                      >
+                        <span>{idx === 1 ? 'Report Safety Data' : 'View Formulations'}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
                     </div>
                   </div>
                 </ScrollReveal>
               ))}
             </div>
+
           </div>
         </section>
       )}
 
       {/* =========================================================================
-          SECTION 6 — THE TREATMENT JOURNEY
+          SECTION 6 — THE TREATMENT JOURNEY (Progressive 4 Stages)
           ========================================================================= */}
       {treatmentJourneySec.is_active && (
-        <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="space-y-16 sm:space-y-20">
-            {/* Header */}
-            <div className="max-w-3xl space-y-6">
-              <ScrollReveal>
-                <SectionEyebrow>{treatmentJourneySec.eyebrow || 'TREATMENT JOURNEY'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight leading-tight whitespace-pre-line">
-                  {treatmentJourneySec.title}
-                </h2>
-              </ScrollReveal>
+        <section className="py-20 sm:py-28 px-4 sm:px-8 max-w-7xl mx-auto space-y-14">
+          <div className="max-w-3xl space-y-4">
+            <ScrollReveal>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                {treatmentJourneySec.eyebrow || 'TREATMENT JOURNEY'}
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
+                A prescription begins in the clinic. <br />
+                <span className="italic font-normal text-[#D52B1E]">Care continues beyond it.</span>
+              </h2>
+              <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-2">
+                Healthcare professionals make treatment decisions in the clinical setting. Patients then carry those decisions into everyday life. A responsible pharmaceutical company should support both parts of that journey.
+              </p>
+            </ScrollReveal>
+          </div>
 
-              <ScrollReveal delay={0.1}>
-                <div className="space-y-3 text-base sm:text-lg text-brand-muted leading-relaxed whitespace-pre-line">
-                  {treatmentJourneySec.body}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {treatmentJourneySec.items.map((step, idx) => (
+              <ScrollReveal key={step.title || idx} delay={idx * 0.06}>
+                <div className="p-8 rounded-3xl bg-white border border-[#E5E3DC] hover:border-[#121212] transition-colors space-y-4 h-full flex flex-col justify-between shadow-xs">
+                  <div className="space-y-3">
+                    <span className="text-xs font-mono text-[#D52B1E] font-bold block">
+                      Stage {step.stage || `0${idx + 1}`}
+                    </span>
+                    <h3 className="text-xl font-serif font-bold text-[#121212] tracking-tight">
+                      {step.title}
+                    </h3>
+                    <p className="text-sm text-[#555555] leading-relaxed font-sans">
+                      {step.desc || step.description || step.text}
+                    </p>
+                  </div>
                 </div>
               </ScrollReveal>
+            ))}
+          </div>
+
+          <div className="pt-4">
+            <div className="rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[21/9] bg-white">
+              <img
+                src={assetUrl(treatmentJourneySec.image_url || '/assets/treatment-journey.jpg')}
+                alt="Doctor-patient consultation in Indian healthcare clinic"
+                className="w-full h-full object-cover"
+              />
             </div>
-
-            {/* Editorial Progressive Journey Flow */}
-            <ScrollReveal delay={0.15}>
-              <div className="pt-4 pb-2 border-t border-brand-border/90">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
-                  {treatmentJourneySec.items.map((step, idx) => (
-                    <div key={step.title || idx} className="relative flex flex-col justify-between pt-6 space-y-4">
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <h3 className="text-xl font-light text-brand-dark tracking-tight">
-                            {step.title}
-                          </h3>
-                          {idx < treatmentJourneySec.items.length - 1 && (
-                            <div className="hidden lg:flex text-brand-sage/60 items-center">
-                              <ArrowRight className="w-4 h-4" />
-                            </div>
-                          )}
-                        </div>
-                        <p className="text-sm text-brand-muted leading-relaxed">
-                          {step.desc || step.description || step.text}
-                        </p>
-                      </div>
-
-                      {idx < treatmentJourneySec.items.length - 1 && (
-                        <div className="flex lg:hidden justify-center py-2 text-brand-sage/60">
-                          <ArrowDown className="w-4 h-4" />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-
-            {/* Doctor-Patient Consultation Photography Asset */}
-            <ScrollReveal delay={0.2}>
-              <div className="overflow-hidden rounded-sm border border-brand-border shadow-sm">
-                <FallbackImage
-                  src={treatmentJourneySec.image_url || '/assets/treatment-journey.jpg'}
-                  alt="Indian doctor in consultation with an elderly patient in a clinical healthcare environment"
-                  aspectRatio="aspect-[16/9]"
-                />
-              </div>
-            </ScrollReveal>
           </div>
         </section>
       )}
 
       {/* =========================================================================
-          SECTION 7 — PATIENT SAFETY
+          SECTION 7 — PATIENT SAFETY & PHARMACOVIGILANCE
           ========================================================================= */}
       {safetySec.is_active && (
-        <section id="patient-safety" className="py-24 sm:py-32 bg-brand-surface/70 border-t border-brand-border scroll-mt-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-            {/* Header */}
-            <div className="max-w-4xl space-y-6">
+        <section id="patient-safety" className="py-20 sm:py-28 bg-[#F0EFEB] border-t border-[#E5E3DC] scroll-mt-24 px-4 sm:px-8">
+          <div className="max-w-7xl mx-auto space-y-12">
+            
+            <div className="max-w-3xl space-y-3">
               <ScrollReveal>
-                <SectionEyebrow>{safetySec.eyebrow || 'PATIENT SAFETY'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight leading-tight whitespace-pre-line">
-                  {safetySec.title}
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                  {safetySec.eyebrow || 'PATIENT SAFETY'}
+                </span>
+                <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
+                  Safety information deserves a clear way to reach us.
                 </h2>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.1}>
-                <p className="text-base sm:text-lg text-brand-muted leading-relaxed whitespace-pre-line">
+                <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans">
                   {safetySec.body}
                 </p>
               </ScrollReveal>
             </div>
 
-            {/* Safety Reporting Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {safetySec.items.map((card, idx) => (
-                <ScrollReveal key={card.title || idx} delay={idx * 0.05}>
-                  <div className="bg-brand-ivory p-8 sm:p-10 border border-brand-border rounded-sm h-full flex flex-col justify-between space-y-8">
-                    <div className="space-y-4">
-                      {card.eyebrow && (
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-semibold uppercase tracking-widest text-brand-sage">
-                            {card.eyebrow}
-                          </span>
-                        </div>
-                      )}
-                      <h3 className="text-2xl font-medium text-brand-dark tracking-tight">
+                <ScrollReveal key={card.title || idx} delay={idx * 0.08}>
+                  <div className="bg-white p-8 sm:p-12 rounded-[28px] border border-[#E5E3DC] shadow-sm h-full flex flex-col justify-between space-y-8">
+                    <div className="space-y-3">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-[#D52B1E] block">
+                        {card.eyebrow}
+                      </span>
+                      <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#121212] tracking-tight">
                         {card.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
+                      <p className="text-sm sm:text-base text-[#555555] leading-relaxed font-sans">
                         {card.desc || card.description || card.text}
                       </p>
                     </div>
 
-                    <div className="pt-4 border-t border-brand-border">
+                    <div className="pt-4 border-t border-[#E5E3DC]">
                       <button
                         onClick={() => setActiveSafetyModal(card.modal_type || (idx === 0 ? 'patient' : 'professional'))}
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-brand-dark text-white text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-brand-sage transition-all duration-200 cursor-pointer group"
+                        className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-colors shadow-xs cursor-pointer"
                       >
-                        <span>{card.cta_text || 'Report concern'}</span>
-                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                        <span>{card.cta_text || 'Report Concern'}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
                 </ScrollReveal>
               ))}
             </div>
+
           </div>
         </section>
       )}
 
       {/* =========================================================================
           INTERACTIVE SAFETY & RESOURCE MODAL
+          Clean, accessible, transparent reporting dialog
           ========================================================================= */}
       {activeSafetyModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-dark/70 backdrop-blur-sm">
-          <div className="bg-brand-ivory border border-brand-border max-w-lg w-full p-8 rounded-sm shadow-2xl space-y-6 relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="bg-white border border-[#E5E3DC] max-w-lg w-full p-8 rounded-3xl shadow-2xl space-y-6 relative">
             <button
               onClick={() => setActiveSafetyModal(null)}
-              className="absolute top-4 right-4 text-brand-muted hover:text-brand-dark text-lg font-mono p-1 cursor-pointer"
+              className="absolute top-5 right-5 text-[#888888] hover:text-[#121212] p-1.5 cursor-pointer rounded-full hover:bg-[#FAF9F6] transition-colors"
               aria-label="Close dialog"
             >
-              ✕
+              <X className="w-5 h-5" />
             </button>
 
             {modalSubmitted ? (
               <div className="py-8 text-center space-y-3">
-                <CheckCircle2 className="w-10 h-10 text-brand-sage mx-auto" />
-                <h3 className="text-xl font-medium text-brand-dark">Report Received</h3>
-                <p className="text-sm text-brand-muted">
-                  Thank you. Your safety and quality report has been securely submitted for review.
+                <div className="w-12 h-12 rounded-full bg-[#FAF9F6] border border-[#E5E3DC] text-[#00A859] flex items-center justify-center mx-auto">
+                  <CheckCircle2 className="w-6 h-6" />
+                </div>
+                <h3 className="text-2xl font-serif font-bold text-[#121212]">Report Received</h3>
+                <p className="text-sm text-[#555555] leading-relaxed max-w-sm mx-auto">
+                  Thank you. Your safety and quality report has been securely transmitted to our Pharmacovigilance & Quality Committee for review.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleModalSubmit} className="space-y-4">
                 <div className="space-y-1">
-                  <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-brand-sage">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#D52B1E] block">
                     {activeSafetyModal === 'patient'
                       ? 'PATIENT & CAREGIVER REPORTING'
-                      : activeSafetyModal === 'professional'
-                        ? 'HEALTHCARE PROFESSIONAL SAFETY DESK'
-                        : 'PROFESSIONAL RESOURCE ACCESS'}
+                      : 'HEALTHCARE PROFESSIONAL SAFETY DESK'}
                   </span>
-                  <h3 className="text-xl font-medium text-brand-dark">
-                    {activeSafetyModal === 'prescribing'
-                      ? 'Request Prescribing & Monograph Information'
-                      : 'Submit Safety or Product Quality Observation'}
+                  <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#121212]">
+                    Submit Safety or Quality Observation
                   </h3>
                 </div>
 
-                <div className="space-y-3 text-sm">
+                <div className="space-y-3 text-sm pt-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase text-brand-dark mb-1">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-[#121212] mb-1.5">
                       Full Name *
                     </label>
                     <input
                       type="text"
                       required
                       placeholder="Your name"
-                      className="w-full px-3 py-2 bg-white border border-brand-border text-sm rounded-sm focus:outline-none focus:border-brand-sage"
+                      className="w-full px-4 py-2.5 bg-[#FAF9F6] border border-[#E5E3DC] text-sm rounded-xl focus:outline-none focus:border-[#D52B1E] transition-colors text-[#121212]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase text-brand-dark mb-1">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-[#121212] mb-1.5">
                       Email Address *
                     </label>
                     <input
                       type="email"
                       required
                       placeholder="name@domain.com"
-                      className="w-full px-3 py-2 bg-white border border-brand-border text-sm rounded-sm focus:outline-none focus:border-brand-sage"
+                      className="w-full px-4 py-2.5 bg-[#FAF9F6] border border-[#E5E3DC] text-sm rounded-xl focus:outline-none focus:border-[#D52B1E] transition-colors text-[#121212]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase text-brand-dark mb-1">
-                      Onecore Product Name or Batch Ref
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-[#121212] mb-1.5">
+                      Product Name or Batch Number
                     </label>
                     <input
                       type="text"
-                      placeholder="Product or therapeutic area"
-                      className="w-full px-3 py-2 bg-white border border-brand-border text-sm rounded-sm focus:outline-none focus:border-brand-sage"
+                      placeholder="e.g. Calmme, Oneflexo, Batch 24B01"
+                      className="w-full px-4 py-2.5 bg-[#FAF9F6] border border-[#E5E3DC] text-sm rounded-xl focus:outline-none focus:border-[#D52B1E] transition-colors text-[#121212]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase text-brand-dark mb-1">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-[#121212] mb-1.5">
                       Observation Summary *
                     </label>
                     <textarea
                       required
                       rows={3}
-                      placeholder="Please summarize your observation or resource inquiry..."
-                      className="w-full px-3 py-2 bg-white border border-brand-border text-sm rounded-sm focus:outline-none focus:border-brand-sage resize-none"
+                      placeholder="Please describe the side effect, packaging irregularity, or quality concern in detail..."
+                      className="w-full px-4 py-2.5 bg-[#FAF9F6] border border-[#E5E3DC] text-sm rounded-xl focus:outline-none focus:border-[#D52B1E] transition-colors text-[#121212] resize-none"
                     />
                   </div>
                 </div>
 
-                <div className="pt-2 flex items-center justify-end gap-3">
+                <div className="pt-3 flex items-center justify-end gap-3">
                   <button
                     type="button"
                     onClick={() => setActiveSafetyModal(null)}
-                    className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-brand-muted hover:text-brand-dark cursor-pointer"
+                    className="px-4 py-2 text-xs font-semibold text-[#777777] hover:text-[#121212] cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2.5 bg-brand-dark text-white text-xs font-semibold uppercase tracking-wider rounded-full hover:bg-brand-sage transition-colors cursor-pointer"
+                    className="px-6 py-2.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-colors cursor-pointer shadow-xs"
                   >
                     Submit Report
                   </button>
@@ -695,6 +692,7 @@ export default function PatientsCaregivers() {
           </div>
         </div>
       )}
+
     </div>
   );
 }

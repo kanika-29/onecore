@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowDown, CheckCircle2, ShieldCheck, Microscope, RefreshCw, Layers, FileCheck } from 'lucide-react';
-import SectionEyebrow from '../components/SectionEyebrow';
+import { ArrowRight, CheckCircle2, ShieldCheck, Microscope, Layers } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
-import FallbackImage from '../components/FallbackImage';
-import PageBanner from '../components/PageBanner';
 import { useCmsPage } from '../hooks/useCmsPage';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function QualityManufacturing() {
   const { getSection } = useCmsPage('quality-manufacturing');
@@ -16,12 +14,12 @@ export default function QualityManufacturing() {
 
   const heroSec = getSection('hero', {
     eyebrow: 'QUALITY & MANUFACTURING',
-    title: 'Quality & Manufacturing',
+    title: 'Quality is part of the product from the beginning.',
     body: 'At Onecore Pharma, quality is not treated as a final checkpoint. It is considered throughout the product journey, from formulation and sourcing to manufacturing, testing and responsible release.',
     image_url: '/assets/quality.jpg',
     cta_text: 'Quality Principles',
     cta_url: '#principles',
-    secondary_cta_text: 'Explore Specialties',
+    secondary_cta_text: 'Explore Formulations',
     secondary_cta_url: '/areas-of-care',
   });
 
@@ -32,19 +30,19 @@ export default function QualityManufacturing() {
     items: [
       {
         title: "Consistent Standards",
-        desc: "Quality begins with clear specifications, controlled processes and consistent standards across the product lifecycle.",
+        desc: "Quality begins with clear specifications, controlled processes and consistent standards across the entire product lifecycle.",
       },
       {
         title: "Responsible Release",
-        desc: "Products are released only after the appropriate quality requirements and checks have been completed.",
+        desc: "Products are released only after the appropriate quality requirements, testing assays, and regulatory checks have been completed.",
       },
       {
         title: "Controlled Processes",
-        desc: "Manufacturing and quality processes are designed to support consistency, traceability and dependable product performance.",
+        desc: "Manufacturing and quality processes are designed to support consistency, traceability and dependable clinical product performance.",
       },
       {
         title: "Continuous Improvement",
-        desc: "We continuously look for opportunities to strengthen processes, improve reliability and support better quality outcomes.",
+        desc: "We continuously look for opportunities to strengthen analytical methods, improve batch reliability and support better healthcare outcomes.",
       },
     ]
   });
@@ -57,11 +55,11 @@ export default function QualityManufacturing() {
     items: [
       {
         title: 'Validated Processes',
-        desc: 'Equipment calibration and environmental monitoring.'
+        desc: 'Equipment calibration, automated dosing precision, and continuous environmental cleanroom monitoring.'
       },
       {
         title: 'Batch Traceability',
-        desc: 'End-to-end documentation across the supply chain.'
+        desc: 'End-to-end documentation, analytical audit logs, and complete ingredient traceability across the supply chain.'
       }
     ]
   });
@@ -100,7 +98,7 @@ export default function QualityManufacturing() {
 
   const finalCtaSec = getSection('final_cta', {
     title: 'Quality you can depend on.',
-    body: 'Explore the therapeutic areas and formulations that make up the Onecore portfolio.',
+    body: 'Explore the therapeutic areas and formulations that make up the Onecore portfolio, or speak with our Medical & Quality Affairs desk.',
     cta_text: 'Explore Areas of Care',
     cta_url: '/areas-of-care',
     secondary_cta_text: 'Contact Quality Team',
@@ -108,188 +106,252 @@ export default function QualityManufacturing() {
   });
 
   return (
-    <div className="w-full bg-brand-ivory text-brand-text">
+    <div className="w-full bg-[#FAF9F6] text-[#121212]">
+      
       {/* =========================================================================
-          SECTION 1 — HERO / BANNER
+          SECTION 1 — EDITORIAL HERO
+          Spacious, dignified typography with signature crimson accent
           ========================================================================= */}
-      {heroSec.is_active && (
-        <PageBanner
-          title="Quality & Manufacturing"
-          imageUrl={heroSec.image_url || '/assets/quality.jpg'}
-          imageAlt="Quality & Manufacturing - Onecore Pharma"
-        />
-      )}
+      <section className="pt-28 sm:pt-36 pb-16 sm:pb-24 px-4 sm:px-8 border-b border-[#E5E3DC] bg-white">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          <div className="max-w-4xl space-y-6">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+              {heroSec.eyebrow || 'QUALITY & MANUFACTURING'}
+            </span>
+
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-[#121212] tracking-tight leading-[1.05]">
+              Quality is part of the product <br />
+              <span className="italic font-normal text-[#D52B1E]">from the beginning.</span>
+            </h1>
+
+            <p className="text-lg sm:text-2xl text-[#555555] font-light leading-relaxed font-sans max-w-3xl">
+              {heroSec.body || 'At Onecore Pharma, quality is not treated as a final checkpoint. It is considered throughout the product journey, from formulation and sourcing to manufacturing, testing and responsible release.'}
+            </p>
+
+            <div className="pt-2 flex flex-wrap items-center gap-4">
+              <a
+                href={heroSec.cta_url || '#principles'}
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-colors shadow-xs"
+              >
+                <span>{heroSec.cta_text || 'Quality Principles'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+
+              <Link
+                to={heroSec.secondary_cta_url || '/areas-of-care'}
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#FAF9F6] hover:bg-[#EBE9E1] text-[#121212] text-xs font-semibold rounded-full transition-colors border border-[#E5E3DC]"
+              >
+                <span>{heroSec.secondary_cta_text || 'Explore Formulations'}</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Stately Full-Bleed Laboratory Visual Frame */}
+          <div className="relative rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/9] lg:aspect-[21/9] bg-[#FAF9F6]">
+            <img
+              src={assetUrl(heroSec.image_url || '/assets/quality.jpg')}
+              alt="Quality assurance laboratory testing and analytical verification"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute bottom-4 left-6 sm:bottom-6 sm:left-8 text-white text-xs tracking-wider uppercase font-mono">
+              Analytical Testing & Stability Monitoring Facility
+            </div>
+          </div>
+
+        </div>
+      </section>
 
       {/* =========================================================================
-          SECTION 2 — PRINCIPLES (4 Cards)
+          SECTION 2 — FOUNDATIONAL PRINCIPLES (4 Cards)
           ========================================================================= */}
       {principlesSec.is_active && (
-        <section id="principles" className="py-20 sm:py-28 bg-brand-surface border-y border-brand-border">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-            <div className="max-w-3xl space-y-4">
-              <ScrollReveal>
-                <SectionEyebrow>{principlesSec.eyebrow || 'FOUNDATIONAL PRINCIPLES'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight whitespace-pre-line">
-                  {principlesSec.title || 'Principles that guide our quality approach.'}
-                </h2>
-                <p className="text-base sm:text-lg text-brand-muted leading-relaxed whitespace-pre-line">
-                  {principlesSec.body}
-                </p>
-              </ScrollReveal>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-              {principlesSec.items.map((item, idx) => (
-                <ScrollReveal key={item.title || idx} delay={idx * 0.06}>
-                  <div className="bg-white border border-brand-border/80 p-6 sm:p-8 rounded-sm h-full flex flex-col justify-between space-y-4 shadow-2xs hover:shadow-sm transition-shadow">
-                    <div className="space-y-3">
-                      <h3 className="text-lg sm:text-xl font-medium text-brand-dark tracking-tight">
-                        {item.title}
-                      </h3>
-                      <p className="text-sm text-brand-muted leading-relaxed">
-                        {item.desc || item.description || item.text}
-                      </p>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* =========================================================================
-          SECTION 3 — MANUFACTURING
-          ========================================================================= */}
-      {manufacturingSec.is_active && (
-        <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            {/* Left Visual (Top-Aligned) */}
-            <div className="lg:col-span-5 order-2 lg:order-1">
-              <ScrollReveal delay={0.1}>
-                <div className="relative rounded-sm overflow-hidden border border-brand-border shadow-sm">
-                  <FallbackImage
-                    src={manufacturingSec.image_url || '/assets/hero-healthcare.jpg'}
-                    alt="Precision pharmaceutical manufacturing lines and cleanroom packaging"
-                    aspectRatio="aspect-[4/3]"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </ScrollReveal>
-            </div>
-
-            {/* Right Copy */}
-            <div className="lg:col-span-7 order-1 lg:order-2 space-y-6">
-              <ScrollReveal>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight leading-tight whitespace-pre-line">
-                  {manufacturingSec.title || 'Manufacturing with discipline and control.'}
-                </h2>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.1}>
-                <p className="text-base sm:text-lg text-brand-muted leading-relaxed whitespace-pre-line">
-                  {manufacturingSec.body || 'Onecore formulations are produced in qualified manufacturing environments adhering strictly to cGMP and regulatory standards.'}
-                </p>
-              </ScrollReveal>
-
-              {manufacturingSec.items && manufacturingSec.items.length > 0 && (
-                <ScrollReveal delay={0.15}>
-                  <div className="pt-4 border-t border-brand-border/80 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {manufacturingSec.items.map((bullet, idx) => (
-                      <div key={bullet.title || idx} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-brand-sage shrink-0 mt-0.5" />
-                        <div>
-                          <h4 className="text-sm font-semibold text-brand-dark">{bullet.title}</h4>
-                          <p className="text-xs text-brand-muted mt-0.5">{bullet.desc || bullet.description || bullet.text}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollReveal>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* =========================================================================
-          SECTION 4 — QUALITY ASSURANCE (Step-by-Step Grid)
-          ========================================================================= */}
-      {assuranceSec.is_active && (
-        <section className="py-24 sm:py-32 bg-brand-surface/80 border-t border-brand-border">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-            <div className="max-w-3xl space-y-4">
-              <ScrollReveal>
-                <SectionEyebrow>{assuranceSec.eyebrow || 'QUALITY ASSURANCE'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight whitespace-pre-line">
-                  {assuranceSec.title || 'Controls throughout the lifecycle.'}
-                </h2>
-                <p className="text-base sm:text-lg text-brand-muted leading-relaxed whitespace-pre-line">
-                  {assuranceSec.subtitle || 'Key assurance stages designed to support formulation reliability from raw ingredient selection to clinical availability.'}
-                </p>
-              </ScrollReveal>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {assuranceSec.items.map((step, idx) => (
-                <ScrollReveal key={step.title || idx} delay={idx * 0.05}>
-                  <div className="bg-white border border-brand-border/70 p-6 sm:p-8 rounded-sm h-full flex flex-col justify-between space-y-4 shadow-2xs hover:border-brand-sage/40 transition-colors">
-                    <div className="space-y-3">
-                      <h3 className="text-base sm:text-lg font-medium text-brand-dark tracking-tight">
-                        {step.title}
-                      </h3>
-                      <p className="text-sm text-brand-muted leading-relaxed">
-                        {step.desc || step.description || step.text}
-                      </p>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* =========================================================================
-          SECTION 5 — FINAL CTA
-          ========================================================================= */}
-      {finalCtaSec.is_active && (
-        <section className="py-24 sm:py-32 bg-brand-dark text-white text-center relative overflow-hidden">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-10">
+        <section id="principles" className="py-20 sm:py-28 px-4 sm:px-8 max-w-7xl mx-auto space-y-14">
+          <div className="max-w-3xl space-y-3">
             <ScrollReveal>
-              <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-white tracking-tight leading-tight max-w-3xl mx-auto whitespace-pre-line">
-                {finalCtaSec.title || 'Quality you can depend on.'}
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                {principlesSec.eyebrow || 'FOUNDATIONAL PRINCIPLES'}
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
+                {principlesSec.title || 'Principles that guide our quality approach.'}
               </h2>
-            </ScrollReveal>
-
-            <ScrollReveal delay={0.1}>
-              <p className="text-lg sm:text-xl text-gray-300 font-normal max-w-2xl mx-auto leading-relaxed whitespace-pre-line">
-                {finalCtaSec.body || 'Explore the therapeutic areas and formulations that make up the Onecore portfolio.'}
+              <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed">
+                {principlesSec.body}
               </p>
             </ScrollReveal>
+          </div>
 
-            <ScrollReveal delay={0.15}>
-              <div className="pt-4 flex flex-wrap justify-center items-center gap-4">
-                <Link
-                  to={finalCtaSec.cta_url || '/areas-of-care'}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-brand-sage hover:bg-brand-sage-light text-brand-dark text-sm font-semibold tracking-wide rounded-full transition-all duration-300 shadow-sm"
-                >
-                  <span>{finalCtaSec.cta_text || 'Explore Areas of Care'}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                {finalCtaSec.secondary_cta_text && (
-                  <Link
-                    to={finalCtaSec.secondary_cta_url || '/contact'}
-                    className="inline-flex items-center gap-2 px-8 py-4 bg-transparent border border-white/20 text-white text-sm font-medium rounded-full hover:bg-white/10 transition-all duration-200"
-                  >
-                    <span>{finalCtaSec.secondary_cta_text}</span>
-                  </Link>
-                )}
-              </div>
-            </ScrollReveal>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {principlesSec.items.map((item, idx) => (
+              <ScrollReveal key={item.title || idx} delay={idx * 0.08}>
+                <div className="bg-white border border-[#E5E3DC] hover:border-[#121212] p-8 rounded-3xl h-full flex flex-col justify-between space-y-4 shadow-xs hover:shadow-md transition-all duration-300">
+                  <div className="space-y-3">
+                    <span className="text-xs font-mono text-[#D52B1E] font-bold block">
+                      0{idx + 1}
+                    </span>
+                    <h3 className="text-xl font-serif font-bold text-[#121212] tracking-tight">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-[#555555] leading-relaxed font-sans">
+                      {item.desc || item.description || item.text}
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
           </div>
         </section>
       )}
+
+      {/* =========================================================================
+          SECTION 3 — MANUFACTURING DISCIPLINES
+          ========================================================================= */}
+      {manufacturingSec.is_active && (
+        <section className="py-20 sm:py-28 bg-white border-y border-[#E5E3DC] px-4 sm:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+              
+              {/* Left Visual */}
+              <div className="lg:col-span-6 order-2 lg:order-1">
+                <ScrollReveal delay={0.1}>
+                  <div className="relative rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[4/3] bg-[#FAF9F6]">
+                    <img
+                      src={assetUrl(manufacturingSec.image_url || '/assets/hero-healthcare.jpg')}
+                      alt="Precision pharmaceutical manufacturing cleanroom"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </ScrollReveal>
+              </div>
+
+              {/* Right Content */}
+              <div className="lg:col-span-6 order-1 lg:order-2 space-y-6">
+                <ScrollReveal>
+                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                    {manufacturingSec.eyebrow || 'MANUFACTURING DISCIPLINES'}
+                  </span>
+                  <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
+                    {manufacturingSec.title || 'Manufacturing with discipline and control.'}
+                  </h2>
+                </ScrollReveal>
+
+                <ScrollReveal delay={0.1}>
+                  <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed">
+                    {manufacturingSec.body || 'Onecore formulations are produced in qualified manufacturing environments adhering strictly to cGMP and regulatory standards.'}
+                  </p>
+                </ScrollReveal>
+
+                {manufacturingSec.items && manufacturingSec.items.length > 0 && (
+                  <ScrollReveal delay={0.15}>
+                    <div className="pt-4 border-t border-[#E5E3DC] space-y-4">
+                      {manufacturingSec.items.map((bullet, idx) => (
+                        <div key={bullet.title || idx} className="flex items-start gap-3.5 p-4 rounded-2xl bg-[#FAF9F6] border border-[#E5E3DC]">
+                          <CheckCircle2 className="w-5 h-5 text-[#00A859] shrink-0 mt-0.5" />
+                          <div>
+                            <h4 className="text-sm font-bold text-[#121212]">{bullet.title}</h4>
+                            <p className="text-xs text-[#555555] mt-1 leading-relaxed">{bullet.desc || bullet.description || bullet.text}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollReveal>
+                )}
+              </div>
+
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* =========================================================================
+          SECTION 4 — QUALITY ASSURANCE (6-Step Lifecycle Grid)
+          ========================================================================= */}
+      {assuranceSec.is_active && (
+        <section className="py-20 sm:py-28 px-4 sm:px-8 max-w-7xl mx-auto space-y-14">
+          <div className="max-w-3xl space-y-3">
+            <ScrollReveal>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                {assuranceSec.eyebrow || 'QUALITY ASSURANCE'}
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
+                {assuranceSec.title || 'Controls throughout the lifecycle.'}
+              </h2>
+              <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed">
+                {assuranceSec.subtitle || 'Key assurance stages designed to support formulation reliability from raw ingredient selection to clinical availability.'}
+              </p>
+            </ScrollReveal>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {assuranceSec.items.map((step, idx) => (
+              <ScrollReveal key={step.title || idx} delay={idx * 0.06}>
+                <div className="bg-white border border-[#E5E3DC] hover:border-[#121212] p-8 rounded-3xl h-full flex flex-col justify-between space-y-4 shadow-xs hover:shadow-md transition-all duration-300">
+                  <div className="space-y-3">
+                    <span className="text-xs font-mono text-[#D52B1E] font-bold block">
+                      Stage 0{idx + 1}
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-serif font-bold text-[#121212] tracking-tight">
+                      {step.title}
+                    </h3>
+                    <p className="text-sm text-[#555555] leading-relaxed font-sans">
+                      {step.desc || step.description || step.text}
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* =========================================================================
+          SECTION 5 — FINAL CTA (Signature Lilly Dark Onyx)
+          ========================================================================= */}
+      {finalCtaSec.is_active && (
+        <section className="py-20 sm:py-28 bg-[#121212] text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center justify-between">
+              
+              <div className="lg:col-span-8 space-y-4">
+                <ScrollReveal>
+                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                    Portfolio & Standards
+                  </span>
+                  <h2 className="text-3xl sm:text-5xl font-serif font-light text-white tracking-tight leading-tight">
+                    {finalCtaSec.title || 'Quality you can depend on.'}
+                  </h2>
+                  <p className="text-base sm:text-lg text-white/70 font-light leading-relaxed max-w-2xl font-sans pt-1">
+                    {finalCtaSec.body || 'Explore the therapeutic areas and formulations that make up the Onecore portfolio.'}
+                  </p>
+                </ScrollReveal>
+              </div>
+
+              <div className="lg:col-span-4 flex flex-wrap lg:justify-end gap-4">
+                <ScrollReveal delay={0.1}>
+                  <Link
+                    to={finalCtaSec.cta_url || '/areas-of-care'}
+                    className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-colors shadow-xs cursor-pointer"
+                  >
+                    <span>{finalCtaSec.cta_text || 'Explore Areas of Care'}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  {finalCtaSec.secondary_cta_text && (
+                    <Link
+                      to={finalCtaSec.secondary_cta_url || '/contact'}
+                      className="inline-flex items-center gap-2 px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-full transition-colors border border-white/15 cursor-pointer"
+                    >
+                      <span>{finalCtaSec.secondary_cta_text}</span>
+                    </Link>
+                  )}
+                </ScrollReveal>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      )}
+
     </div>
   );
 }

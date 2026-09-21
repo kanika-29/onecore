@@ -74,7 +74,7 @@ function AppRoutes() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-brand-ivory text-brand-text">
+    <div className="flex flex-col min-h-screen bg-[#FAF9F6] text-[#121212]">
       <Navbar />
       <main className="flex-grow">
         <Routes>

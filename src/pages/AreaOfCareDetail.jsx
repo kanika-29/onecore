@@ -368,7 +368,7 @@ export default function AreaOfCareDetail() {
             <span>›</span>
             <span className="text-[#121212] font-semibold">{currentCategory.title} ({currentCategory.subtitle})</span>
           </div>
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-[#D52B1E] bg-[#FFF1F0] px-3 py-1 rounded-full border border-[#F5C2C0]">
+          <div className="text-xs font-semibold uppercase tracking-wider text-[#D52B1E]">
             {currentCategory.products.length} Registered Formulations
           </div>
         </div>
@@ -459,7 +459,7 @@ export default function AreaOfCareDetail() {
                 >
                   <div>
                     {/* Product Packshot Container */}
-                    <div className="w-full aspect-[4/3] bg-[#FAF9F6] border border-[#E5E3DC]/70 rounded-2xl overflow-hidden mb-5 flex items-center justify-center p-4 group-hover:bg-[#FFF1F0]/40 transition-colors">
+                    <div className="w-full aspect-[4/3] bg-[#FAF9F6] border border-[#E5E3DC]/70 rounded-2xl overflow-hidden mb-5 flex items-center justify-center p-4 group-hover:bg-[#F4F2EB] transition-colors">
                       <img
                         src={assetUrl(productImage)}
                         alt={`${product.name} - Onecore Pharma`}
