@@ -1,22 +1,6 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  ArrowRight, 
-  ArrowUpRight, 
-  Heart, 
-  ShieldCheck, 
-  Sparkles, 
-  ChevronLeft, 
-  ChevronRight, 
-  CheckCircle2, 
-  Cpu, 
-  Leaf, 
-  Users, 
-  Microscope,
-  Compass,
-  Activity
-} from 'lucide-react';
-import SectionEyebrow from '../components/SectionEyebrow';
+import { ArrowRight, ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import FallbackImage from '../components/FallbackImage';
 import { useCmsPage } from '../hooks/useCmsPage';
@@ -30,7 +14,7 @@ export default function Home() {
   const { articles: dynamicNews } = useNews();
   const carouselRef = useRef(null);
 
-  // Scroll controls for the Areas of Care carousel
+  // Smooth scroll controls for the Areas of Care carousel
   const scrollCarousel = (direction) => {
     if (carouselRef.current) {
       const scrollAmount = direction === 'left' ? -380 : 380;
@@ -38,7 +22,7 @@ export default function Home() {
     }
   };
 
-  // 100% AUTHENTIC ONECORE CONTENT PRESERVED FROM CMS & DATABASE
+  // 100% AUTHENTIC ONECORE CONTENT PRESERVED FROM CMS & STATIC DATABASE
   const heroSec = getSection('hero', {
     title: 'Committed to better tomorrow',
     image_url: '/assets/hero-healthcare.jpg',
@@ -100,19 +84,16 @@ export default function Home() {
         eyebrow: 'RESPONSIBLE OPERATIONS',
         title: 'Use resources thoughtfully.',
         desc: 'Work toward more efficient use of energy, water and materials across the operations and manufacturing network that support our products.',
-        icon: 'Cpu'
       },
       {
         eyebrow: 'PACKAGING',
         title: 'Reduce what is unnecessary.',
         desc: 'Evaluate packaging choices with the aim of reducing avoidable material use while protecting product quality, safety and stability.',
-        icon: 'Leaf'
       },
       {
         eyebrow: 'RESPONSIBLE PARTNERSHIPS',
         title: 'Grow with shared standards.',
         desc: 'Build relationships with partners who share expectations around quality, compliance, ethical conduct and environmental responsibility.',
-        icon: 'Users'
       }
     ]
   });
@@ -158,39 +139,33 @@ export default function Home() {
   // Map dynamic areas to division cards
   const divisions = (dynamicAreas && dynamicAreas.length > 0)
     ? dynamicAreas.map((a) => ({
-        name: a.divisionName || a.displayName || a.title,
-        specialty: a.therapeuticArea || a.displayName || a.title,
-        description: a.description || a.shortDescription || 'Targeted therapeutic formulations developed to address real clinical needs.',
-        image: a.image || a.image_url || '/assets/therapeutic-general-medicine.jpg',
-        path: a.divisionName?.toLowerCase() === 'femme' ? '/areas-of-care/femme' : '/areas-of-care',
-      }))
+      name: a.divisionName || a.displayName || a.title,
+      specialty: a.therapeuticArea || a.displayName || a.title,
+      description: a.description || a.shortDescription || 'Targeted therapeutic formulations developed to address real clinical needs.',
+      image: a.image || a.image_url || '/assets/therapeutic-general-medicine.jpg',
+      path: a.divisionName?.toLowerCase() === 'femme' ? '/areas-of-care/femme' : '/areas-of-care',
+    }))
     : [
-        { name: "CYTOS", specialty: "Oncology", description: "Targeted therapeutics and supportive oncology care.", image: "/assets/cytos.jpg", path: "/areas-of-care" },
-        { name: "FEMME", specialty: "Women’s Health", description: "Formulations supporting maternal wellness and hormonal balance.", image: "/assets/therapeutic-womens-health.jpg", path: "/areas-of-care/femme" },
-        { name: "NEURIX", specialty: "Neurology", description: "Neuroprotective and cognitive formulations for CNS care.", image: "/assets/neurix.jpg", path: "/areas-of-care" },
-        { name: "ORTHEON", specialty: "Orthopaedics", description: "Musculoskeletal mobility and cartilage protection solutions.", image: "/assets/ortheon.jpg", path: "/areas-of-care" },
-        { name: "VELLIS", specialty: "Dermatology", description: "Dermatological formulations restoring barrier integrity.", image: "/assets/vellis.webp", path: "/areas-of-care" },
-        { name: "EYERIX", specialty: "Ophthalmology", description: "Precision ocular care and anti-inflammatory eye formulations.", image: "/assets/eyerix.jpg", path: "/areas-of-care" },
-        { name: "OTIRA", specialty: "ENT", description: "Targeted airway and otolaryngology formulations.", image: "/assets/otira.jpg", path: "/areas-of-care" },
-        { name: "PEDIAPLUS", specialty: "Paediatrics", description: "Safe, child-friendly dosage forms and pediatric wellness.", image: "/assets/pediaplus.jpg", path: "/areas-of-care" },
-        { name: "OMNARA", specialty: "General Medicine", description: "Essential broad-spectrum therapeutics for daily practice.", image: "/assets/therapeutic-general-medicine.jpg", path: "/areas-of-care" },
-      ];
-
-  const renderSustainabilityIcon = (iconName, idx) => {
-    if (iconName === 'Cpu' || idx === 0) return <Cpu className="w-5 h-5 stroke-[1.75]" />;
-    if (iconName === 'Leaf' || idx === 1) return <Leaf className="w-5 h-5 stroke-[1.75]" />;
-    return <Users className="w-5 h-5 stroke-[1.75]" />;
-  };
+      { name: "CYTOS", specialty: "Oncology", description: "Targeted therapeutics and supportive oncology care.", image: "/assets/cytos.jpg", path: "/areas-of-care" },
+      { name: "FEMME", specialty: "Women’s Health", description: "Formulations supporting maternal wellness and hormonal balance.", image: "/assets/therapeutic-womens-health.jpg", path: "/areas-of-care/femme" },
+      { name: "NEURIX", specialty: "Neurology", description: "Neuroprotective and cognitive formulations for CNS care.", image: "/assets/neurix.jpg", path: "/areas-of-care" },
+      { name: "ORTHEON", specialty: "Orthopaedics", description: "Musculoskeletal mobility and cartilage protection solutions.", image: "/assets/ortheon.jpg", path: "/areas-of-care" },
+      { name: "VELLIS", specialty: "Dermatology", description: "Dermatological formulations restoring barrier integrity.", image: "/assets/vellis.webp", path: "/areas-of-care" },
+      { name: "EYERIX", specialty: "Ophthalmology", description: "Precision ocular care and anti-inflammatory eye formulations.", image: "/assets/eyerix.jpg", path: "/areas-of-care" },
+      { name: "OTIRA", specialty: "ENT", description: "Targeted airway and otolaryngology formulations.", image: "/assets/otira.jpg", path: "/areas-of-care" },
+      { name: "PEDIAPLUS", specialty: "Paediatrics", description: "Safe, child-friendly dosage forms and pediatric wellness.", image: "/assets/pediaplus.jpg", path: "/areas-of-care" },
+      { name: "OMNARA", specialty: "General Medicine", description: "Essential broad-spectrum therapeutics for daily practice.", image: "/assets/therapeutic-general-medicine.jpg", path: "/areas-of-care" },
+    ];
 
   return (
     <div className="w-full bg-white overflow-hidden">
-      
+
       {/* =========================================================================
-          SECTION 1 — HERO BANNER (ONECORE CONTENT + LILLY HERO DESIGN SENSE)
-          Bold grotesque sans statement, high contrast human imagery, pill CTAs
+          SECTION 1 — HERO BANNER
+          Clean, stately, high-contrast human photography with bold typography
           ========================================================================= */}
       {heroSec.is_active && (
-        <section className="relative min-h-[92vh] sm:min-h-screen flex items-end pb-16 sm:pb-24 pt-32 px-4 sm:px-8 lg:px-12 bg-black">
+        <section className="relative min-h-[90vh] sm:min-h-screen flex items-end pb-16 sm:pb-24 pt-32 px-4 sm:px-8 lg:px-12 bg-black">
           {/* Hero Background Photograph */}
           <div className="absolute inset-0 z-0">
             <img
@@ -204,15 +179,10 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
           </div>
 
-          {/* Hero Content Block (Lilly Typographic Weight + Onecore Headline) */}
+          {/* Hero Content Block */}
           <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
             <ScrollReveal>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold uppercase tracking-[0.2em]">
-                <span className="w-2 h-2 rounded-full bg-[#D52B1E] animate-pulse" />
-                <span>Onecore Pharma</span>
-              </div>
-
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-white tracking-tightest leading-[1.04] pt-2 max-w-4xl">
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-white tracking-tightest leading-[1.04] max-w-4xl">
                 {heroSec.title || 'Committed to better tomorrow'}
               </h1>
             </ScrollReveal>
@@ -245,22 +215,19 @@ export default function Home() {
       )}
 
       {/* =========================================================================
-          SECTION 2 — ABOUT ONECORE (EDITORIAL STATEMENT & 3 ACTION CARDS)
-          Onecore Content: "Healthcare is personal. Our approach should be too."
-          Lilly Design Sense: Cormorant Garamond headline with italics, 3-column action cards with red pill CTAs
+          SECTION 2 — ABOUT ONECORE (EDITORIAL STATEMENT & 3 PILLARS)
+          Pure typography, generous white space, stately Cormorant Garamond serif
           ========================================================================= */}
       {aboutSec.is_active && (
         <section className="py-20 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="space-y-16 sm:space-y-20">
-            
-            {/* Centered Editorial Title with Italicized Punchline */}
+
+            {/* Editorial Title with Italicized Punchline */}
             <div className="max-w-4xl mx-auto text-center space-y-6">
               <ScrollReveal>
-                <div className="inline-block">
-                  <span className="font-serif text-3xl font-bold tracking-tight text-[#D52B1E]">
-                    Onecore
-                  </span>
-                </div>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
+                  {aboutSec.eyebrow || 'ABOUT ONECORE'}
+                </span>
                 <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.12] pt-2">
                   Healthcare is personal. <em className="lilly-serif-italic font-normal text-[#121212]">Our approach should be too.</em>
                 </h2>
@@ -273,15 +240,12 @@ export default function Home() {
               </ScrollReveal>
             </div>
 
-            {/* 3 Action Pillars (Lilly 3-column action card layout for Onecore) */}
+            {/* 3 Editorial Pillars (Pure typography, no fake icon boxes) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 pt-4">
-              
-              {/* Pillar 1: Purposeful Formulations */}
+
+              {/* Pillar 1 */}
               <ScrollReveal delay={0.1}>
-                <div className="flex flex-col h-full space-y-5 p-2">
-                  <div className="w-12 h-12 rounded-2xl bg-[#FFF1F0] flex items-center justify-center text-[#D52B1E]">
-                    <Activity className="w-6 h-6 stroke-[1.75]" />
-                  </div>
+                <div className="flex flex-col h-full space-y-4 p-2 border-t border-stone-200 pt-6">
                   <h3 className="text-2xl font-bold text-[#121212] tracking-tight">
                     Purposeful Formulations
                   </h3>
@@ -300,12 +264,9 @@ export default function Home() {
                 </div>
               </ScrollReveal>
 
-              {/* Pillar 2: Dependable Quality */}
+              {/* Pillar 2 */}
               <ScrollReveal delay={0.15}>
-                <div className="flex flex-col h-full space-y-5 p-2">
-                  <div className="w-12 h-12 rounded-2xl bg-[#FFF1F0] flex items-center justify-center text-[#D52B1E]">
-                    <ShieldCheck className="w-6 h-6 stroke-[1.75]" />
-                  </div>
+                <div className="flex flex-col h-full space-y-4 p-2 border-t border-stone-200 pt-6">
                   <h3 className="text-2xl font-bold text-[#121212] tracking-tight">
                     Dependable Quality
                   </h3>
@@ -324,12 +285,9 @@ export default function Home() {
                 </div>
               </ScrollReveal>
 
-              {/* Pillar 3: Clinical & Patient Dialogue */}
+              {/* Pillar 3 */}
               <ScrollReveal delay={0.2}>
-                <div className="flex flex-col h-full space-y-5 p-2">
-                  <div className="w-12 h-12 rounded-2xl bg-[#FFF1F0] flex items-center justify-center text-[#D52B1E]">
-                    <Heart className="w-6 h-6 stroke-[1.75]" />
-                  </div>
+                <div className="flex flex-col h-full space-y-4 p-2 border-t border-stone-200 pt-6">
                   <h3 className="text-2xl font-bold text-[#121212] tracking-tight">
                     Patient & Doctor Focus
                   </h3>
@@ -355,18 +313,18 @@ export default function Home() {
       )}
 
       {/* =========================================================================
-          SECTION 3 — AREAS OF CARE (ONECORE DIVISIONS + LILLY CAROUSEL DESIGN SENSE)
-          9 Division Cards with rounded-[28px] geometry, contrast overlays, horizontal scroll controls
+          SECTION 3 — AREAS OF CARE (ONECORE DIVISIONS + LILLY CAROUSEL)
+          Generous rounded-[28px] cards, horizontal scroll controls, authentic photography
           ========================================================================= */}
       {areasSec.is_active && (
         <section className="py-20 sm:py-28 bg-[#FAF9F6] border-y border-[#E5E7EB]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            
-            {/* Header with Onecore Content */}
+
+            {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
               <div className="max-w-3xl space-y-4">
                 <ScrollReveal>
-                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#4B5563] block">
+                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
                     {areasSec.eyebrow || 'AREAS OF CARE'}
                   </span>
                   <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight">
@@ -378,7 +336,7 @@ export default function Home() {
                 </ScrollReveal>
               </div>
 
-              {/* Carousel Scroll Controls */}
+              {/* Circular Carousel Controls */}
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => scrollCarousel('left')}
@@ -397,12 +355,12 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Horizontal Condition Support Carousel */}
+            {/* Horizontal Condition Carousel */}
             <div
               ref={carouselRef}
               className="flex gap-6 overflow-x-auto scrollbar-none pb-4 pt-2 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth snap-x snap-mandatory"
             >
-              {divisions.map((item, idx) => (
+              {divisions.map((item) => (
                 <div
                   key={item.name}
                   className="snap-start flex-shrink-0 w-[280px] sm:w-[340px] lg:w-[380px]"
@@ -422,10 +380,10 @@ export default function Home() {
                     {/* Gradient Mask for High Contrast */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
 
-                    {/* Card Content Overlay */}
+                    {/* Card Content Overlay (Clean text, no artificial chips) */}
                     <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-between text-white">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/90 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full">
+                      <div>
+                        <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white/75 block">
                           {item.name}
                         </span>
                       </div>
@@ -456,17 +414,17 @@ export default function Home() {
       )}
 
       {/* =========================================================================
-          SECTION 4 — OUR PURPOSE & IMPACT (ONECORE PURPOSE + LILLY METRIC ROW)
-          Garamond title with italics, 3-column metric row, Vision & Mission
+          SECTION 4 — OUR PURPOSE & IMPACT
+          High-stature numbers, clean horizontal hairline dividers
           ========================================================================= */}
       {purposeSec.is_active && (
         <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="space-y-16 sm:space-y-20">
-            
-            {/* Header with Onecore Content */}
+
+            {/* Header */}
             <div className="max-w-4xl mx-auto text-center space-y-6">
               <ScrollReveal>
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#4B5563] block">
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
                   {purposeSec.eyebrow || 'OUR PURPOSE'}
                 </span>
                 <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.1]">
@@ -475,9 +433,9 @@ export default function Home() {
               </ScrollReveal>
             </div>
 
-            {/* Impact Metric Row (Lilly 3-column metric layout for Onecore) */}
+            {/* Impact Numbers */}
             <ScrollReveal delay={0.1}>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-8 border-t border-stone-300">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-8 border-t border-stone-200">
                 <div className="space-y-2">
                   <span className="text-5xl sm:text-6xl font-black text-[#121212] tracking-tight block">
                     60+
@@ -507,12 +465,12 @@ export default function Home() {
               </div>
             </ScrollReveal>
 
-            {/* Vision & Mission Cards (Onecore items) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 pt-6">
+            {/* Vision & Mission Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 pt-4">
               {purposeSec.items.map((item, idx) => (
                 <ScrollReveal key={item.title || idx} delay={(idx + 1) * 0.1}>
-                  <div className="p-8 sm:p-10 rounded-3xl bg-[#FAF9F6] border border-stone-200 space-y-4 h-full">
-                    <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                  <div className="p-8 sm:p-10 rounded-3xl bg-[#FAF9F6] border border-stone-200/80 space-y-4 h-full">
+                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
                       {item.title}
                     </span>
                     <p className="text-base sm:text-lg text-[#121212] leading-relaxed font-medium">
@@ -528,18 +486,18 @@ export default function Home() {
       )}
 
       {/* =========================================================================
-          SECTION 5 — QUALITY ASSURANCE (ONECORE QUALITY + LILLY DARK SECTION)
-          High contrast dark canvas, laboratory testing protocol tag, QA principles
+          SECTION 5 — QUALITY ASSURANCE (DEEP DARK GRAPHITE CANVAS)
+          Clean photographic frame, disciplined typography, no faux sci-fi widgets
           ========================================================================= */}
       {qualitySec.is_active && (
         <section className="py-24 sm:py-32 bg-[#0F1115] text-white relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-              
+
               {/* Left Content */}
               <div className="lg:col-span-7 space-y-8">
                 <ScrollReveal>
-                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
                     {qualitySec.eyebrow || 'QUALITY ASSURANCE'}
                   </span>
                   <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight pt-2">
@@ -590,7 +548,7 @@ export default function Home() {
                 </ScrollReveal>
               </div>
 
-              {/* Right Visual Image */}
+              {/* Right Visual Image (Clean photographic frame, no fake badges) */}
               <div className="lg:col-span-5">
                 <ScrollReveal delay={0.2} direction="left">
                   <div className="relative rounded-3xl overflow-hidden border border-white/15 shadow-2xl">
@@ -599,13 +557,6 @@ export default function Home() {
                       alt="Onecore Pharma quality assurance and laboratory testing"
                       className="w-full aspect-[4/3] object-cover"
                     />
-                    <div className="bg-[#16191F] p-4 border-t border-white/10 flex items-center justify-between text-xs text-stone-400">
-                      <span className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#D52B1E]" />
-                        Batch Verification
-                      </span>
-                      <span className="font-mono text-[11px] text-stone-500">QA PROTOCOL V.26</span>
-                    </div>
                   </div>
                 </ScrollReveal>
               </div>
@@ -616,17 +567,17 @@ export default function Home() {
       )}
 
       {/* =========================================================================
-          SECTION 6 — SUSTAINABILITY (ONECORE SUSTAINABILITY + LILLY INITIATIVE CARDS)
-          3 Cards with clean line icons and signature red underline links
+          SECTION 6 — SUSTAINABILITY & RESPONSIBILITY
+          Clean editorial cards, pure typography, signature red underline links
           ========================================================================= */}
       {sustainabilitySec.is_active && (
         <section className="py-24 sm:py-32 bg-[#FAF9F6] border-b border-[#E5E7EB]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-            
+
             {/* Header */}
             <div className="max-w-3xl space-y-4">
               <ScrollReveal>
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#4B5563] block">
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
                   {sustainabilitySec.eyebrow || 'SUSTAINABILITY'}
                 </span>
                 <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight">
@@ -638,20 +589,17 @@ export default function Home() {
               </ScrollReveal>
             </div>
 
-            {/* 3 Sustainability Cards */}
+            {/* 3 Sustainability Cards (Clean typography, no tacky icon containers) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 pt-4">
               {sustainabilitySec.items.map((col, idx) => (
                 <ScrollReveal key={col.title || idx} delay={0.05 + idx * 0.05}>
-                  <div className="p-8 rounded-3xl bg-white border border-stone-200 shadow-sm flex flex-col h-full space-y-4 group">
-                    <div className="w-12 h-12 rounded-2xl bg-[#FFF1F0] flex items-center justify-center text-[#D52B1E]">
-                      {renderSustainabilityIcon(col.icon, idx)}
-                    </div>
+                  <div className="p-8 sm:p-10 rounded-3xl bg-white border border-stone-200/80 shadow-sm flex flex-col h-full space-y-4 group">
                     {col.eyebrow && (
-                      <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#D52B1E] block">
+                      <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#D52B1E] block">
                         {col.eyebrow}
                       </span>
                     )}
-                    <h3 className="text-xl font-bold text-[#121212] tracking-tight">
+                    <h3 className="text-xl sm:text-2xl font-bold text-[#121212] tracking-tight">
                       {col.title}
                     </h3>
                     <p className="text-sm text-[#4B5563] leading-relaxed flex-1">
@@ -681,11 +629,11 @@ export default function Home() {
       {lookingAheadSec.is_active && (
         <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-            
+
             {/* Left Header */}
             <div className="lg:col-span-5 space-y-6">
               <ScrollReveal>
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#4B5563] block">
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
                   {lookingAheadSec.eyebrow || 'LOOKING AHEAD'}
                 </span>
                 <h2 className="lilly-serif text-3xl sm:text-5xl text-[#121212] tracking-tight leading-tight whitespace-pre-line pt-2">
@@ -697,7 +645,7 @@ export default function Home() {
               </ScrollReveal>
             </div>
 
-            {/* Right Strategic Rows with Smooth Hover Highlighting */}
+            {/* Right Strategic Rows */}
             <div className="lg:col-span-7">
               <div className="border-t border-stone-200 divide-y divide-stone-200">
                 {lookingAheadSec.items.map((item, idx) => (
@@ -720,16 +668,16 @@ export default function Home() {
       )}
 
       {/* =========================================================================
-          SECTION 8 — NEWS PREVIEW (ONECORE ARTICLES)
+          SECTION 8 — NEWS PREVIEW
           ========================================================================= */}
       {newsSec.is_active && (
         <section className="py-24 sm:py-32 bg-[#FAF9F6] border-t border-[#E5E7EB]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-            
+
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
               <ScrollReveal>
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#4B5563] block">
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
                   {newsSec.eyebrow || 'LATEST FROM ONECORE'}
                 </span>
                 <h2 className="lilly-serif text-3xl sm:text-5xl text-[#121212] tracking-tight leading-tight pt-2">
@@ -748,7 +696,7 @@ export default function Home() {
               </ScrollReveal>
             </div>
 
-            {/* 3 News Cards */}
+            {/* 3 News Articles */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
               {dynamicNews.slice(0, 3).map((article, idx) => (
                 <ScrollReveal key={article.id} delay={idx * 0.08}>
@@ -761,7 +709,7 @@ export default function Home() {
                         className="group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
-                    
+
                     <div className="flex items-center justify-between text-xs text-stone-500 pt-1">
                       <span className="font-bold tracking-wider text-[#D52B1E] uppercase">
                         {article.category}
