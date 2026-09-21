@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight, ShieldCheck, Cpu, Leaf, Layers, RefreshCw, Users, CheckCircle2 } from 'lucide-react';
+import { 
+  ArrowRight, 
+  ArrowUpRight, 
+  Heart, 
+  ShieldCheck, 
+  Sparkles, 
+  ChevronLeft, 
+  ChevronRight, 
+  CheckCircle2, 
+  Building2, 
+  Microscope, 
+  Users,
+  Quote
+} from 'lucide-react';
 import SectionEyebrow from '../components/SectionEyebrow';
 import ScrollReveal from '../components/ScrollReveal';
 import FallbackImage from '../components/FallbackImage';
-import PageBanner from '../components/PageBanner';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { useTherapeuticAreas } from '../hooks/useTherapeuticAreas';
 import { useNews } from '../hooks/useNews';
@@ -14,574 +26,758 @@ export default function Home() {
   const { getSection } = useCmsPage('home');
   const { areas: dynamicAreas } = useTherapeuticAreas();
   const { articles: dynamicNews } = useNews();
+  const carouselRef = useRef(null);
 
-  // Fallbacks matching approved design & copy
-  const heroSec = getSection('hero', {
-    title: 'Committed to better tomorrow',
-    image_url: '/assets/hero-healthcare.jpg',
-  });
-
-  const aboutSec = getSection('about_onecore', {
-    eyebrow: 'ABOUT ONECORE',
-    title: 'Healthcare is personal. \nOur approach should be too.',
-    body: 'Onecore Pharma is a pharmaceutical company focused on purposeful formulations, dependable quality and the needs of patients and healthcare professionals.',
-    cta_text: 'Discover Onecore',
-    cta_url: '/about',
-    image_url: '/assets/about-facility.jpg',
-  });
-
-  const areasSec = getSection('areas_of_care', {
-    eyebrow: 'AREAS OF CARE',
-    title: 'Focused expertise. Purposeful healthcare.',
-  });
-
-  const purposeSec = getSection('our_purpose', {
-    eyebrow: 'OUR PURPOSE',
-    title: 'Improve care through medicines and healthcare solutions that matter.',
-    items: [
-      {
-        title: 'OUR VISION',
-        desc: 'To be a trusted pharmaceutical company for patients and healthcare professionals across the areas of care we serve.'
-      },
-      {
-        title: 'OUR MISSION',
-        desc: 'To develop and deliver purposeful formulations that address real clinical needs, uphold dependable quality and expand responsibly into areas where we can make a meaningful difference.'
-      }
-    ]
-  });
-
-  const qualitySec = getSection('quality_assurance', {
-    eyebrow: 'QUALITY ASSURANCE',
-    title: 'Quality is part of the product from the beginning.',
-    body: 'Medicines carry responsibility. That is why quality needs to be considered across manufacturing, testing, review and release, not treated as a final checkpoint.',
-    subheading: 'Our approach is centered on qualified manufacturing environments, appropriate quality controls and disciplined review before products reach the market.',
-    image_url: '/assets/quality.jpg',
-    items: [
-      {
-        title: 'Consistent standards',
-        desc: 'Quality expectations aligned to the nature and regulatory requirements of each product.'
-      },
-      {
-        title: 'Responsible release',
-        desc: 'Review and controls designed to support product consistency and reliability.'
-      }
-    ]
-  });
-
-  const sustainabilitySec = getSection('sustainability', {
-    eyebrow: 'SUSTAINABILITY',
-    title: 'Better health and a healthier future belong together.',
-    body: 'Our responsibility extends beyond the products we provide. As Onecore grows, we want responsible choices to become part of how we operate, how we source and how we work with our partners.',
-    items: [
-      {
-        eyebrow: 'RESPONSIBLE OPERATIONS',
-        title: 'Use resources thoughtfully.',
-        desc: 'Work toward more efficient use of energy, water and materials across the operations and manufacturing network that support our products.',
-        icon: 'Cpu'
-      },
-      {
-        eyebrow: 'PACKAGING',
-        title: 'Reduce what is unnecessary.',
-        desc: 'Evaluate packaging choices with the aim of reducing avoidable material use while protecting product quality, safety and stability.',
-        icon: 'Leaf'
-      },
-      {
-        eyebrow: 'RESPONSIBLE PARTNERSHIPS',
-        title: 'Grow with shared standards.',
-        desc: 'Build relationships with partners who share expectations around quality, compliance, ethical conduct and environmental responsibility.',
-        icon: 'Users'
-      }
-    ]
-  });
-
-  const lookingAheadSec = getSection('looking_ahead', {
-    eyebrow: 'LOOKING AHEAD',
-    title: 'Building depth. \nExpanding thoughtfully.',
-    body: 'Our roadmap prioritizes therapeutic rigor, medical dialogue, and disciplined expansion that preserves trust.',
-    items: [
-      {
-        title: "Deepen therapeutic expertise",
-        desc: "Build stronger portfolios within our core areas of care."
-      },
-      {
-        title: "Strengthen medical engagement",
-        desc: "Stay closer to clinical practice and evolving healthcare needs."
-      },
-      {
-        title: "Expand thoughtfully",
-        desc: "Enter new areas where the portfolio can add meaningful value."
-      },
-      {
-        title: "Grow responsibly",
-        desc: "Strengthen quality, partnerships and sustainable practices as the organisation scales."
-      }
-    ]
-  });
-
-  const newsSec = getSection('news_preview', {
-    eyebrow: 'LATEST FROM ONECORE',
-    title: 'News & perspectives.',
-  });
-
-  const finalCtaSec = getSection('final_cta', {
-    title: 'Purposeful healthcare, across every area we serve.',
-    body: 'Explore the therapeutic areas and formulations that make up the Onecore portfolio.',
-    cta_text: 'Explore areas of care',
-    cta_url: '/areas-of-care',
-    secondary_cta_text: 'Connect With Us',
-    secondary_cta_url: '/contact',
-  });
-
-  // Map dynamic areas to division cards
-  const divisions = (dynamicAreas && dynamicAreas.length > 0)
-    ? dynamicAreas.map((a) => ({
-        name: a.divisionName || a.displayName || a.title,
-        specialty: a.therapeuticArea || a.displayName || a.title,
-        image: a.image || a.image_url || '/assets/therapeutic-general-medicine.jpg',
-      }))
-    : [
-        { name: "CYTOS", specialty: "Oncology", image: "/assets/cytos.jpg" },
-        { name: "PEDIAPLUS", specialty: "Paediatrics", image: "/assets/pediaplus.jpg" },
-        { name: "OTIRA", specialty: "ENT", image: "/assets/otira.jpg" },
-        { name: "FEMME", specialty: "Women’s Health", image: "/assets/therapeutic-womens-health.jpg" },
-        { name: "OMNARA", specialty: "General Medicine", image: "/assets/therapeutic-general-medicine.jpg" },
-        { name: "VELLIS", specialty: "Dermatology", image: "/assets/vellis.webp" },
-        { name: "EYERIX", specialty: "Ophthalmology", image: "/assets/eyerix.jpg" },
-        { name: "NEURIX", specialty: "Neurology", image: "/assets/neurix.jpg" },
-        { name: "ORTHEON", specialty: "Orthopaedics", image: "/assets/ortheon.jpg" },
-      ];
-
-  const renderSustainabilityIcon = (iconName, idx) => {
-    if (iconName === 'Cpu' || idx === 0) return <Cpu className="w-5 h-5 stroke-[1.5]" />;
-    if (iconName === 'Leaf' || idx === 1) return <Leaf className="w-5 h-5 stroke-[1.5]" />;
-    return <Users className="w-5 h-5 stroke-[1.5]" />;
+  // Scroll controls for the Condition Support carousel
+  const scrollCarousel = (direction) => {
+    if (carouselRef.current) {
+      const scrollAmount = direction === 'left' ? -380 : 380;
+      carouselRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
   };
 
+  // 9 Specialized Therapeutic Divisions (Condition Showcase)
+  const conditions = [
+    {
+      id: 'cancer',
+      division: 'CYTOS',
+      name: 'Oncology',
+      description: 'Advancing targeted therapeutics and supportive oncology care with clinical precision.',
+      image: '/assets/cytos.jpg',
+      path: '/areas-of-care',
+    },
+    {
+      id: 'womens-health',
+      division: 'FEMME',
+      name: 'Women’s Health',
+      description: 'Comprehensive formulations supporting maternal health, hormonal balance, and wellness.',
+      image: '/assets/therapeutic-womens-health.jpg',
+      path: '/areas-of-care/femme',
+    },
+    {
+      id: 'neurology',
+      division: 'NEURIX',
+      name: 'Neurology',
+      description: 'Neuroprotective and cognitive formulations developed for central nervous system disorders.',
+      image: '/assets/neurix.jpg',
+      path: '/areas-of-care',
+    },
+    {
+      id: 'orthopaedics',
+      division: 'ORTHEON',
+      name: 'Orthopaedics',
+      description: 'Bone density, cartilage protection, and musculoskeletal rehabilitation solutions.',
+      image: '/assets/ortheon.jpg',
+      path: '/areas-of-care',
+    },
+    {
+      id: 'dermatology',
+      division: 'VELLIS',
+      name: 'Dermatology',
+      description: 'Dermatological formulations restoring barrier integrity and skin vitality.',
+      image: '/assets/vellis.webp',
+      path: '/areas-of-care',
+    },
+    {
+      id: 'ophthalmology',
+      division: 'EYERIX',
+      name: 'Ophthalmology',
+      description: 'Ocular lubricants, anti-inflammatory drops, and retinal care formulations.',
+      image: '/assets/eyerix.jpg',
+      path: '/areas-of-care',
+    },
+    {
+      id: 'ent',
+      division: 'OTIRA',
+      name: 'Ear, Nose & Throat',
+      description: 'Targeted airway and otolaryngology formulations for prompt clinical relief.',
+      image: '/assets/otira.jpg',
+      path: '/areas-of-care',
+    },
+    {
+      id: 'paediatrics',
+      division: 'PEDIAPLUS',
+      name: 'Paediatrics',
+      description: 'Child-friendly dosage forms and pediatric wellness therapies designed for safety.',
+      image: '/assets/pediaplus.jpg',
+      path: '/areas-of-care',
+    },
+    {
+      id: 'general-medicine',
+      division: 'OMNARA',
+      name: 'General Medicine',
+      description: 'Essential primary care therapeutics and broad-spectrum health management.',
+      image: '/assets/therapeutic-general-medicine.jpg',
+      path: '/areas-of-care',
+    },
+  ];
+
   return (
-    <div className="w-full">
+    <div className="w-full bg-white overflow-hidden">
+      
       {/* =========================================================================
-          SECTION 1 — HERO / BANNER
+          SECTION 1 — PRIMARY HERO (THE LILLY HUMAN-CENTRIC HERO)
+          Screenshot 1 Pattern: Full-bleed photograph with heavy grotesque headline
           ========================================================================= */}
-      {heroSec.is_active && (
-        <PageBanner
-          title="Committed to better tomorrow"
-          imageUrl={heroSec.image_url || '/assets/hero-healthcare.jpg'}
-          imageAlt="Onecore Pharma - Committed to better tomorrow"
-        />
-      )}
+      <section className="relative min-h-[92vh] sm:min-h-screen flex items-end pb-16 sm:pb-24 pt-32 px-4 sm:px-8 lg:px-12 bg-black">
+        {/* Background Photograph with Subtle Contrast Gradient */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={assetUrl('/assets/hero-healthcare.jpg')}
+            alt="Onecore Pharma — Healthcare centered on people"
+            className="w-full h-full object-cover object-center opacity-85 brightness-90"
+            loading="eager"
+          />
+          {/* Directional gradient ensuring high text contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+        </div>
 
-      {/* =========================================================================
-          SECTION 1.5 — ABOUT ONECORE (REVIVED EDITORIAL SECTION)
-          ========================================================================= */}
-      {aboutSec.is_active && (
-        <section className="py-20 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            {/* Left Column: Heading & Copy */}
-            <div className="lg:col-span-7 space-y-8">
-              <ScrollReveal>
-                <SectionEyebrow>{aboutSec.eyebrow || 'ABOUT ONECORE'}</SectionEyebrow>
-                <h2 className="editorial-heading text-4xl sm:text-5xl lg:text-6xl font-light text-brand-dark tracking-tight leading-[1.08] whitespace-pre-line mt-3">
-                  {aboutSec.title || 'Healthcare is personal. \nOur approach should be too.'}
-                </h2>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.1}>
-                <p className="text-lg sm:text-xl text-brand-muted font-normal max-w-2xl leading-relaxed whitespace-pre-line">
-                  {aboutSec.body || 'Onecore Pharma is a pharmaceutical company focused on purposeful formulations, dependable quality and the needs of patients and healthcare professionals.'}
-                </p>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.15}>
-                <div className="pt-2 flex flex-wrap items-center gap-4">
-                  <Link
-                    to={aboutSec.cta_url || '/about'}
-                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-dark text-white text-sm font-semibold tracking-wide rounded-full hover:bg-brand-sage transition-all duration-300 shadow-sm group"
-                  >
-                    <span>{aboutSec.cta_text || 'Discover Onecore'}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </ScrollReveal>
+        {/* Hero Content Block (Lilly Heavy Typography Layout) */}
+        <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
+          <ScrollReveal>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold uppercase tracking-[0.2em]">
+              <span className="w-2 h-2 rounded-full bg-[#D52B1E] animate-pulse" />
+              <span>A Medicine Company</span>
             </div>
 
-            {/* Right Column: Hero Visual Asset */}
-            <div className="lg:col-span-5">
-              <ScrollReveal delay={0.15} direction="left">
-                <div className="relative rounded-sm overflow-hidden border border-brand-border shadow-sm">
-                  <FallbackImage
-                    src={aboutSec.image_url || '/assets/about-facility.jpg'}
-                    alt="Onecore Pharma clinical and research environment"
-                    aspectRatio="aspect-[4/3]"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </ScrollReveal>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-white tracking-tightest leading-[1.04] pt-2 max-w-4xl">
+              A medicine company that puts health above all.
+            </h1>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.1}>
+            <p className="text-base sm:text-xl text-white/85 font-normal max-w-2xl leading-relaxed">
+              Onecore Pharma develops purposeful formulations and dependable medicines centered on patients, families, and healthcare professionals.
+            </p>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.15}>
+            <div className="pt-2 flex flex-wrap items-center gap-4">
+              <Link
+                to="/areas-of-care"
+                className="inline-flex items-center gap-2.5 px-8 py-4 bg-[#D52B1E] hover:bg-[#B52015] text-white text-sm font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+              >
+                <span>Explore Medicines</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white text-sm font-medium rounded-full transition-all duration-200"
+              >
+                <span>Our Approach</span>
+              </Link>
             </div>
-          </div>
-        </section>
-      )}
+          </ScrollReveal>
+        </div>
+      </section>
 
       {/* =========================================================================
-          SECTION 2 — AREAS OF CARE / DIVISIONS
+          SECTION 2 — EDITORIAL STATEMENT & 3 ACTION CARDS (LILLY MODEL)
+          Screenshot 2 & 3 Pattern: Garamond headline with italics & 3 red pill actions
           ========================================================================= */}
-      {areasSec.is_active && (
-        <section className="py-20 sm:py-28 lg:py-32 bg-brand-surface/60 border-y border-brand-border/80">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
-            {/* Section Heading */}
-            <div className="max-w-3xl space-y-4">
-              <ScrollReveal>
-                <SectionEyebrow>{areasSec.eyebrow || 'AREAS OF CARE'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight leading-tight whitespace-pre-line">
-                  {areasSec.title || 'Focused expertise. Purposeful healthcare.'}
-                </h2>
-              </ScrollReveal>
-            </div>
-
-            {/* 3x3 Grid of 9 Division Cards with Soft Muted Sage Tint */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              {divisions.map((item, idx) => (
-                <ScrollReveal key={item.name} delay={idx * 0.04}>
-                  <Link
-                    to="/areas-of-care"
-                    className="group bg-[#F0F4F2] hover:bg-[#E6EFEA] border border-brand-sage/20 hover:border-brand-sage/45 rounded-sm overflow-hidden flex flex-col h-full transition-all duration-300 shadow-2xs hover:shadow-xs"
-                  >
-                    {/* Card Image */}
-                    <div className="relative aspect-[16/10] overflow-hidden bg-brand-surface border-b border-brand-sage/15">
-                      <img
-                        src={assetUrl(item.image)}
-                        alt={`${item.name} — ${item.specialty}`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                        loading="lazy"
-                      />
-                    </div>
-
-                    {/* Card Content */}
-                    <div className="p-5 sm:p-6 flex flex-col justify-between flex-1 space-y-4">
-                      <div className="space-y-1">
-                        <h3 className="text-lg sm:text-xl font-semibold tracking-wider text-brand-dark uppercase group-hover:text-brand-sage transition-colors">
-                          {item.name}
-                        </h3>
-                        <p className="text-xs sm:text-sm text-brand-muted font-normal">
-                          {item.specialty}
-                        </p>
-                      </div>
-
-                      <div className="pt-3 border-t border-brand-sage/15 flex items-center justify-end text-xs font-semibold text-brand-sage group-hover:text-brand-dark transition-colors">
-                        <span className="inline-flex items-center gap-1 uppercase tracking-wider text-xs font-semibold">
-                          <span>Explore</span>
-                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-brand-sage" />
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* =========================================================================
-          SECTION 3 — OUR PURPOSE
-          ========================================================================= */}
-      {purposeSec.is_active && (
-        <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="space-y-16">
-            {/* Eyebrow & Large Statement */}
-            <div className="max-w-4xl space-y-6">
-              <ScrollReveal>
-                <SectionEyebrow>{purposeSec.eyebrow || 'OUR PURPOSE'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-brand-dark tracking-tight leading-tight whitespace-pre-line">
-                  {purposeSec.title || 'Improve care through medicines and healthcare solutions that matter.'}
-                </h2>
-              </ScrollReveal>
-            </div>
-
-            {/* Editorial Content Blocks */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 pt-8 border-t border-brand-border">
-              {purposeSec.items.map((item, idx) => (
-                <ScrollReveal key={item.title || idx} delay={(idx + 1) * 0.1}>
-                  <div className="relative pl-6 sm:pl-8 border-l-2 border-brand-sage/40 space-y-4">
-                    <h3 className="text-xl sm:text-2xl font-semibold text-brand-dark tracking-tight">
-                      {item.title}
-                    </h3>
-                    <p className="text-base sm:text-lg text-brand-muted leading-relaxed">
-                      {item.desc || item.description || item.text}
-                    </p>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* =========================================================================
-          SECTION 4 — QUALITY (Contrasting Dark Section)
-          ========================================================================= */}
-      {qualitySec.is_active && (
-        <section className="py-24 sm:py-32 bg-brand-dark text-white border-y border-brand-border-dark relative overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-              {/* Left Content */}
-              <div className="lg:col-span-7 space-y-8">
-                <ScrollReveal>
-                  <SectionEyebrow isDark>{qualitySec.eyebrow || 'QUALITY ASSURANCE'}</SectionEyebrow>
-                  <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-white tracking-tight leading-tight whitespace-pre-line">
-                    {qualitySec.title || 'Quality is part of the product from the beginning.'}
-                  </h2>
-                </ScrollReveal>
-
-                <ScrollReveal delay={0.1}>
-                  <div className="space-y-4 text-gray-300 text-base sm:text-lg leading-relaxed whitespace-pre-line">
-                    <p>
-                      {qualitySec.body || 'Medicines carry responsibility. That is why quality needs to be considered across manufacturing, testing, review and release, not treated as a final checkpoint.'}
-                    </p>
-                    {qualitySec.subheading && (
-                      <p>
-                        {qualitySec.subheading}
-                      </p>
-                    )}
-                  </div>
-                </ScrollReveal>
-
-                {/* Principles */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4 border-t border-brand-border-dark">
-                  {qualitySec.items.map((principle, idx) => (
-                    <ScrollReveal key={principle.title || idx} delay={0.15 + idx * 0.05}>
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-medium text-white">{principle.title}</h3>
-                        <p className="text-sm text-gray-400 leading-relaxed">
-                          {principle.desc || principle.description || principle.text}
-                        </p>
-                      </div>
-                    </ScrollReveal>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right Visual Image */}
-              <div className="lg:col-span-5">
-                <ScrollReveal delay={0.2} direction="left">
-                  <div className="relative border border-brand-border-dark rounded-sm overflow-hidden">
-                    <FallbackImage
-                      src={qualitySec.image_url || '/assets/quality.jpg'}
-                      alt="Onecore Pharma quality assurance and laboratory testing"
-                      aspectRatio="aspect-[4/3] sm:aspect-[1/1]"
-                    />
-                    <div className="bg-brand-dark-surface p-4 border-t border-brand-border-dark flex items-center justify-between text-xs text-gray-400">
-                      <span className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-brand-sage-light" />
-                        Batch Verification
-                      </span>
-                      <span className="font-mono text-[11px]">QA PROTOCOL V.26</span>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* =========================================================================
-          SECTION 5 — SUSTAINABILITY
-          ========================================================================= */}
-      {sustainabilitySec.is_active && (
-        <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="space-y-16">
-            {/* Header */}
-            <div className="max-w-3xl space-y-6">
-              <ScrollReveal>
-                <SectionEyebrow>{sustainabilitySec.eyebrow || 'SUSTAINABILITY'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight whitespace-pre-line">
-                  {sustainabilitySec.title || 'Better health and a healthier future belong together.'}
-                </h2>
-                <p className="text-base sm:text-lg text-brand-muted leading-relaxed whitespace-pre-line">
-                  {sustainabilitySec.body || 'Our responsibility extends beyond the products we provide. As Onecore grows, we want responsible choices to become part of how we operate, how we source and how we work with our partners.'}
-                </p>
-              </ScrollReveal>
-            </div>
-
-            {/* Columns */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 pt-8 border-t border-brand-border">
-              {sustainabilitySec.items.map((col, idx) => (
-                <ScrollReveal key={col.title || idx} delay={0.05 + idx * 0.05}>
-                  <div className="space-y-4">
-                    <div className="w-10 h-10 rounded-full bg-brand-surface border border-brand-border flex items-center justify-center text-brand-sage">
-                      {renderSustainabilityIcon(col.icon, idx)}
-                    </div>
-                    {col.eyebrow && (
-                      <span className="text-xs font-semibold uppercase tracking-widest text-brand-sage block">
-                        {col.eyebrow}
-                      </span>
-                    )}
-                    <h3 className="text-xl font-medium text-brand-dark tracking-tight">
-                      {col.title}
-                    </h3>
-                    <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
-                      {col.desc || col.description || col.text}
-                    </p>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* =========================================================================
-          SECTION 7 — LOOKING AHEAD
-          ========================================================================= */}
-      {lookingAheadSec.is_active && (
-        <section className="py-24 sm:py-32 bg-brand-surface/60 border-t border-brand-border">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-              {/* Left Header */}
-              <div className="lg:col-span-5 space-y-6">
-                <ScrollReveal>
-                  <SectionEyebrow>{lookingAheadSec.eyebrow || 'LOOKING AHEAD'}</SectionEyebrow>
-                  <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight leading-tight whitespace-pre-line">
-                    {lookingAheadSec.title || 'Building depth. \nExpanding thoughtfully.'}
-                  </h2>
-                  <p className="text-base text-brand-muted leading-relaxed pt-2 whitespace-pre-line">
-                    {lookingAheadSec.body || 'Our roadmap prioritizes therapeutic rigor, medical dialogue, and disciplined expansion that preserves trust.'}
-                  </p>
-                </ScrollReveal>
-              </div>
-
-              {/* Right Strategic Rows */}
-              <div className="lg:col-span-7">
-                <div className="border-t border-brand-border divide-y divide-brand-border">
-                  {lookingAheadSec.items.map((item, idx) => (
-                    <ScrollReveal key={item.title || idx} delay={idx * 0.08}>
-                      <div className="py-6 sm:py-7 space-y-2 group hover:bg-brand-ivory/60 transition-colors px-4 -mx-4 rounded-sm">
-                        <h3 className="text-xl font-medium text-brand-dark tracking-tight">
-                          {item.title}
-                        </h3>
-                        <p className="text-sm sm:text-base text-brand-muted leading-relaxed">
-                          {item.desc || item.description || item.text}
-                        </p>
-                      </div>
-                    </ScrollReveal>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* =========================================================================
-          SECTION 8 — NEWS PREVIEW
-          ========================================================================= */}
-      {newsSec.is_active && (
-        <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="space-y-16">
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-              <ScrollReveal>
-                <SectionEyebrow>{newsSec.eyebrow || 'LATEST FROM ONECORE'}</SectionEyebrow>
-                <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl font-light text-brand-dark tracking-tight whitespace-pre-line">
-                  {newsSec.title || 'News & perspectives.'}
-                </h2>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.1}>
-                <Link
-                  to={newsSec.cta_url || '/news'}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-brand-dark hover:text-brand-sage group transition-colors"
-                >
-                  <span>{newsSec.cta_text || 'View all news'}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
-                </Link>
-              </ScrollReveal>
-            </div>
-
-            {/* 3 News Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
-              {dynamicNews.slice(0, 3).map((article, idx) => (
-                <ScrollReveal key={article.id} delay={idx * 0.08}>
-                  <article className="group flex flex-col h-full space-y-4">
-                    <div className="relative overflow-hidden rounded-sm border border-brand-border/80">
-                      <FallbackImage
-                        src={article.image}
-                        alt={article.title}
-                        aspectRatio="aspect-[16/10]"
-                        className="group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                    <div className="flex items-center justify-between text-xs text-brand-muted pt-1">
-                      <span className="font-semibold tracking-wider text-brand-sage uppercase">
-                        {article.category}
-                      </span>
-                      <time dateTime={article.date}>{article.date}</time>
-                    </div>
-                    <h3 className="text-lg sm:text-xl font-medium text-brand-dark group-hover:text-brand-sage transition-colors leading-snug">
-                      <Link to="/news">
-                        {article.title}
-                      </Link>
-                    </h3>
-                    <p className="text-sm text-brand-muted leading-relaxed line-clamp-2">
-                      {article.excerpt}
-                    </p>
-                    <div className="pt-2 mt-auto">
-                      <Link
-                        to="/news"
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-dark group-hover:text-brand-sage tracking-wider uppercase transition-colors"
-                      >
-                        <span>Read more</span>
-                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                      </Link>
-                    </div>
-                  </article>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* =========================================================================
-          SECTION 9 — FINAL CTA
-          ========================================================================= */}
-      {finalCtaSec.is_active && (
-        <section className="py-24 sm:py-32 bg-brand-surface/80 border-t border-brand-border text-center">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <section className="py-20 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="space-y-16 sm:space-y-20">
+          
+          {/* Centered Brand Mark & Monumental Garamond Title */}
+          <div className="max-w-4xl mx-auto text-center space-y-6">
             <ScrollReveal>
-              <h2 className="editorial-heading text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light text-brand-dark tracking-tight leading-tight max-w-3xl mx-auto whitespace-pre-line">
-                {finalCtaSec.title || 'Purposeful healthcare, across every area we serve.'}
+              <div className="inline-block">
+                <span className="font-serif text-3xl font-bold tracking-tight text-[#D52B1E]">
+                  Onecore
+                </span>
+              </div>
+              <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.12] pt-3">
+                A medicine company should do more <em className="lilly-serif-italic font-normal text-[#121212]">than just make medicine.</em>
               </h2>
             </ScrollReveal>
 
             <ScrollReveal delay={0.1}>
-              <p className="text-lg sm:text-xl text-brand-muted font-normal max-w-2xl mx-auto leading-relaxed whitespace-pre-line">
-                {finalCtaSec.body || 'Explore the therapeutic areas and formulations that make up the Onecore portfolio.'}
+              <p className="text-base sm:text-lg text-[#4B5563] max-w-2xl mx-auto leading-relaxed pt-2">
+                Healthcare is personal. Beyond discovering and manufacturing quality formulations, our role is supporting the informed decisions that empower healing.
               </p>
             </ScrollReveal>
+          </div>
 
-            <ScrollReveal delay={0.15}>
-              <div className="pt-4 flex flex-wrap justify-center items-center gap-4">
-                <Link
-                  to={finalCtaSec.cta_url || '/areas-of-care'}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-brand-dark text-white text-sm font-semibold tracking-wide rounded-full hover:bg-brand-sage transition-all duration-300 shadow-sm group"
-                >
-                  <span>{finalCtaSec.cta_text || 'Explore areas of care'}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-                {finalCtaSec.secondary_cta_text && (
+          {/* 3-Column Action Cards with Custom Line Icons & Red Pill CTAs */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 pt-4">
+            
+            {/* Action Card 1: Find Care */}
+            <ScrollReveal delay={0.1}>
+              <div className="flex flex-col h-full space-y-5 p-2">
+                <div className="w-12 h-12 rounded-2xl bg-[#FFF1F0] flex items-center justify-center text-[#D52B1E]">
+                  <Heart className="w-6 h-6 stroke-[1.75]" />
+                </div>
+                <h3 className="text-2xl font-bold text-[#121212] tracking-tight">
+                  Find care
+                </h3>
+                <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed flex-1">
+                  Connect with specialized physicians and clinical partners who understand your therapeutic needs and treatment options.
+                </p>
+                <div className="pt-2">
                   <Link
-                    to={finalCtaSec.secondary_cta_url || '/contact'}
-                    className="inline-flex items-center gap-2 px-8 py-4 bg-white border border-brand-border text-brand-dark text-sm font-medium rounded-full hover:bg-brand-ivory hover:border-brand-muted/40 transition-all duration-200"
+                    to="/contact"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-all duration-200 group"
                   >
-                    <span>{finalCtaSec.secondary_cta_text}</span>
+                    <span>Get started</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
-                )}
+                </div>
               </div>
             </ScrollReveal>
+
+            {/* Action Card 2: Access Pharmacy / Medicines */}
+            <ScrollReveal delay={0.15}>
+              <div className="flex flex-col h-full space-y-5 p-2">
+                <div className="w-12 h-12 rounded-2xl bg-[#FFF1F0] flex items-center justify-center text-[#D52B1E]">
+                  <ShieldCheck className="w-6 h-6 stroke-[1.75]" />
+                </div>
+                <h3 className="text-2xl font-bold text-[#121212] tracking-tight">
+                  Access medicines
+                </h3>
+                <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed flex-1">
+                  Explore Onecore’s portfolio of over 60 purposefully engineered formulations across 9 distinct medical areas of care.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    to="/areas-of-care"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-all duration-200 group"
+                  >
+                    <span>Get medicine</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            {/* Action Card 3: Clinical Trials & Standards */}
+            <ScrollReveal delay={0.2}>
+              <div className="flex flex-col h-full space-y-5 p-2">
+                <div className="w-12 h-12 rounded-2xl bg-[#FFF1F0] flex items-center justify-center text-[#D52B1E]">
+                  <Sparkles className="w-6 h-6 stroke-[1.75]" />
+                </div>
+                <h3 className="text-2xl font-bold text-[#121212] tracking-tight">
+                  View clinical standards
+                </h3>
+                <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed flex-1">
+                  Discover how our qualified manufacturing protocols, batch verifications, and safety standards safeguard every dose.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    to="/quality-manufacturing"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-all duration-200 group"
+                  >
+                    <span>View standards</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+            </ScrollReveal>
+
           </div>
-        </section>
-      )}
+
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 3 — CONDITION SUPPORT CAROUSEL (LILLY MODEL)
+          Screenshot 3 & 4 Pattern: Tracked eyebrow, Garamond title, rounded-3xl cards
+          ========================================================================= */}
+      <section className="py-20 sm:py-28 bg-[#FAF9F6] border-y border-[#E5E7EB]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          
+          {/* Header & Description */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+            <div className="max-w-3xl space-y-4">
+              <ScrollReveal>
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#4B5563] block">
+                  CONDITION SUPPORT
+                </span>
+                <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight">
+                  Get a better understanding of a condition.
+                </h2>
+                <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed pt-2 max-w-2xl">
+                  One of the healthiest actions a patient or loved one can take is getting informed about a condition. Part of our job is providing the information and purposeful medicines you need to help make the best decisions for health.
+                </p>
+              </ScrollReveal>
+            </div>
+
+            {/* Carousel Navigation Buttons */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => scrollCarousel('left')}
+                className="w-12 h-12 rounded-full border border-stone-300 hover:border-black bg-white flex items-center justify-center text-stone-800 hover:text-black transition-colors shadow-sm focus:outline-none"
+                aria-label="Previous Condition"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => scrollCarousel('right')}
+                className="w-12 h-12 rounded-full border border-stone-300 hover:border-black bg-white flex items-center justify-center text-stone-800 hover:text-black transition-colors shadow-sm focus:outline-none"
+                aria-label="Next Condition"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Horizontally Scrollable Condition Cards (Lilly rounded-[28px] geometry) */}
+          <div
+            ref={carouselRef}
+            className="flex gap-6 overflow-x-auto scrollbar-none pb-4 pt-2 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth snap-x snap-mandatory"
+          >
+            {conditions.map((item, idx) => (
+              <div
+                key={item.id}
+                className="snap-start flex-shrink-0 w-[280px] sm:w-[340px] lg:w-[380px]"
+              >
+                <Link
+                  to={item.path}
+                  className="group relative block aspect-[4/5] rounded-[28px] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 bg-stone-900 border border-stone-200/80"
+                >
+                  {/* Background Condition Imagery */}
+                  <img
+                    src={assetUrl(item.image)}
+                    alt={`${item.name} — ${item.division}`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                  />
+
+                  {/* Gradient Mask for Perfect Contrast */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
+
+                  {/* Card Content Overlay */}
+                  <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-between text-white">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/80 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full">
+                        {item.division}
+                      </span>
+                    </div>
+
+                    <div className="space-y-3">
+                      <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-snug">
+                        {item.name}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-white/80 line-clamp-2 leading-relaxed font-normal">
+                        {item.description}
+                      </p>
+
+                      <div className="pt-2">
+                        <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-white group-hover:text-red-300 underline underline-offset-4 decoration-white/60 group-hover:decoration-red-300 transition-all">
+                          <span>Explore Condition</span>
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 4 — PATIENT VOICE / TESTIMONIAL SPOTLIGHT (LILLY MODEL)
+          Screenshot 6 Pattern: Large rounded photographic card with quote marks & voice
+          ========================================================================= */}
+      <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <ScrollReveal>
+          <div className="relative rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden min-h-[480px] sm:min-h-[540px] flex items-end p-8 sm:p-12 lg:p-16 bg-stone-900 border border-stone-200 shadow-xl">
+            
+            {/* Warm Portrait Image */}
+            <div className="absolute inset-0 z-0">
+              <img
+                src={assetUrl('/assets/patients-caregivers.jpg')}
+                alt="Patient Story — Real clinical perspectives"
+                className="w-full h-full object-cover object-top sm:object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/30" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+            </div>
+
+            {/* Testimonial Overlay Content */}
+            <div className="relative z-10 max-w-3xl space-y-6 text-white">
+              <div className="w-12 h-12 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center text-white">
+                <Quote className="w-6 h-6 stroke-[2]" />
+              </div>
+
+              <blockquote className="lilly-serif text-2xl sm:text-4xl lg:text-5xl font-normal text-white leading-[1.2] tracking-tight">
+                “Advice I can give to anyone navigating recovery? Consult your doctor early, understand your regimen, and choose formulations built on dependable quality.”
+              </blockquote>
+
+              <div className="pt-2 border-t border-white/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h4 className="text-base sm:text-lg font-bold text-white tracking-wide">
+                    Patient Perspective
+                  </h4>
+                  <p className="text-xs sm:text-sm text-white/70">
+                    Navigating Chronic Care & Daily Wellness
+                  </p>
+                </div>
+
+                <Link
+                  to="/patients-caregivers"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white/15 hover:bg-[#D52B1E] backdrop-blur-md border border-white/20 hover:border-transparent text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200"
+                >
+                  <span>Read Patient Support Guides</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+          </div>
+        </ScrollReveal>
+      </section>
+
+      {/* =========================================================================
+          SECTION 5 — ABOUT ONECORE, IMPACT METRICS & INITIATIVES (LILLY MODEL)
+          Screenshots 7 & 8 Pattern: Serif statement, bold metrics, 3 story cards with red links
+          ========================================================================= */}
+      <section className="py-24 sm:py-32 bg-[#FAF9F6] border-t border-[#E5E7EB]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
+          
+          {/* Header Block */}
+          <div className="max-w-4xl mx-auto text-center space-y-6">
+            <ScrollReveal>
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#4B5563] block">
+                ABOUT ONECORE
+              </span>
+              <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.1]">
+                Our job is to put health <em className="lilly-serif-italic text-[#121212]">above all.</em>
+              </h2>
+            </ScrollReveal>
+
+            <ScrollReveal delay={0.1}>
+              <p className="text-base sm:text-lg text-[#4B5563] max-w-2xl mx-auto leading-relaxed">
+                Our research and operations focus on developing purposeful, dependable medicines for patients and physicians. We know our most meaningful advancements in healthcare are still ahead of us.
+              </p>
+            </ScrollReveal>
+          </div>
+
+          {/* Key Metrics Row (Lilly 3-column impact numbers) */}
+          <ScrollReveal delay={0.15}>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-8 border-t border-stone-300">
+              <div className="space-y-2">
+                <span className="text-5xl sm:text-6xl font-black text-[#121212] tracking-tight block">
+                  150+
+                </span>
+                <p className="text-sm font-medium text-[#4B5563]">
+                  Purposeful formulations in circulation
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <span className="text-5xl sm:text-6xl font-black text-[#121212] tracking-tight block">
+                  9
+                </span>
+                <p className="text-sm font-medium text-[#4B5563]">
+                  Specialized therapeutic divisions
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <span className="text-5xl sm:text-6xl font-black text-[#121212] tracking-tight block">
+                  100%
+                </span>
+                <p className="text-sm font-medium text-[#4B5563]">
+                  Qualified manufacturing & QA testing
+                </p>
+              </div>
+            </div>
+          </ScrollReveal>
+
+          {/* 3 Story / Initiative Cards (Screenshot 8 Pattern) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 pt-4">
+            
+            {/* Story Card 1 */}
+            <ScrollReveal delay={0.1}>
+              <article className="space-y-4 flex flex-col h-full group">
+                <div className="aspect-[16/10] rounded-3xl overflow-hidden bg-stone-200 border border-stone-300/80">
+                  <img
+                    src={assetUrl('/assets/about-facility.jpg')}
+                    alt="Onecore manufacturing environment"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-[#121212] tracking-tight leading-snug">
+                  Medicine starts with quality
+                </h3>
+                <p className="text-sm text-[#4B5563] leading-relaxed flex-1">
+                  Dedicated teams work across our network to ensure formulations are produced consistently to the highest standards. Manufacturing discipline is the cornerstone of our patient promise.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    to="/quality-manufacturing"
+                    className="lilly-red-underline text-sm inline-block"
+                  >
+                    Examine our process
+                  </Link>
+                </div>
+              </article>
+            </ScrollReveal>
+
+            {/* Story Card 2 */}
+            <ScrollReveal delay={0.15}>
+              <article className="space-y-4 flex flex-col h-full group">
+                <div className="aspect-[16/10] rounded-3xl overflow-hidden bg-stone-200 border border-stone-300/80">
+                  <img
+                    src={assetUrl('/assets/quality.jpg')}
+                    alt="Laboratory verification and quality testing"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-[#121212] tracking-tight leading-snug">
+                  Protecting formulation integrity
+                </h3>
+                <p className="text-sm text-[#4B5563] leading-relaxed flex-1">
+                  We implement multi-stage batch controls, verified packaging seals, and strict quality documentation so physicians and pharmacists receive genuine, uncompromised medicines.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    to="/quality-manufacturing"
+                    className="lilly-red-underline text-sm inline-block"
+                  >
+                    View testing protocols
+                  </Link>
+                </div>
+              </article>
+            </ScrollReveal>
+
+            {/* Story Card 3 */}
+            <ScrollReveal delay={0.2}>
+              <article className="space-y-4 flex flex-col h-full group">
+                <div className="aspect-[16/10] rounded-3xl overflow-hidden bg-stone-200 border border-stone-300/80">
+                  <img
+                    src={assetUrl('/assets/hero-patients-professionals.jpg')}
+                    alt="Healthcare focused on real clinical needs"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-[#121212] tracking-tight leading-snug">
+                  Healthcare focused on real clinical needs
+                </h3>
+                <p className="text-sm text-[#4B5563] leading-relaxed flex-1">
+                  Our pipeline is shaped by continuous dialogue with healthcare practitioners, targeting common clinical gaps to improve patient adherence, tolerability, and healing.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    to="/about"
+                    className="lilly-red-underline text-sm inline-block"
+                  >
+                    Learn about our approach
+                  </Link>
+                </div>
+              </article>
+            </ScrollReveal>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 6 — QUALITY ASSURANCE (DRAMATIC DARK CONTRAST SECTION)
+          ========================================================================= */}
+      <section className="py-24 sm:py-32 bg-[#0F1115] text-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            
+            {/* Left Content */}
+            <div className="lg:col-span-7 space-y-8">
+              <ScrollReveal>
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                  QUALITY ASSURANCE & STANDARDS
+                </span>
+                <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight pt-2">
+                  Quality is part of the product from the beginning.
+                </h2>
+              </ScrollReveal>
+
+              <ScrollReveal delay={0.1}>
+                <p className="text-base sm:text-lg text-stone-300 font-normal leading-relaxed">
+                  Medicines carry responsibility. That is why quality needs to be considered across manufacturing, testing, review, and release — not treated as an afterthought or a final checkpoint.
+                </p>
+              </ScrollReveal>
+
+              <ScrollReveal delay={0.15}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-white/15">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-white font-semibold">
+                      <CheckCircle2 className="w-4 h-4 text-[#D52B1E]" />
+                      <span>Consistent Standards</span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-stone-400 leading-relaxed">
+                      Quality expectations aligned to the therapeutic nature and regulatory requirements of each formulation.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-white font-semibold">
+                      <CheckCircle2 className="w-4 h-4 text-[#D52B1E]" />
+                      <span>Disciplined Release</span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-stone-400 leading-relaxed">
+                      Batch-level QA verification and analytical review before any product enters distribution.
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+
+              <ScrollReveal delay={0.2}>
+                <div className="pt-2">
+                  <Link
+                    to="/quality-manufacturing"
+                    className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-bold uppercase tracking-wider rounded-full transition-colors"
+                  >
+                    <span>Explore Manufacturing & QA</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </ScrollReveal>
+            </div>
+
+            {/* Right Visual Image */}
+            <div className="lg:col-span-5">
+              <ScrollReveal delay={0.2} direction="left">
+                <div className="relative rounded-3xl overflow-hidden border border-white/15 shadow-2xl">
+                  <img
+                    src={assetUrl('/assets/quality.jpg')}
+                    alt="Onecore Pharma quality control laboratory"
+                    className="w-full aspect-[4/3] object-cover"
+                  />
+                  <div className="bg-[#16191F] p-4 border-t border-white/10 flex items-center justify-between text-xs text-stone-400">
+                    <span className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#D52B1E]" />
+                      Batch Verification
+                    </span>
+                    <span className="font-mono text-[11px] text-stone-500">QA PROTOCOL V.26</span>
+                  </div>
+                </div>
+              </ScrollReveal>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 7 — LATEST FROM ONECORE (NEWS & PERSPECTIVES)
+          ========================================================================= */}
+      <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="space-y-16">
+          
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+            <ScrollReveal>
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#4B5563] block">
+                LATEST FROM ONECORE
+              </span>
+              <h2 className="lilly-serif text-3xl sm:text-5xl text-[#121212] tracking-tight leading-tight pt-2">
+                News & perspectives.
+              </h2>
+            </ScrollReveal>
+
+            <ScrollReveal delay={0.1}>
+              <Link
+                to="/news"
+                className="inline-flex items-center gap-2 text-sm font-bold text-[#121212] hover:text-[#D52B1E] transition-colors group"
+              >
+                <span>View all news</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+              </Link>
+            </ScrollReveal>
+          </div>
+
+          {/* 3 News Articles */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+            {dynamicNews.slice(0, 3).map((article, idx) => (
+              <ScrollReveal key={article.id} delay={idx * 0.08}>
+                <article className="group flex flex-col h-full space-y-4">
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-3xl border border-stone-200 bg-stone-100">
+                    <img
+                      src={assetUrl(article.image)}
+                      alt={article.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between text-xs text-stone-500 pt-1">
+                    <span className="font-bold tracking-wider text-[#D52B1E] uppercase">
+                      {article.category}
+                    </span>
+                    <time dateTime={article.date}>{article.date}</time>
+                  </div>
+
+                  <h3 className="text-lg sm:text-xl font-bold text-[#121212] group-hover:text-[#D52B1E] transition-colors leading-snug">
+                    <Link to="/news">
+                      {article.title}
+                    </Link>
+                  </h3>
+
+                  <p className="text-sm text-[#4B5563] leading-relaxed line-clamp-2">
+                    {article.excerpt}
+                  </p>
+
+                  <div className="pt-2 mt-auto">
+                    <Link
+                      to="/news"
+                      className="lilly-red-underline text-xs inline-flex items-center gap-1"
+                    >
+                      <span>Read article</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </article>
+              </ScrollReveal>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 8 — FINAL CALL TO ACTION
+          ========================================================================= */}
+      <section className="py-24 sm:py-32 bg-[#FAF9F6] border-t border-[#E5E7EB] text-center">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <ScrollReveal>
+            <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight">
+              Purposeful healthcare, <em className="lilly-serif-italic">across every area we serve.</em>
+            </h2>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.1}>
+            <p className="text-base sm:text-lg text-[#4B5563] max-w-2xl mx-auto leading-relaxed">
+              Explore the 9 specialized divisions and over 60 therapeutic formulations that make up the Onecore portfolio.
+            </p>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.15}>
+            <div className="pt-4 flex flex-wrap justify-center items-center gap-4">
+              <Link
+                to="/areas-of-care"
+                className="inline-flex items-center gap-2.5 px-8 py-4 bg-[#D52B1E] hover:bg-[#B52015] text-white text-sm font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+              >
+                <span>Explore Areas of Care</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white border border-stone-300 text-[#121212] hover:bg-stone-50 text-sm font-medium rounded-full transition-all duration-200"
+              >
+                <span>Connect With Us</span>
+              </Link>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
     </div>
   );
 }

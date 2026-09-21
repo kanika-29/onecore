@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { footerLinks } from '../data/navigation';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, ShieldCheck, Heart, Mail, PhoneCall } from 'lucide-react';
 import { useSettings } from '../hooks/useSettings';
 import { assetUrl } from '../utils/assetUrl';
 
@@ -9,160 +8,189 @@ export default function Footer() {
   const location = useLocation();
   const { siteSettings } = useSettings();
 
-  const logoUrl = assetUrl(siteSettings.logo_url || '/assets/onecore-logo.png');
-  const tagline = siteSettings.footer_tagline || 'Healthcare centered on people.';
-  const copyright = siteSettings.copyright_text || '© 2026 Onecore Pharma Pvt. Ltd.';
+  const currentYear = new Date().getFullYear();
+  const copyright = siteSettings.copyright_text || `© ${currentYear} Onecore Pharma Pvt. Ltd. All rights reserved.`;
 
-  const parseLinks = (val, fallback) => {
-    let list = fallback;
-    if (val) {
-      try {
-        const parsed = typeof val === 'string' ? JSON.parse(val) : val;
-        if (Array.isArray(parsed) && parsed.length > 0) list = parsed;
-      } catch {
-        list = fallback;
-      }
-    }
-    return list.filter(
-      (item) =>
-        item.is_active !== false &&
-        !item.path?.includes('healthcare-professional') &&
-        !item.name?.toLowerCase().includes('healthcare professional')
-    );
-  };
+  const areasOfCare = [
+    { name: 'Oncology (CYTOS)', path: '/areas-of-care' },
+    { name: 'Women’s Health (FEMME)', path: '/areas-of-care/femme' },
+    { name: 'Neurology (NEURIX)', path: '/areas-of-care' },
+    { name: 'Orthopaedics (ORTHEON)', path: '/areas-of-care' },
+    { name: 'Dermatology (VELLIS)', path: '/areas-of-care' },
+    { name: 'Ophthalmology (EYERIX)', path: '/areas-of-care' },
+    { name: 'ENT (OTIRA)', path: '/areas-of-care' },
+    { name: 'Paediatrics (PEDIAPLUS)', path: '/areas-of-care' },
+    { name: 'General Medicine (OMNARA)', path: '/areas-of-care' },
+  ];
 
-  const exploreList = parseLinks(siteSettings.footer_explore_links, footerLinks.explore);
-  const areasOfCareList = footerLinks.areasOfCare;
-  const companyList = footerLinks.company;
+  const careAndSupport = [
+    { name: 'Patients & Caregivers', path: '/patients-caregivers' },
+    { name: 'Healthcare Professionals', path: '/contact' },
+    { name: 'Adverse Event Reporting', path: '/contact' },
+    { name: 'Medical Inquiries', path: '/contact' },
+    { name: 'Formulation Directory', path: '/areas-of-care' },
+  ];
 
-  const handleAnchorClick = (path) => {
-    if (path.includes('#')) {
-      const [route, hash] = path.split('#');
-      if (location.pathname === route) {
-        const el = document.getElementById(hash);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-    }
-  };
+  const qualityAndScience = [
+    { name: 'Quality & Manufacturing', path: '/quality-manufacturing' },
+    { name: 'Testing & Release Protocols', path: '/quality-manufacturing' },
+    { name: 'Qualified Environments', path: '/quality-manufacturing' },
+    { name: 'Responsible Packaging', path: '/#sustainability' },
+  ];
+
+  const company = [
+    { name: 'About Onecore', path: '/about' },
+    { name: 'Our Purpose & Vision', path: '/#purpose' },
+    { name: 'News & Perspectives', path: '/news' },
+    { name: 'Careers & Partnerships', path: '/contact' },
+    { name: 'Contact Us', path: '/contact' },
+  ];
 
   return (
-    <footer className="bg-brand-dark text-white pt-16 pb-12 border-t border-brand-border-dark">
+    <footer className="bg-[#D52B1E] text-white pt-16 sm:pt-20 pb-12 overflow-hidden selection:bg-white/20 selection:text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 pb-16 border-b border-brand-border-dark">
-          {/* Brand Column */}
-          <div className="lg:col-span-2 space-y-4">
-            <Link to="/" className="inline-flex items-center" aria-label="Onecore Pharma Home">
-              <img
-                src={logoUrl}
-                alt="Onecore Pharma"
-                className="h-8 sm:h-9 w-auto object-contain brightness-0 invert opacity-95 hover:opacity-100 transition-opacity"
-              />
+        
+        {/* Main Grid: Lilly Brand Mark + 4 Columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 pb-16 border-b border-white/20">
+          
+          {/* Brand Stature Block */}
+          <div className="lg:col-span-4 space-y-4">
+            <Link to="/" className="inline-block group focus:outline-none" aria-label="Onecore Pharma">
+              <span className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-white block">
+                Onecore
+              </span>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/80 block pt-1">
+                A MEDICINE COMPANY
+              </span>
             </Link>
-            <p className="text-gray-400 text-sm max-w-sm leading-relaxed pt-2">
-              {tagline}
+
+            <p className="text-white/80 text-sm max-w-sm leading-relaxed pt-2">
+              Developing purposeful formulations, dependable quality, and healthcare solutions centered on patients and healthcare professionals.
             </p>
+
+            {/* Quick Medical Emergency Support Note */}
+            <div className="pt-4 space-y-2 text-xs text-white/75">
+              <p className="font-semibold text-white uppercase tracking-wider text-[10px]">
+                Medical Safety & Pharmacovigilance
+              </p>
+              <p className="leading-relaxed">
+                If you suspect an adverse reaction or have a clinical query regarding a Onecore formulation, please consult your physician or notify our medical safety team.
+              </p>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-white underline underline-offset-4 hover:text-white/80 transition-colors"
+              >
+                <span>Report an Adverse Event</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
 
-          {/* Column 1: Explore */}
-          <div className="space-y-4">
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-              Explore
-            </h4>
-            <ul className="space-y-3 text-sm">
-              {exploreList.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    to={item.path}
-                    className="text-gray-300 hover:text-white transition-colors flex items-center gap-1 group"
-                  >
-                    <span>{item.name}</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Column 2: Areas of Care */}
-          <div className="space-y-4">
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-400">
+          {/* Column 1: Areas of Care */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-white/90">
               Areas of Care
             </h4>
-            <ul className="space-y-2.5 text-sm">
-              {areasOfCareList.map((item) => (
+            <ul className="space-y-2.5 text-xs sm:text-sm text-white/80">
+              {areasOfCare.map((item) => (
                 <li key={item.name}>
                   <Link
                     to={item.path}
-                    onClick={() => handleAnchorClick(item.path)}
-                    className="text-gray-300 hover:text-white transition-colors flex items-center gap-1 group"
+                    className="hover:text-white hover:underline underline-offset-4 transition-colors block py-0.5"
                   >
-                    <span>{item.name}</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    {item.name}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Column 3: Company */}
-          <div className="space-y-4">
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-              Company
+          {/* Column 2: Care & Support */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-white/90">
+              Care & Support
             </h4>
-            <ul className="space-y-2.5 text-sm">
-              {companyList.map((item) => {
-                const isOnecore = item.name.toLowerCase() === 'onecore';
-                const isExternal = item.isExternal || !isOnecore;
-                const hasValidUrl = item.path && item.path !== '#' && item.path !== '';
-
-                if (isOnecore) {
-                  return (
-                    <li key={item.name}>
-                      <Link
-                        to="/"
-                        className="text-gray-300 hover:text-white transition-colors flex items-center gap-1 group"
-                      >
-                        <span>{item.name}</span>
-                        <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                      </Link>
-                    </li>
-                  );
-                }
-
-                return (
-                  <li key={item.name}>
-                    <a
-                      href={hasValidUrl ? item.path : '#'}
-                      target={hasValidUrl ? '_blank' : undefined}
-                      rel={hasValidUrl ? 'noopener noreferrer' : undefined}
-                      className="text-gray-300 hover:text-white transition-colors flex items-center gap-1 group"
-                      onClick={(e) => {
-                        if (!hasValidUrl) {
-                          e.preventDefault();
-                        }
-                      }}
-                    >
-                      <span>{item.name}</span>
-                      <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                    </a>
-                  </li>
-                );
-              })}
+            <ul className="space-y-2.5 text-xs sm:text-sm text-white/80">
+              {careAndSupport.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    to={item.path}
+                    className="hover:text-white hover:underline underline-offset-4 transition-colors block py-0.5"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
+
+          {/* Column 3: Science & Quality */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-white/90">
+              Science & Quality
+            </h4>
+            <ul className="space-y-2.5 text-xs sm:text-sm text-white/80">
+              {qualityAndScience.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    to={item.path}
+                    className="hover:text-white hover:underline underline-offset-4 transition-colors block py-0.5"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Company */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-white/90">
+              Company
+            </h4>
+            <ul className="space-y-2.5 text-xs sm:text-sm text-white/80">
+              {company.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    to={item.path}
+                    className="hover:text-white hover:underline underline-offset-4 transition-colors block py-0.5"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-4">
-          <p>{copyright}</p>
-          <div className="flex items-center gap-6">
-            <span className="text-gray-500 hover:text-gray-400">Quality Assured</span>
-            <span className="text-gray-500 hover:text-gray-400">Clinical Integrity</span>
-            <span className="text-gray-500 hover:text-gray-400">Global Compliance</span>
+        {/* Regulatory Code, Legal & Disclaimers (Lilly Style) */}
+        <div className="pt-8 space-y-4 text-xs text-white/70">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <p className="font-mono text-[11px] tracking-wider text-white/80">
+              CMAT-IN-0104/2026 {copyright}
+            </p>
+            <div className="flex flex-wrap items-center gap-6 text-xs text-white/80">
+              <Link to="/privacy" className="hover:text-white hover:underline underline-offset-4 transition-colors">
+                Privacy Statement
+              </Link>
+              <Link to="/disclaimer" className="hover:text-white hover:underline underline-offset-4 transition-colors">
+                Terms of Use
+              </Link>
+              <Link to="/contact" className="hover:text-white hover:underline underline-offset-4 transition-colors">
+                Accessibility
+              </Link>
+              <Link to="/contact" className="hover:text-white hover:underline underline-offset-4 transition-colors">
+                Contact & Regulatory
+              </Link>
+            </div>
           </div>
+
+          <p className="text-[11px] leading-relaxed text-white/60 max-w-4xl pt-2">
+            The healthcare information on this website is provided for educational and clinical awareness purposes only and is not intended to substitute for professional medical advice, diagnosis, or treatment. Consult a licensed healthcare provider for questions regarding any medical condition or prescription regimen.
+          </p>
         </div>
+
       </div>
     </footer>
   );
