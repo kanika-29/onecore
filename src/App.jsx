@@ -87,6 +87,8 @@ function AppRoutes() {
           <Route path="/areas-of-care/pediaplus/:productSlug" element={<PediatricsProductDetail />} />
           <Route path="/areas-of-care/pediatrics/:productSlug" element={<PediatricsProductDetail />} />
           <Route path="/areas-of-care/paediatrics/:productSlug" element={<PediatricsProductDetail />} />
+          <Route path="/areas-of-care/ortheon/oneflexo" element={<ProductOneFlexo />} />
+          <Route path="/areas-of-care/orthopaedics/oneflexo" element={<ProductOneFlexo />} />
           <Route path="/areas-of-care/ortheon/:productSlug" element={<OrthopaedicsProductDetail />} />
           <Route path="/areas-of-care/orthopaedics/:productSlug" element={<OrthopaedicsProductDetail />} />
           <Route path="/areas-of-care/orthopedic/:productSlug" element={<OrthopaedicsProductDetail />} />

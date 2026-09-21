@@ -29,12 +29,12 @@ export const pagesContent = {
         title: 'Improve care through medicines and healthcare solutions that matter.',
         items: [
           {
-            title: 'OUR VISION',
-            desc: 'To be a trusted pharmaceutical company for patients and healthcare professionals across the areas of care we serve.'
+            title: 'Our Vision',
+            desc: 'To be a trusted partner for healthcare professionals across India, known for our innovation, reliability, and commitment to excellence in prescription medicine.'
           },
           {
-            title: 'OUR MISSION',
-            desc: 'To develop and deliver purposeful formulations that address real clinical needs, uphold dependable quality and expand responsibly into areas where we can make a meaningful difference.'
+            title: 'Our Mission',
+            desc: 'To improve patient health outcomes by delivering high-quality, prescription-based products that address the unique needs of Orthopaedic, Gynaecological, Paediatric and General Segment.'
           }
         ]
       },
@@ -121,16 +121,16 @@ export const pagesContent = {
         title: 'Guided by clinical integrity and long-term care.',
         items: [
           {
-            title: 'OUR PURPOSE',
+            title: 'Our Purpose',
             desc: 'Improve care through medicines and healthcare solutions that matter.'
           },
           {
-            title: 'OUR VISION',
-            desc: 'To be a trusted pharmaceutical company for patients and healthcare professionals across the areas of care we serve.'
+            title: 'Our Vision',
+            desc: 'To be a trusted partner for healthcare professionals across India, known for our innovation, reliability, and commitment to excellence in prescription medicine.'
           },
           {
-            title: 'OUR MISSION',
-            desc: 'To develop and deliver purposeful formulations that address real clinical needs, uphold dependable quality and expand responsibly into areas where we can make a meaningful difference.'
+            title: 'Our Mission',
+            desc: 'To improve patient health outcomes by delivering high-quality, prescription-based products that address the unique needs of Orthopaedic, Gynaecological, Paediatric and General Segment.'
           }
         ]
       },

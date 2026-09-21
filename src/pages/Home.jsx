@@ -47,12 +47,12 @@ export default function Home() {
     title: 'Improve care through medicines and healthcare solutions that matter.',
     items: [
       {
-        title: 'OUR VISION',
-        desc: 'To be a trusted pharmaceutical company for patients and healthcare professionals across the areas of care we serve.'
+        title: 'Our Vision',
+        desc: 'To be a trusted partner for healthcare professionals across India, known for our innovation, reliability, and commitment to excellence in prescription medicine.'
       },
       {
-        title: 'OUR MISSION',
-        desc: 'To develop and deliver purposeful formulations that address real clinical needs, uphold dependable quality and expand responsibly into areas where we can make a meaningful difference.'
+        title: 'Our Mission',
+        desc: 'To improve patient health outcomes by delivering high-quality, prescription-based products that address the unique needs of Orthopaedic, Gynaecological, Paediatric and General Segment.'
       }
     ]
   });
@@ -143,18 +143,18 @@ export default function Home() {
       specialty: a.therapeuticArea || a.displayName || a.title,
       description: a.description || a.shortDescription || 'Targeted therapeutic formulations developed to address real clinical needs.',
       image: a.image || a.image_url || '/assets/therapeutic-general-medicine.jpg',
-      path: a.divisionName?.toLowerCase() === 'femme' ? '/areas-of-care/femme' : '/areas-of-care',
+      path: `/areas-of-care/${(a.slug || a.id || a.divisionName || '').toLowerCase().trim()}`,
     }))
     : [
-      { name: "CYTOS", specialty: "Oncology", description: "Targeted therapeutics and supportive oncology care.", image: "/assets/cytos.jpg", path: "/areas-of-care" },
+      { name: "CYTOS", specialty: "Oncology", description: "Targeted therapeutics and supportive oncology care.", image: "/assets/cytos.jpg", path: "/areas-of-care/cytos" },
       { name: "FEMME", specialty: "Women’s Health", description: "Formulations supporting maternal wellness and hormonal balance.", image: "/assets/therapeutic-womens-health.jpg", path: "/areas-of-care/femme" },
-      { name: "NEURIX", specialty: "Neurology", description: "Neuroprotective and cognitive formulations for CNS care.", image: "/assets/neurix.jpg", path: "/areas-of-care" },
-      { name: "ORTHEON", specialty: "Orthopaedics", description: "Musculoskeletal mobility and cartilage protection solutions.", image: "/assets/ortheon.jpg", path: "/areas-of-care" },
-      { name: "VELLIS", specialty: "Dermatology", description: "Dermatological formulations restoring barrier integrity.", image: "/assets/vellis.webp", path: "/areas-of-care" },
-      { name: "EYERIX", specialty: "Ophthalmology", description: "Precision ocular care and anti-inflammatory eye formulations.", image: "/assets/eyerix.jpg", path: "/areas-of-care" },
-      { name: "OTIRA", specialty: "ENT", description: "Targeted airway and otolaryngology formulations.", image: "/assets/otira.jpg", path: "/areas-of-care" },
-      { name: "PEDIAPLUS", specialty: "Paediatrics", description: "Safe, child-friendly dosage forms and pediatric wellness.", image: "/assets/pediaplus.jpg", path: "/areas-of-care" },
-      { name: "OMNARA", specialty: "General Medicine", description: "Essential broad-spectrum therapeutics for daily practice.", image: "/assets/therapeutic-general-medicine.jpg", path: "/areas-of-care" },
+      { name: "NEURIX", specialty: "Neurology", description: "Neuroprotective and cognitive formulations for CNS care.", image: "/assets/neurix.jpg", path: "/areas-of-care/neurix" },
+      { name: "ORTHEON", specialty: "Orthopaedics", description: "Musculoskeletal mobility and cartilage protection solutions.", image: "/assets/ortheon.jpg", path: "/areas-of-care/ortheon" },
+      { name: "VELLIS", specialty: "Dermatology", description: "Dermatological formulations restoring barrier integrity.", image: "/assets/vellis.webp", path: "/areas-of-care/vellis" },
+      { name: "EYERIX", specialty: "Ophthalmology", description: "Precision ocular care and anti-inflammatory eye formulations.", image: "/assets/eyerix.jpg", path: "/areas-of-care/eyerix" },
+      { name: "OTIRA", specialty: "ENT", description: "Targeted airway and otolaryngology formulations.", image: "/assets/otira.jpg", path: "/areas-of-care/otira" },
+      { name: "PEDIAPLUS", specialty: "Paediatrics", description: "Safe, child-friendly dosage forms and pediatric wellness.", image: "/assets/pediaplus.jpg", path: "/areas-of-care/pediaplus" },
+      { name: "OMNARA", specialty: "General Medicine", description: "Essential broad-spectrum therapeutics for daily practice.", image: "/assets/therapeutic-general-medicine.jpg", path: "/areas-of-care/omnara" },
     ];
 
   return (
@@ -395,13 +395,6 @@ export default function Home() {
                         <p className="text-xs sm:text-sm text-white/80 line-clamp-2 leading-relaxed font-normal">
                           {item.description}
                         </p>
-
-                        <div className="pt-2">
-                          <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-white group-hover:text-red-300 underline underline-offset-4 decoration-white/60 group-hover:decoration-red-300 transition-all">
-                            <span>Explore Portfolio</span>
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                          </span>
-                        </div>
                       </div>
                     </div>
                   </Link>
@@ -465,15 +458,15 @@ export default function Home() {
               </div>
             </ScrollReveal>
 
-            {/* Vision & Mission Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 pt-4">
+            {/* Vision & Mission Cards (Faithfully rendered to client identity) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 pt-6">
               {purposeSec.items.map((item, idx) => (
                 <ScrollReveal key={item.title || idx} delay={(idx + 1) * 0.1}>
-                  <div className="p-8 sm:p-10 rounded-3xl bg-[#FAF9F6] border border-stone-200/80 space-y-4 h-full">
-                    <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                  <div className="p-8 sm:p-10 rounded-2xl bg-white border border-[#E5E3DC] border-l-[6px] border-l-[#00A859] shadow-xs hover:shadow-md transition-all duration-300 space-y-3 h-full">
+                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0F172A]">
                       {item.title}
-                    </span>
-                    <p className="text-base sm:text-lg text-[#121212] leading-relaxed font-medium">
+                    </h3>
+                    <p className="text-base sm:text-lg text-[#4B5563] leading-relaxed font-normal">
                       {item.desc || item.description || item.text}
                     </p>
                   </div>

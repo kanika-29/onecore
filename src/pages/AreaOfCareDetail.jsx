@@ -323,17 +323,19 @@ export default function AreaOfCareDetail() {
 
   if (!currentCategory) {
     return (
-      <div className="min-h-screen w-full bg-brand-ivory flex flex-col items-center justify-center p-6 text-center">
+      <div className="min-h-screen w-full bg-[#FAF9F6] flex flex-col items-center justify-center p-6 text-center">
         <div className="max-w-md space-y-4">
-          <SectionEyebrow>THERAPEUTIC AREAS</SectionEyebrow>
-          <h1 className="font-serif text-3xl font-light text-brand-dark">Specialty Area Not Found</h1>
-          <p className="text-sm text-brand-muted">
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#D52B1E]">
+            Therapeutic Areas
+          </span>
+          <h1 className="font-serif text-3xl font-light text-[#121212]">Specialty Area Not Found</h1>
+          <p className="text-sm text-[#555555]">
             The requested therapeutic division "<span className="font-mono">{slug}</span>" is not recognized.
           </p>
           <div className="pt-4">
             <Link
               to="/areas-of-care"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-brand-dark text-brand-dark hover:bg-brand-dark hover:text-white transition-colors text-xs font-semibold uppercase tracking-wider"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#121212] hover:bg-[#D52B1E] text-white text-xs font-semibold rounded-full transition-colors"
             >
               <ArrowLeft size={14} />
               <span>Back to Areas of Care</span>
@@ -354,94 +356,110 @@ export default function AreaOfCareDetail() {
   };
 
   return (
-    <div className="w-full bg-brand-ivory text-brand-text min-h-screen">
-      {/* 1. Page Banner */}
-      <PageBanner
-        title={currentCategory.title}
-        imageUrl={currentCategory.image}
-        imageAlt={`${currentCategory.title} — ${currentCategory.subtitle} — Onecore Pharma`}
-      />
-
-      {/* 2. Breadcrumbs & Context Header */}
-      <div className="w-full border-b border-brand-border/80 bg-brand-surface/40 py-3.5 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs text-brand-muted gap-2">
+    <div className="w-full bg-[#FAF9F6] text-[#121212] min-h-screen">
+      
+      {/* 1. Breadcrumbs Context Bar */}
+      <div className="pt-24 sm:pt-28 pb-4 border-b border-[#E5E3DC] bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs text-[#777777] gap-2">
           <div className="flex items-center gap-2 flex-wrap">
-            <Link to="/areas-of-care" className="hover:text-brand-dark transition-colors">
+            <Link to="/areas-of-care" className="hover:text-[#121212] transition-colors font-medium">
               Areas of Care
             </Link>
             <span>›</span>
-            <span className="text-brand-dark font-medium">{currentCategory.title} ({currentCategory.subtitle})</span>
+            <span className="text-[#121212] font-semibold">{currentCategory.title} ({currentCategory.subtitle})</span>
           </div>
-          <div className="text-[11px] font-mono uppercase tracking-wider text-brand-muted">
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-[#D52B1E] bg-[#FFF1F0] px-3 py-1 rounded-full border border-[#F5C2C0]">
             {currentCategory.products.length} Registered Formulations
           </div>
         </div>
       </div>
 
-      {/* 3. Main Product Catalogue Section */}
-      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
-        {/* Header Block with Editorial Hierarchy */}
-        <div className="border-b border-brand-border/80 pb-8 space-y-4">
-          <SectionEyebrow>PRODUCT CATALOGUE</SectionEyebrow>
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <div>
-              <h1 className="editorial-heading text-4xl sm:text-5xl lg:text-6xl font-light text-brand-dark tracking-tight">
-                {currentCategory.title}
+      {/* 2. Hero Section */}
+      <section className="py-12 sm:py-16 px-4 sm:px-8 bg-white border-b border-[#E5E3DC]">
+        <div className="max-w-7xl mx-auto space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            <div className="lg:col-span-7 space-y-4">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#D52B1E] block">
+                Division Portfolio
+              </span>
+              <h1 className="text-4xl sm:text-6xl font-serif font-light text-[#121212] tracking-tight leading-[1.05]">
+                {currentCategory.title} <br />
+                <span className="italic font-normal text-[#D52B1E]">{currentCategory.subtitle}</span>
               </h1>
-              <p className="text-xl sm:text-2xl font-light text-brand-muted tracking-tight mt-1">
-                {currentCategory.subtitle}
+              <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans max-w-2xl">
+                {currentCategory.description}
               </p>
             </div>
-            <p className="max-w-xl text-sm sm:text-base text-brand-muted leading-relaxed font-sans">
-              {currentCategory.description}
-            </p>
+
+            <div className="lg:col-span-5">
+              <div className="rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/10] bg-[#FAF9F6]">
+                <img
+                  src={assetUrl(currentCategory.image)}
+                  alt={`${currentCategory.title} — ${currentCategory.subtitle} — Onecore Pharma`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+          </div>
+
+          {/* Search & Filter Bar */}
+          <div className="pt-6 border-t border-[#E5E3DC] flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
+            <div className="relative flex-grow max-w-md">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#888888] w-4 h-4 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={`Search in ${currentCategory.title} products or active salts...`}
+                className="w-full bg-[#FAF9F6] border border-[#E5E3DC] focus:border-[#D52B1E] rounded-full pl-11 pr-10 py-2.5 text-xs sm:text-sm text-[#121212] placeholder-[#888888] focus:outline-none transition-colors shadow-xs"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#777777] hover:text-[#121212] p-1"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5 hidden" />
+                  ✕
+                </button>
+              )}
+            </div>
+            <div className="text-xs text-[#777777] self-end sm:self-center">
+              Showing <strong className="text-[#121212] font-semibold">{filteredProducts.length}</strong> of {currentCategory.products.length} formulations
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Search & Filter Bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 pt-2">
-          <div className="relative flex-grow max-w-md">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-muted w-4 h-4 pointer-events-none" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={`Search in ${currentCategory.title} products or active ingredients...`}
-              className="w-full bg-white border border-brand-border/90 rounded-xs pl-10 pr-4 py-2.5 text-xs sm:text-sm text-brand-dark placeholder:text-brand-muted/70 focus:outline-hidden focus:border-brand-dark transition-colors shadow-2xs"
-            />
-          </div>
-          <div className="text-xs font-mono text-brand-muted self-end sm:self-center">
-            Showing <strong className="text-brand-dark font-semibold">{filteredProducts.length}</strong> of {currentCategory.products.length} products
-          </div>
-        </div>
-
-        {/* Product Cards Grid */}
+      {/* 3. Product Cards Grid */}
+      <section className="py-12 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto space-y-8">
         {filteredProducts.length === 0 ? (
-          <div className="py-16 text-center bg-brand-surface/40 border border-brand-border/60 rounded-xs p-8 space-y-3">
-            <p className="text-base text-brand-dark font-medium">No products match your search query.</p>
-            <p className="text-xs text-brand-muted">Try searching with a different product name or active salt.</p>
+          <div className="py-16 text-center bg-white border border-[#E5E3DC] rounded-3xl p-8 space-y-3 max-w-lg mx-auto">
+            <p className="text-base text-[#121212] font-serif font-bold">No formulations match your search.</p>
+            <p className="text-xs text-[#555555]">Try searching with a generic chemical name or active ingredient.</p>
             <button
               onClick={() => setSearchQuery('')}
-              className="text-xs font-semibold text-brand-sage underline hover:text-brand-dark pt-2 cursor-pointer"
+              className="text-xs font-semibold text-[#D52B1E] underline hover:text-[#121212] pt-2 cursor-pointer"
             >
               Clear Search
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((product, index) => {
               const productUrl = getProductRoute(product);
               const productImage = product.image || currentCategory.image;
 
               return (
-                <Link
+                <div
                   key={product.slug || index}
-                  to={productUrl}
-                  className="bg-white border border-brand-border/80 hover:border-brand-dark/50 transition-all duration-300 rounded-xs p-6 flex flex-col justify-between group shadow-2xs hover:shadow-sm"
+                  className="bg-white border border-[#E5E3DC] hover:border-[#121212] transition-all duration-300 rounded-[24px] p-6 flex flex-col justify-between group shadow-xs hover:shadow-md"
                 >
                   <div>
-                    {/* Product Image / Packshot Container */}
-                    <div className="w-full aspect-[4/3] bg-brand-surface/40 border border-brand-border/40 rounded-xs overflow-hidden mb-5 flex items-center justify-center p-4 group-hover:bg-brand-surface/70 transition-colors">
+                    {/* Product Packshot Container */}
+                    <div className="w-full aspect-[4/3] bg-[#FAF9F6] border border-[#E5E3DC]/70 rounded-2xl overflow-hidden mb-5 flex items-center justify-center p-4 group-hover:bg-[#FFF1F0]/40 transition-colors">
                       <img
                         src={assetUrl(productImage)}
                         alt={`${product.name} - Onecore Pharma`}
@@ -451,38 +469,50 @@ export default function AreaOfCareDetail() {
                     </div>
 
                     {/* Product Name */}
-                    <h3 className="text-xl sm:text-2xl font-light text-brand-dark tracking-tight leading-snug group-hover:text-brand-sage transition-colors font-serif mb-2.5">
+                    <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#121212] tracking-tight group-hover:text-[#D52B1E] transition-colors mb-2 leading-snug">
                       {product.name}
                     </h3>
 
                     {/* Composition / Strength */}
-                    <p className="text-xs sm:text-sm text-brand-muted leading-relaxed font-sans line-clamp-3">
+                    <p className="text-xs text-[#555555] leading-relaxed font-mono bg-[#FAF9F6] p-2.5 rounded-xl border border-[#E5E3DC]/60 line-clamp-3 mb-3">
                       {product.composition}
                     </p>
+
+                    {/* Indication Preview */}
+                    {product.usedFor && (
+                      <p className="text-xs text-[#777777] line-clamp-2 italic leading-relaxed">
+                        {product.usedFor}
+                      </p>
+                    )}
                   </div>
 
                   {/* View Product CTA Link */}
-                  <div className="pt-5 mt-6 border-t border-brand-border/60 flex items-center justify-between text-xs sm:text-sm font-medium text-brand-dark group-hover:text-brand-sage transition-colors">
-                    <span>View Product</span>
-                    <ArrowRight size={15} className="group-hover:translate-x-1.5 transition-transform text-brand-muted group-hover:text-brand-sage" />
+                  <div className="pt-5 mt-5 border-t border-[#E5E3DC]">
+                    <Link
+                      to={productUrl}
+                      className="w-full flex items-center justify-between px-4 py-2.5 bg-[#121212] group-hover:bg-[#D52B1E] text-white text-xs font-semibold rounded-full transition-colors"
+                    >
+                      <span>View Monograph</span>
+                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>
         )}
 
         {/* Bottom Navigation / Return Link */}
-        <div className="border-t border-brand-border/80 pt-10 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="border-t border-[#E5E3DC] pt-10 flex flex-col sm:flex-row justify-between items-center gap-4">
           <Link
             to="/areas-of-care"
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-brand-dark hover:text-brand-sage transition-colors"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-[#121212] hover:text-[#D52B1E] transition-colors"
           >
             <ArrowLeft size={14} />
-            <span>View All Areas of Care</span>
+            <span>View All 9 Therapeutic Divisions</span>
           </Link>
-          <span className="text-xs text-brand-muted">
-            All formulations subject to clinician prescription and regional regulatory approval.
+          <span className="text-xs text-[#777777]">
+            All formulations manufactured to cGMP & pharmacopoeial standards.
           </span>
         </div>
       </section>
