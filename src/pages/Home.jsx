@@ -39,7 +39,7 @@ export default function Home() {
 
   const areasSec = getSection('areas_of_care', {
     eyebrow: 'AREAS OF CARE',
-    title: 'Focused expertise. Purposeful healthcare.',
+    title: 'Focused expertise. \nPurposeful healthcare.',
   });
 
   const purposeSec = getSection('our_purpose', {
@@ -228,8 +228,8 @@ export default function Home() {
                 <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
                   {aboutSec.eyebrow || 'ABOUT ONECORE'}
                 </span>
-                <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.12] pt-2">
-                  Healthcare is personal. <em className="lilly-serif-italic font-normal text-[#121212]">Our approach should be too.</em>
+                <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.12] pt-2 text-balance">
+                  Healthcare is personal. <br className="hidden sm:inline" /><em className="lilly-serif-italic font-normal text-[#121212]">Our approach should be too.</em>
                 </h2>
               </ScrollReveal>
 
@@ -322,15 +322,15 @@ export default function Home() {
 
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-              <div className="max-w-3xl space-y-4">
+              <div className="max-w-4xl space-y-4">
                 <ScrollReveal>
                   <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
                     {areasSec.eyebrow || 'AREAS OF CARE'}
                   </span>
-                  <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight">
-                    {areasSec.title || 'Focused expertise. Purposeful healthcare.'}
+                  <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight text-balance">
+                    Focused expertise. <br className="hidden sm:inline" />Purposeful healthcare.
                   </h2>
-                  <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed pt-2 max-w-2xl">
+                  <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed pt-2 max-w-2xl text-pretty">
                     Discover the 9 specialized divisions that make up the Onecore portfolio, each dedicated to therapeutic depth, medical dialogue, and clinical outcomes.
                   </p>
                 </ScrollReveal>
@@ -420,8 +420,8 @@ export default function Home() {
                 <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
                   {purposeSec.eyebrow || 'OUR PURPOSE'}
                 </span>
-                <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.1]">
-                  Improve care through medicines <em className="lilly-serif-italic">and healthcare solutions that matter.</em>
+                <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.1] text-balance">
+                  Improve care through medicines <br className="hidden sm:inline" /><em className="lilly-serif-italic">and healthcare solutions that matter.</em>
                 </h2>
               </ScrollReveal>
             </div>
@@ -517,8 +517,8 @@ export default function Home() {
                   <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
                     {qualitySec.eyebrow || 'QUALITY ASSURANCE'}
                   </span>
-                  <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight pt-2">
-                    {qualitySec.title || 'Quality is part of the product from the beginning.'}
+                  <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight pt-2 text-balance">
+                    Quality is part of the product <br className="hidden sm:inline" />from the beginning.
                   </h2>
                 </ScrollReveal>
 
@@ -597,8 +597,8 @@ export default function Home() {
                 <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
                   {sustainabilitySec.eyebrow || 'SUSTAINABILITY'}
                 </span>
-                <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight">
-                  {sustainabilitySec.title || 'Better health and a healthier future belong together.'}
+                <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight text-balance">
+                  Better health and a healthier future <br className="hidden sm:inline" />belong together.
                 </h2>
                 <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed pt-2">
                   {sustainabilitySec.body || 'Our responsibility extends beyond the products we provide. As Onecore grows, we want responsible choices to become part of how we operate, how we source and how we work with our partners.'}
@@ -769,8 +769,8 @@ export default function Home() {
         <section className="py-24 sm:py-32 bg-white border-t border-[#E5E7EB] text-center">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             <ScrollReveal>
-              <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight">
-                {finalCtaSec.title || 'Purposeful healthcare, across every area we serve.'}
+              <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight text-balance">
+                Purposeful healthcare, <br className="hidden sm:inline" />across every area we serve.
               </h2>
             </ScrollReveal>
 

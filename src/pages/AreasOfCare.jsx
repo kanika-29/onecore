@@ -404,8 +404,8 @@ export default function AreasOfCare() {
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
               INSTITUTIONAL ACCESS
             </span>
-            <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
-              Request Full Product Portfolio & Monographs
+            <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight text-balance">
+              Request Full Product Portfolio <br className="hidden sm:inline" />&amp; Monographs
             </h2>
             <p className="text-sm sm:text-base text-[#555555] font-light leading-relaxed font-sans max-w-2xl mx-auto">
               For registered medical practitioners, hospital formularies, and institutional procurement partners requiring prescribing dossiers, bioequivalence data, or commercial rate cards.

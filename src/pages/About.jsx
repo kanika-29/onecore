@@ -284,8 +284,8 @@ export default function About() {
                 <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
                   {principlesSec.eyebrow || 'FOUNDATIONAL PRINCIPLES'}
                 </span>
-                <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
-                  {principlesSec.title || 'Principles guiding every decision.'}
+                <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight text-balance">
+                  Principles guiding <br className="hidden sm:inline" />every decision.
                 </h2>
                 <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-1">
                   {principlesSec.subtitle || 'A disciplined framework connecting formulation science with clinical trust and everyday healthcare across India.'}
@@ -360,8 +360,8 @@ export default function About() {
                   <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
                     {commitmentsSec.eyebrow || 'OUR COMMITMENTS'}
                   </span>
-                  <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
-                    {commitmentsSec.title || 'Disciplined science, human focus.'}
+                  <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight text-balance">
+                    Disciplined science, <br className="hidden sm:inline" />human focus.
                   </h2>
                   <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-1">
                     {commitmentsSec.subtitle || 'Connecting clinical insight with dependable pharmaceutical manufacturing to deliver medicines people can trust.'}
@@ -400,8 +400,8 @@ export default function About() {
           ========================================================================= */}
       <section className="py-20 sm:py-28 bg-[#121212] text-white text-center">
         <div className="max-w-4xl mx-auto px-4 sm:px-8 space-y-6">
-          <h2 className="text-3xl sm:text-5xl font-serif font-light text-white tracking-tight leading-tight">
-            {finalCtaSec.title || 'Explore our therapeutic specialties and quality disciplines.'}
+          <h2 className="text-3xl sm:text-5xl font-serif font-light text-white tracking-tight leading-tight text-balance">
+            Explore our therapeutic specialties <br className="hidden sm:inline" />and quality disciplines.
           </h2>
           <p className="text-base sm:text-lg text-stone-300 max-w-2xl mx-auto font-light leading-relaxed">
             {finalCtaSec.body || 'Discover how our formulations serve diverse clinical disciplines with dependable consistency and uncompromising standards.'}

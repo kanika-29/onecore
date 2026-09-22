@@ -351,8 +351,8 @@ export default function Contact() {
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
                 {enquirySec.eyebrow || 'HOW CAN WE HELP?'}
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-light text-[#121212] tracking-tight">
-                {enquirySec.title || 'Choose the reason for getting in touch.'}
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-light text-[#121212] tracking-tight text-balance">
+                Choose the reason <br className="hidden sm:inline" />for getting in touch.
               </h2>
               <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-1">
                 {enquirySec.subtitle || enquirySec.body || 'Selecting the right enquiry type helps your message reach the relevant Onecore team.'}
@@ -699,8 +699,8 @@ export default function Contact() {
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
                 {safetySec.eyebrow || 'PATIENT SAFETY'}
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-light text-[#121212] tracking-tight">
-                {safetySec.title || 'Reporting a safety or quality concern?'}
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-light text-[#121212] tracking-tight text-balance">
+                Reporting a safety <br className="hidden sm:inline" />or quality concern?
               </h2>
               {safetySec.subheading && (
                 <h3 className="text-xl sm:text-2xl font-serif italic text-[#D52B1E] pt-1">

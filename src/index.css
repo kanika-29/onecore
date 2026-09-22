@@ -32,6 +32,15 @@
     padding: 0;
   }
 
+  /* Prevent awkward single-word line wraps (orphans/widows) */
+  h1, h2, h3, h4, h5, h6, .lilly-serif {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
   /* Custom subtle scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
