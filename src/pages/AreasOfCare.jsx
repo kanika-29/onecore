@@ -225,37 +225,37 @@ export default function AreasOfCare() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {searchResults.map((product) => (
-                  <Link
-                    key={product.division + product.slug + product.name}
-                    to={product.productUrl}
-                    className="bg-[#FAF9F6] hover:bg-white border border-[#E5E3DC] hover:border-[#D52B1E] transition-all duration-300 rounded-3xl p-6 flex flex-col justify-between group shadow-xs hover:shadow-md block cursor-pointer"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <span className="text-xs font-semibold tracking-wider uppercase text-[#D52B1E]">
-                          {product.division}
-                        </span>
-                        <span className="text-[11px] text-[#777777] truncate font-medium">
-                          {product.category}
-                        </span>
+                {searchResults.map((product) => {
+                  const productImage = product.image || '/assets/therapeutic-general-medicine.jpg';
+                  return (
+                    <Link
+                      key={product.division + product.slug + product.name}
+                      to={product.productUrl}
+                      className="bg-white border border-[#E5E3DC] hover:border-[#D52B1E] transition-all duration-300 rounded-3xl overflow-hidden flex flex-col group shadow-xs hover:shadow-md block cursor-pointer"
+                    >
+                      {/* Product Image — Flush to top, left, and right */}
+                      <div className="w-full aspect-[4/3] bg-[#FAF9F6] overflow-hidden">
+                        <img
+                          src={assetUrl(productImage)}
+                          alt={`${product.name} - Onecore Pharma`}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
                       </div>
 
-                      <h3 className="text-xl sm:text-2xl font-serif font-medium text-[#121212] group-hover:text-[#D52B1E] transition-colors mb-2 leading-snug">
-                        {product.name}
-                      </h3>
+                      {/* Product Details: Just Name and Salt */}
+                      <div className="p-5 sm:p-6 flex flex-col flex-1">
+                        <h3 className="text-xl sm:text-2xl font-serif font-medium text-[#121212] group-hover:text-[#D52B1E] transition-colors mb-2 leading-snug">
+                          {product.name}
+                        </h3>
 
-                      <p className="text-xs sm:text-sm text-[#555555] font-light leading-relaxed mb-4">
-                        {product.composition}
-                      </p>
-                    </div>
-
-                    <div className="pt-4 border-t border-[#E5E3DC] flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-[#121212] group-hover:text-[#D52B1E] transition-colors">
-                      <span>View Product</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200" />
-                    </div>
-                  </Link>
-                ))}
+                        <p className="text-xs sm:text-sm text-[#555555] font-light leading-relaxed">
+                          {product.composition}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             )}
           </div>

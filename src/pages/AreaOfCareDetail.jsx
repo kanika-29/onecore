@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowRight, ArrowLeft, Search, Check } from 'lucide-react';
+import { ArrowLeft, Search, Check } from 'lucide-react';
 import PageBanner from '../components/PageBanner';
 import SectionEyebrow from '../components/SectionEyebrow';
 import { assetUrl } from '../utils/assetUrl';
@@ -456,34 +456,26 @@ export default function AreaOfCareDetail() {
                 <Link
                   key={product.slug || index}
                   to={productUrl}
-                  className="bg-white border border-[#E5E3DC] hover:border-[#D52B1E] rounded-3xl p-6 flex flex-col justify-between group shadow-xs hover:shadow-md transition-all duration-300 block cursor-pointer"
+                  className="bg-white border border-[#E5E3DC] hover:border-[#D52B1E] rounded-3xl overflow-hidden flex flex-col group shadow-xs hover:shadow-md transition-all duration-300 block cursor-pointer"
                 >
-                  <div>
-                    {/* Product Packshot Container */}
-                    <div className="w-full aspect-[4/3] bg-[#FAF9F6] rounded-2xl overflow-hidden mb-5 flex items-center justify-center p-3 group-hover:bg-[#F4F2EB] transition-colors">
-                      <img
-                        src={assetUrl(productImage)}
-                        alt={`${product.name} - Onecore Pharma`}
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
-                    </div>
+                  {/* Product Packshot / Image — Flush to top, left, and right with no padding */}
+                  <div className="w-full aspect-[4/3] bg-[#FAF9F6] overflow-hidden">
+                    <img
+                      src={assetUrl(productImage)}
+                      alt={`${product.name} - Onecore Pharma`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                  </div>
 
-                    {/* Product Name */}
+                  {/* Product Details: Just Product Name and Active Salt */}
+                  <div className="p-5 sm:p-6 flex flex-col flex-1">
                     <h3 className="text-xl sm:text-2xl font-serif font-medium text-[#121212] tracking-tight group-hover:text-[#D52B1E] transition-colors mb-2 leading-snug">
                       {product.name}
                     </h3>
-
-                    {/* Active Salt Composition - Clean Legible Typography */}
-                    <p className="text-xs sm:text-sm text-[#555555] font-light leading-relaxed mb-4">
+                    <p className="text-xs sm:text-sm text-[#555555] font-light leading-relaxed">
                       {product.composition}
                     </p>
-                  </div>
-
-                  {/* View Product Action */}
-                  <div className="pt-4 border-t border-[#E5E3DC] flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-[#121212] group-hover:text-[#D52B1E] transition-colors">
-                    <span>View Product</span>
-                    <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform duration-200" />
                   </div>
                 </Link>
               );
