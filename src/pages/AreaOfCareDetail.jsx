@@ -453,50 +453,39 @@ export default function AreaOfCareDetail() {
               const productImage = product.image || currentCategory.image;
 
               return (
-                <div
+                <Link
                   key={product.slug || index}
-                  className="bg-white border border-[#E5E3DC] hover:border-[#121212] transition-all duration-300 rounded-[24px] p-6 flex flex-col justify-between group shadow-xs hover:shadow-md"
+                  to={productUrl}
+                  className="bg-white border border-[#E5E3DC] hover:border-[#D52B1E] rounded-3xl p-6 flex flex-col justify-between group shadow-xs hover:shadow-md transition-all duration-300 block cursor-pointer"
                 >
                   <div>
                     {/* Product Packshot Container */}
-                    <div className="w-full aspect-[4/3] bg-[#FAF9F6] border border-[#E5E3DC]/70 rounded-2xl overflow-hidden mb-5 flex items-center justify-center p-4 group-hover:bg-[#F4F2EB] transition-colors">
+                    <div className="w-full aspect-[4/3] bg-[#FAF9F6] rounded-2xl overflow-hidden mb-5 flex items-center justify-center p-3 group-hover:bg-[#F4F2EB] transition-colors">
                       <img
                         src={assetUrl(productImage)}
                         alt={`${product.name} - Onecore Pharma`}
-                        className="w-full h-full object-contain group-hover:scale-103 transition-transform duration-500"
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                       />
                     </div>
 
                     {/* Product Name */}
-                    <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#121212] tracking-tight group-hover:text-[#D52B1E] transition-colors mb-2 leading-snug">
+                    <h3 className="text-xl sm:text-2xl font-serif font-medium text-[#121212] tracking-tight group-hover:text-[#D52B1E] transition-colors mb-2 leading-snug">
                       {product.name}
                     </h3>
 
-                    {/* Composition / Strength */}
-                    <p className="text-xs text-[#555555] leading-relaxed font-mono bg-[#FAF9F6] p-2.5 rounded-xl border border-[#E5E3DC]/60 line-clamp-3 mb-3">
+                    {/* Active Salt Composition - Clean Legible Typography */}
+                    <p className="text-xs sm:text-sm text-[#555555] font-light leading-relaxed mb-4">
                       {product.composition}
                     </p>
-
-                    {/* Indication Preview */}
-                    {product.usedFor && (
-                      <p className="text-xs text-[#777777] line-clamp-2 italic leading-relaxed">
-                        {product.usedFor}
-                      </p>
-                    )}
                   </div>
 
-                  {/* View Product CTA Link */}
-                  <div className="pt-5 mt-5 border-t border-[#E5E3DC]">
-                    <Link
-                      to={productUrl}
-                      className="w-full flex items-center justify-between px-4 py-2.5 bg-[#121212] group-hover:bg-[#D52B1E] text-white text-xs font-semibold rounded-full transition-colors"
-                    >
-                      <span>View Monograph</span>
-                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                    </Link>
+                  {/* View Product Action */}
+                  <div className="pt-4 border-t border-[#E5E3DC] flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-[#121212] group-hover:text-[#D52B1E] transition-colors">
+                    <span>View Product</span>
+                    <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform duration-200" />
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

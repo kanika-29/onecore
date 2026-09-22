@@ -121,10 +121,6 @@ export const pagesContent = {
         title: 'Guided by clinical integrity and long-term care.',
         items: [
           {
-            title: 'Our Purpose',
-            desc: 'Improve care through medicines and healthcare solutions that matter.'
-          },
-          {
             title: 'Our Vision',
             desc: 'To be a trusted partner for healthcare professionals across India, known for our innovation, reliability, and commitment to excellence in prescription medicine.'
           },

@@ -458,20 +458,44 @@ export default function Home() {
               </div>
             </ScrollReveal>
 
-            {/* Vision & Mission Cards (Faithfully rendered to client identity) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 pt-6">
-              {purposeSec.items.map((item, idx) => (
-                <ScrollReveal key={item.title || idx} delay={(idx + 1) * 0.1}>
-                  <div className="p-8 sm:p-10 rounded-2xl bg-white border border-[#E5E3DC] border-l-[6px] border-l-[#00A859] shadow-xs hover:shadow-md transition-all duration-300 space-y-3 h-full">
-                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0F172A]">
-                      {item.title}
-                    </h3>
-                    <p className="text-base sm:text-lg text-[#4B5563] leading-relaxed font-normal">
-                      {item.desc || item.description || item.text}
-                    </p>
+            {/* Rich Visual Storytelling & Editorial Link to About (Eliminates duplicate Vision/Mission) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-6">
+              <div className="lg:col-span-7">
+                <ScrollReveal delay={0.15}>
+                  <div className="relative rounded-3xl overflow-hidden border border-stone-200 shadow-sm aspect-[16/10] bg-[#FAF9F6]">
+                    <img
+                      src={assetUrl('/assets/about-facility.jpg')}
+                      alt="Onecore Pharma laboratory manufacturing facility"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute bottom-4 left-6 text-white text-xs tracking-wider uppercase font-mono">
+                      Analytical Testing & Facility Network
+                    </div>
                   </div>
                 </ScrollReveal>
-              ))}
+              </div>
+
+              <div className="lg:col-span-5 space-y-6">
+                <ScrollReveal delay={0.2}>
+                  <h3 className="lilly-serif text-2xl sm:text-4xl text-[#121212] tracking-tight leading-snug">
+                    Connecting Clinical Science with Real Patient Needs
+                  </h3>
+                  <p className="text-base text-[#4B5563] leading-relaxed font-normal">
+                    Onecore Pharma brings together disciplined formulation research, stringent cGMP batch authorization, and compassionate healthcare solutions to serve doctors and patients across India.
+                  </p>
+                  <div className="pt-2">
+                    <Link
+                      to="/about"
+                      className="inline-flex items-center gap-2 px-8 py-4 bg-[#121212] hover:bg-[#D52B1E] text-white text-xs font-bold uppercase tracking-wider rounded-full transition-colors shadow-sm"
+                    >
+                      <span>Read Our Vision & Story</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </ScrollReveal>
+              </div>
             </div>
 
           </div>
