@@ -25,7 +25,7 @@ export default function Home() {
   // 100% AUTHENTIC ONECORE CONTENT PRESERVED FROM CMS & STATIC DATABASE
   const heroSec = getSection('hero', {
     title: 'Prescribing a better tomorrow',
-    image_url: '/assets/internet/doctors-walking-corridor.jpg',
+    image_url: '/assets/internet/patient-hospital-ward.jpg',
   });
 
   const aboutSec = getSection('about_onecore', {

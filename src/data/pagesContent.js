@@ -10,7 +10,7 @@ export const pagesContent = {
     sections: {
       hero: {
         title: 'Prescribing a better tomorrow',
-        image_url: '/assets/internet/doctors-walking-corridor.jpg',
+        image_url: '/assets/internet/patient-hospital-ward.jpg',
       },
       about_onecore: {
         eyebrow: '',
