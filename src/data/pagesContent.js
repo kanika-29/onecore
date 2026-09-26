@@ -5,27 +5,27 @@
 
 export const pagesContent = {
   home: {
-    seo_title: 'Onecore Pharma | Committed to a better tomorrow',
+    seo_title: 'Onecore Pharma | Prescribing a better tomorrow',
     seo_description: 'Onecore Pharma is a pharmaceutical company focused on purposeful formulations, dependable quality, and the needs of patients and healthcare professionals.',
     sections: {
       hero: {
-        title: 'Committed to better tomorrow',
-        image_url: '/assets/hero-healthcare.jpg',
+        title: 'Prescribing a better tomorrow',
+        image_url: '/assets/internet/doctors-walking-corridor.jpg',
       },
       about_onecore: {
-        eyebrow: 'ABOUT ONECORE',
+        eyebrow: '',
         title: 'Healthcare is personal.\nOur approach should be too.',
         body: 'Onecore Pharma is a pharmaceutical company focused on purposeful formulations, dependable quality and the needs of patients and healthcare professionals.',
         cta_text: 'Discover Onecore',
         cta_url: '/about',
-        image_url: '/assets/about-facility.jpg',
+        image_url: '/assets/internet/healthcare-team-discussion.jpg',
       },
       areas_of_care: {
-        eyebrow: 'AREAS OF CARE',
-        title: 'Focused expertise. Purposeful healthcare.',
+        eyebrow: '',
+        title: 'Areas of Care',
       },
       our_purpose: {
-        eyebrow: 'OUR PURPOSE',
+        eyebrow: '',
         title: 'Improve care through medicines and healthcare solutions that matter.',
         items: [
           {
@@ -39,11 +39,11 @@ export const pagesContent = {
         ]
       },
       quality_assurance: {
-        eyebrow: 'QUALITY ASSURANCE',
+        eyebrow: '',
         title: 'Quality is part of the product from the beginning.',
         body: 'Medicines carry responsibility. That is why quality needs to be considered across manufacturing, testing, review and release, not treated as a final checkpoint.',
         subheading: 'Our approach is centered on qualified manufacturing environments, appropriate quality controls and disciplined review before products reach the market.',
-        image_url: '/assets/quality.jpg',
+        image_url: '/assets/internet/lab-chemistry.jpg',
         items: [
           {
             title: 'Consistent standards',
@@ -111,13 +111,13 @@ export const pagesContent = {
     seo_description: 'Discover Onecore Pharma – our mission, principles, leadership, and unwavering commitment to healthcare centered on people.',
     sections: {
       hero: {
-        eyebrow: 'ABOUT ONECORE',
+        eyebrow: '',
         title: 'Formulations with purpose. Quality with discipline.',
         body: 'Onecore Pharma is built around a straightforward belief: healthcare works best when science, medical insight and genuine patient needs are closely connected.',
         image_url: '/assets/about-facility.jpg',
       },
       mission_vision: {
-        eyebrow: 'MISSION & VISION',
+        eyebrow: '',
         title: 'Guided by clinical integrity and long-term care.',
         items: [
           {
@@ -131,7 +131,7 @@ export const pagesContent = {
         ]
       },
       video_section: {
-        eyebrow: 'INSIDE ONECORE',
+        eyebrow: '',
         title: 'A closer look at how we work.',
         body: 'Our commitment to quality, patient-first thinking, and disciplined formulation in motion.',
         poster_url: '/assets/about-video-poster.jpg',
@@ -144,7 +144,7 @@ export const pagesContent = {
     seo_description: 'Quality is part of the product from the beginning. Learn about Onecore Pharma manufacturing standards and rigorous quality assurance.',
     sections: {
       hero: {
-        eyebrow: 'QUALITY & MANUFACTURING',
+        eyebrow: '',
         title: 'Quality is part of the product from the beginning.',
         body: 'Medicines carry responsibility. That is why quality needs to be considered across manufacturing, testing, review and release, not treated as a final checkpoint.',
         image_url: '/assets/quality.jpg',
@@ -157,7 +157,7 @@ export const pagesContent = {
     seo_description: 'Clear, dependable health guidance and therapeutic support for patients and their caregivers from Onecore Pharma.',
     sections: {
       hero: {
-        eyebrow: 'PATIENTS & CAREGIVERS',
+        eyebrow: '',
         title: 'Clear information. Supportive care.',
         body: 'Understanding a diagnosis and managing daily treatment can be overwhelming. We provide transparent resources to help you navigate care with confidence.',
         image_url: '/assets/patients-caregivers.jpg',
@@ -170,7 +170,7 @@ export const pagesContent = {
     seo_description: 'Read the latest updates, medical perspectives, formulation insights, and corporate news from Onecore Pharma.',
     sections: {
       hero: {
-        eyebrow: 'NEWS & INSIGHTS',
+        eyebrow: '',
         title: 'Perspectives on healthcare and innovation.',
         body: 'Stay updated on our therapeutic developments, formulation research, clinical partnerships, and corporate milestones.',
         image_url: '/assets/news-1.jpg',
@@ -183,7 +183,7 @@ export const pagesContent = {
     seo_description: 'Get in touch with Onecore Pharma. Connect with our medical information, corporate office, or general inquiries team.',
     sections: {
       hero: {
-        eyebrow: 'CONTACT US',
+        eyebrow: '',
         title: 'Connect with Onecore Pharma.',
         body: 'Whether you have inquiries regarding our therapeutic divisions, medical products, or corporate partnerships, our team is ready to assist you.',
         image_url: '/assets/contact-hero.jpg',

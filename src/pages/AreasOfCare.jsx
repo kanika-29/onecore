@@ -373,7 +373,7 @@ export default function AreasOfCare() {
                 >
                   <Link
                     to={divisionUrl}
-                    className="block group rounded-3xl overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/11] bg-white relative"
+                    className="block group rounded-3xl overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/11] bg-white"
                   >
                     <img
                       src={assetUrl(area.image)}
@@ -381,10 +381,6 @@ export default function AreasOfCare() {
                       className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity pointer-events-none" />
-                    <div className="absolute bottom-4 left-6 text-white text-xs tracking-wider uppercase font-mono">
-                      {area.divisionName} · Prescription Monograph Portfolio
-                    </div>
                   </Link>
                 </div>
 

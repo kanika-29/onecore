@@ -4,6 +4,7 @@ import { Mail, Phone, Clock, ArrowRight, ArrowDown, CheckCircle2, ArrowUpRight }
 import ScrollReveal from '../components/ScrollReveal';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { useSettings } from '../hooks/useSettings';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function Contact() {
   const { getSection } = useCmsPage('contact');
@@ -211,7 +212,7 @@ export default function Contact() {
 
   return (
     <div className="w-full bg-[#FAF9F6] text-[#121212]">
-      
+
       {/* =========================================================================
           SECTION 1 — EDITORIAL HERO
           Spacious, dignified, human-scale typography (The Lilly Model)
@@ -219,10 +220,6 @@ export default function Contact() {
       {heroSec.is_active && (
         <section className="pt-28 sm:pt-36 pb-16 sm:pb-24 px-4 sm:px-8 border-b border-[#E5E3DC] bg-white">
           <div className="max-w-7xl mx-auto space-y-6">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-              {heroSec.eyebrow || 'CONTACT ONECORE'}
-            </span>
-
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-[#121212] tracking-tight leading-[1.05]">
               {heroSec.title || 'Contact'}. <br />
               <span className="italic font-normal text-[#D52B1E]">Direct dialogue, dedicated care.</span>
@@ -248,6 +245,15 @@ export default function Contact() {
                 <ArrowRight className="w-3.5 h-3.5" />
               </a>
             </div>
+
+            {/* Stately Healthcare Direct Helpline & Inquiries Banner Frame */}
+            <div className="relative rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/9] lg:aspect-[21/9] bg-[#FAF9F6] mt-8">
+              <img
+                src={assetUrl('/assets/internet/contact-direct-helpline.jpg')}
+                alt="Onecore Pharma medical communication and direct helpline desk"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
         </section>
       )}
@@ -258,11 +264,8 @@ export default function Contact() {
       {channelsSec.is_active && (
         <section id="contact-details" className="py-20 sm:py-28 px-4 sm:px-8 border-b border-[#E5E3DC] scroll-mt-24">
           <div className="max-w-7xl mx-auto space-y-16">
-            
+
             <div className="max-w-3xl space-y-3">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                {channelsSec.eyebrow || 'GET IN TOUCH'}
-              </span>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-light text-[#121212] tracking-tight">
                 {channelsSec.title || 'Direct Channels'}
               </h2>
@@ -345,12 +348,9 @@ export default function Contact() {
           ========================================================================= */}
       {enquirySec.is_active && (
         <section className="py-20 sm:py-28 px-4 sm:px-8 max-w-7xl mx-auto space-y-12">
-          
+
           <div className="max-w-3xl space-y-3">
             <ScrollReveal>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                {enquirySec.eyebrow || 'HOW CAN WE HELP?'}
-              </span>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-light text-[#121212] tracking-tight text-balance">
                 Choose the reason <br className="hidden sm:inline" />for getting in touch.
               </h2>
@@ -405,13 +405,10 @@ export default function Contact() {
       {formIntroSec.is_active && (
         <section id="enquiry-form" className="py-20 sm:py-28 bg-white border-t border-[#E5E3DC] scroll-mt-20">
           <div className="max-w-4xl mx-auto px-4 sm:px-8 space-y-12">
-            
+
             {/* Header */}
             <div className="text-center space-y-3">
               <ScrollReveal>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                  {formIntroSec.eyebrow || 'SEND AN ENQUIRY'}
-                </span>
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-light text-[#121212] tracking-tight">
                   {formIntroSec.title || 'Tell us how we can help.'}
                 </h2>
@@ -420,6 +417,18 @@ export default function Contact() {
                 </p>
               </ScrollReveal>
             </div>
+
+            {/* Medical Affairs & Support Desk Photo Frame */}
+            <ScrollReveal delay={0.08}>
+              <div className="relative rounded-3xl overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/9] sm:aspect-[21/9] bg-stone-100">
+                <img
+                  src={assetUrl('/assets/internet/contact-medical-liaison.jpg')}
+                  alt="Onecore Pharma medical affairs and commercial liaison team"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            </ScrollReveal>
 
             {/* Form Container */}
             <ScrollReveal delay={0.1}>
@@ -459,7 +468,7 @@ export default function Contact() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} noValidate className="space-y-6">
-                    
+
                     {/* Row 1: Full name * & Email address * */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
@@ -476,11 +485,10 @@ export default function Contact() {
                             if (errors.fullName) setErrors({ ...errors, fullName: undefined });
                           }}
                           placeholder="e.g. Dr. Arthur Vance"
-                          className={`w-full px-4 py-3.5 bg-white border text-sm rounded-xl focus:outline-none transition-all ${
-                            errors.fullName
-                              ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
-                              : 'border-[#E5E3DC] focus:border-[#D52B1E] focus:ring-1 focus:ring-[#D52B1E]'
-                          }`}
+                          className={`w-full px-4 py-3.5 bg-white border text-sm rounded-xl focus:outline-none transition-all ${errors.fullName
+                            ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
+                            : 'border-[#E5E3DC] focus:border-[#D52B1E] focus:ring-1 focus:ring-[#D52B1E]'
+                            }`}
                         />
                         {errors.fullName && <p className="text-xs text-red-600 font-medium">{errors.fullName}</p>}
                       </div>
@@ -499,11 +507,10 @@ export default function Contact() {
                             if (errors.email) setErrors({ ...errors, email: undefined });
                           }}
                           placeholder="e.g. arthur.vance@medicalcenter.org"
-                          className={`w-full px-4 py-3.5 bg-white border text-sm rounded-xl focus:outline-none transition-all ${
-                            errors.email
-                              ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
-                              : 'border-[#E5E3DC] focus:border-[#D52B1E] focus:ring-1 focus:ring-[#D52B1E]'
-                          }`}
+                          className={`w-full px-4 py-3.5 bg-white border text-sm rounded-xl focus:outline-none transition-all ${errors.email
+                            ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
+                            : 'border-[#E5E3DC] focus:border-[#D52B1E] focus:ring-1 focus:ring-[#D52B1E]'
+                            }`}
                         />
                         {errors.email && <p className="text-xs text-red-600 font-medium">{errors.email}</p>}
                       </div>
@@ -554,11 +561,10 @@ export default function Contact() {
                             setFormData({ ...formData, contactType: e.target.value });
                             if (errors.contactType) setErrors({ ...errors, contactType: undefined });
                           }}
-                          className={`w-full px-4 py-3.5 bg-white border text-sm rounded-xl focus:outline-none transition-all text-[#121212] ${
-                            errors.contactType
-                              ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
-                              : 'border-[#E5E3DC] focus:border-[#D52B1E] focus:ring-1 focus:ring-[#D52B1E]'
-                          }`}
+                          className={`w-full px-4 py-3.5 bg-white border text-sm rounded-xl focus:outline-none transition-all text-[#121212] ${errors.contactType
+                            ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
+                            : 'border-[#E5E3DC] focus:border-[#D52B1E] focus:ring-1 focus:ring-[#D52B1E]'
+                            }`}
                         >
                           <option value="">Select</option>
                           <option value="Healthcare professional">Healthcare professional</option>
@@ -583,11 +589,10 @@ export default function Contact() {
                             setFormData({ ...formData, natureOfEnquiry: e.target.value });
                             if (errors.natureOfEnquiry) setErrors({ ...errors, natureOfEnquiry: undefined });
                           }}
-                          className={`w-full px-4 py-3.5 bg-white border text-sm rounded-xl focus:outline-none transition-all text-[#121212] ${
-                            errors.natureOfEnquiry
-                              ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
-                              : 'border-[#E5E3DC] focus:border-[#D52B1E] focus:ring-1 focus:ring-[#D52B1E]'
-                          }`}
+                          className={`w-full px-4 py-3.5 bg-white border text-sm rounded-xl focus:outline-none transition-all text-[#121212] ${errors.natureOfEnquiry
+                            ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
+                            : 'border-[#E5E3DC] focus:border-[#D52B1E] focus:ring-1 focus:ring-[#D52B1E]'
+                            }`}
                         >
                           <option value="">Select</option>
                           {enquirySec.items.map((opt) => (
@@ -615,11 +620,10 @@ export default function Contact() {
                           if (errors.message) setErrors({ ...errors, message: undefined });
                         }}
                         placeholder="Please provide details regarding your clinical, distribution, or general enquiry..."
-                        className={`w-full px-4 py-3.5 bg-white border text-sm rounded-xl focus:outline-none transition-all resize-none ${
-                          errors.message
-                            ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
-                            : 'border-[#E5E3DC] focus:border-[#D52B1E] focus:ring-1 focus:ring-[#D52B1E]'
-                        }`}
+                        className={`w-full px-4 py-3.5 bg-white border text-sm rounded-xl focus:outline-none transition-all resize-none ${errors.message
+                          ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500'
+                          : 'border-[#E5E3DC] focus:border-[#D52B1E] focus:ring-1 focus:ring-[#D52B1E]'
+                          }`}
                       />
                       {errors.message && <p className="text-xs text-red-600 font-medium">{errors.message}</p>}
                     </div>
@@ -696,9 +700,6 @@ export default function Contact() {
         <section className="py-20 sm:py-28 px-4 sm:px-8 max-w-7xl mx-auto space-y-12">
           <div className="max-w-4xl space-y-3">
             <ScrollReveal>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                {safetySec.eyebrow || 'PATIENT SAFETY'}
-              </span>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-light text-[#121212] tracking-tight text-balance">
                 Reporting a safety <br className="hidden sm:inline" />or quality concern?
               </h2>
@@ -713,17 +714,24 @@ export default function Contact() {
             </ScrollReveal>
           </div>
 
+          {/* Pharmacovigilance & Safety Advisory Desk Frame */}
+          <ScrollReveal delay={0.05}>
+            <div className="relative rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/8] sm:aspect-[21/8] bg-[#FAF9F6]">
+              <img
+                src={assetUrl('/assets/internet/contact-medical-inquiry.jpg')}
+                alt="Onecore Pharma adverse event reporting and medical inquiry desk"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </ScrollReveal>
+
           {/* Two Editorial Safety Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
             {safetySec.items.map((card, idx) => (
               <ScrollReveal key={card.title || idx} delay={idx * 0.08}>
                 <div className="bg-white p-8 sm:p-10 border border-[#E5E3DC] rounded-3xl h-full flex flex-col justify-between space-y-8 hover:border-[#121212] transition-all duration-300 shadow-xs hover:shadow-md">
                   <div className="space-y-3">
-                    {card.eyebrow && (
-                      <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#777777]">
-                        {card.eyebrow}
-                      </span>
-                    )}
                     <h4 className="text-2xl font-serif font-medium text-[#121212] tracking-tight">
                       {card.title}
                     </h4>

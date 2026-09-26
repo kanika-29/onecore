@@ -88,7 +88,7 @@ export default function PatientsCaregivers() {
     cta_url: '/areas-of-care',
     secondary_cta_text: 'Report a Safety Concern',
     secondary_cta_url: '#patient-safety',
-    image_url: '/assets/patients-caregivers.jpg',
+    image_url: '/assets/internet/compassionate-care.jpg',
     items: [
       {
         title: 'Find information about your medicine',
@@ -229,10 +229,6 @@ export default function PatientsCaregivers() {
               alt="Elderly Indian patient in wheelchair with compassionate healthcare caregiver"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute bottom-4 left-6 sm:bottom-6 sm:left-8 text-white text-xs tracking-wider uppercase font-mono">
-              Patient Lived Experience & Clinical Partnership
-            </div>
           </div>
 
         </div>
@@ -387,8 +383,8 @@ export default function PatientsCaregivers() {
               <ScrollReveal delay={0.15}>
                 <div className="rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[4/3] bg-white">
                   <img
-                    src={assetUrl(forPatientsSec.image_url || '/assets/patients-caregivers.jpg')}
-                    alt="Elderly Indian patient with caring nurse"
+                    src={assetUrl(forPatientsSec.image_url || '/assets/internet/compassionate-care.jpg')}
+                    alt="Compassionate healthcare support for patients and families"
                     className="w-full h-full object-cover"
                   />
                 </div>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Search, Globe, ArrowRight, ArrowUpRight, ShieldCheck, Mail } from 'lucide-react';
+import { Menu, X, Search, Globe, ArrowRight, ArrowUpRight, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSettings } from '../hooks/useSettings';
 import { assetUrl } from '../utils/assetUrl';
-import { searchFormulations, allProducts } from '../data/allProducts';
+import { searchFormulations } from '../data/allProducts';
 
 export default function Navbar() {
   const { siteSettings } = useSettings();
@@ -64,6 +64,7 @@ export default function Navbar() {
     { label: 'Areas of Care', path: '/areas-of-care', desc: 'Specialized therapeutic disciplines' },
     { label: 'Patients & Caregivers', path: '/patients-caregivers', desc: 'Condition guides and safety support' },
     { label: 'Quality & Manufacturing', path: '/quality-manufacturing', desc: 'Precision standards & laboratory QA' },
+    { label: 'Partnerships', path: '/partnerships', desc: 'Distribution & franchise opportunities' },
     { label: 'News & Perspectives', path: '/news', desc: 'Latest updates and clinical insights' },
     { label: 'Contact Us', path: '/contact', desc: 'Medical affairs and partner inquiries' },
   ];
@@ -76,26 +77,26 @@ export default function Navbar() {
       <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none px-4 sm:px-8 py-4 sm:py-6 transition-all duration-300">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
-          {/* LEFT FLOATING PILL: Brand Logo + Menu Hamburger */}
+          {/* LEFT FLOATING PILL: Official Brand Logo + Menu Hamburger */}
           <div className="pointer-events-auto">
             <div
-              className={`flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full backdrop-blur-xl border transition-all duration-300 shadow-lg ${
+              className={`flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-xl border transition-all duration-300 shadow-lg ${
                 scrolled
                   ? 'bg-[#111111]/95 text-white border-white/15 shadow-2xl'
                   : 'bg-[#141414]/90 text-white border-white/20 shadow-xl'
               }`}
             >
-              {/* Home Logo Link */}
+              {/* Home Logo Link with Official Onecore Logo */}
               <Link
                 to="/"
-                className="flex items-center gap-2 group focus:outline-none"
+                className="flex items-center group focus:outline-none pr-1"
                 aria-label="Onecore Pharma Home"
               >
-                <div className="h-6 sm:h-7 w-auto flex items-center">
-                  <span className="font-serif text-lg sm:text-xl font-bold tracking-tight text-white group-hover:text-red-400 transition-colors">
-                    Onecore
-                  </span>
-                </div>
+                <img
+                  src={logoUrl}
+                  alt="Onecore Pharma"
+                  className="h-6 sm:h-7 md:h-7.5 w-auto object-contain filter drop-shadow-sm transition-transform duration-200 group-hover:scale-105"
+                />
               </Link>
 
               {/* Vertical Subtle Separator */}
@@ -404,7 +405,7 @@ export default function Navbar() {
 
               {/* Drawer Bottom Bar */}
               <div className="pt-12 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/40">
-                <p>© {new Date().getFullYear()} Onecore Pharma. Committed to a better tomorrow.</p>
+                <p>© {new Date().getFullYear()} Onecore Pharma. Prescribing a better tomorrow.</p>
                 <div className="flex items-center gap-6">
                   <Link to="/privacy" onClick={() => setDrawerOpen(false)} className="hover:text-white transition-colors">
                     Privacy Policy

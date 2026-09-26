@@ -20,6 +20,7 @@ import OncologyProductDetail from './pages/OncologyProductDetail';
 import ProductOneFlexo from './pages/ProductOneFlexo';
 import News from './pages/News';
 import Contact from './pages/Contact';
+import DistributionPartnerships from './pages/DistributionPartnerships';
 import Privacy from './pages/Privacy';
 import Disclaimer from './pages/Disclaimer';
 import NotFound from './pages/NotFound';
@@ -117,6 +118,8 @@ function AppRoutes() {
           <Route path="/areas-of-care/:slug" element={<AreaOfCareDetail />} />
           <Route path="/areas-of-care/orthopaedics/oneflexo" element={<ProductOneFlexo />} />
           <Route path="/news" element={<News />} />
+          <Route path="/partnerships" element={<DistributionPartnerships />} />
+          <Route path="/distribution-partnerships" element={<DistributionPartnerships />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/disclaimer" element={<Disclaimer />} />

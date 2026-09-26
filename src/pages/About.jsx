@@ -129,10 +129,6 @@ export default function About() {
         <div className="max-w-7xl mx-auto space-y-12">
           
           <div className="max-w-4xl space-y-6">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-              {heroSec.eyebrow || 'ABOUT ONECORE'}
-            </span>
-
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-[#121212] tracking-tight leading-[1.05]">
               Built around clinical reality. <br />
               <span className="italic font-normal text-[#D52B1E]">Guided by patient trust.</span>
@@ -150,10 +146,6 @@ export default function About() {
               alt="Onecore Pharma formulation and manufacturing facility"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute bottom-4 left-6 sm:bottom-6 sm:left-8 text-white text-xs tracking-wider uppercase font-mono">
-              Manufacturing & Laboratory Analytics Network
-            </div>
           </div>
 
         </div>
@@ -166,9 +158,6 @@ export default function About() {
       <section className="py-16 sm:py-24 px-4 sm:px-8 max-w-7xl mx-auto">
         <div className="space-y-8">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-              Our Core Conviction
-            </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-light text-[#121212] tracking-tight">
               Vision & Mission
             </h2>
@@ -200,9 +189,6 @@ export default function About() {
             
             <div className="space-y-8">
               <ScrollReveal>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                  {foundationSec.eyebrow || 'OUR FOUNDATION'}
-                </span>
                 <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-[#121212] tracking-tight leading-tight">
                   {foundationSec.title || 'Our Foundation & Vision'}
                 </h2>
@@ -281,9 +267,6 @@ export default function About() {
             
             <div className="lg:col-span-7 space-y-4">
               <ScrollReveal>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                  {principlesSec.eyebrow || 'FOUNDATIONAL PRINCIPLES'}
-                </span>
                 <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight text-balance">
                   Principles guiding <br className="hidden sm:inline" />every decision.
                 </h2>
@@ -357,9 +340,6 @@ export default function About() {
 
               <div className="lg:col-span-7 space-y-4 order-1 lg:order-2">
                 <ScrollReveal>
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                    {commitmentsSec.eyebrow || 'OUR COMMITMENTS'}
-                  </span>
                   <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight text-balance">
                     Disciplined science, <br className="hidden sm:inline" />human focus.
                   </h2>
@@ -376,9 +356,6 @@ export default function About() {
                 <ScrollReveal key={item.title || idx} delay={idx * 0.08}>
                   <div className="p-8 sm:p-10 rounded-3xl bg-[#FAF9F6] border border-[#E5E3DC] space-y-3 h-full flex flex-col justify-between">
                     <div className="space-y-2">
-                      <span className="text-xs font-mono text-[#777777] font-semibold uppercase tracking-wider block">
-                        COMMITMENT // 0{idx + 1}
-                      </span>
                       <h4 className="text-xl font-serif font-medium text-[#121212] tracking-tight">
                         {item.title}
                       </h4>

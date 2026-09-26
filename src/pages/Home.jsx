@@ -24,26 +24,26 @@ export default function Home() {
 
   // 100% AUTHENTIC ONECORE CONTENT PRESERVED FROM CMS & STATIC DATABASE
   const heroSec = getSection('hero', {
-    title: 'Committed to better tomorrow',
-    image_url: '/assets/hero-healthcare.jpg',
+    title: 'Prescribing a better tomorrow',
+    image_url: '/assets/internet/doctors-walking-corridor.jpg',
   });
 
   const aboutSec = getSection('about_onecore', {
-    eyebrow: 'ABOUT ONECORE',
+    eyebrow: '',
     title: 'Healthcare is personal. \nOur approach should be too.',
     body: 'Onecore Pharma is a pharmaceutical company focused on purposeful formulations, dependable quality and the needs of patients and healthcare professionals.',
     cta_text: 'Discover Onecore',
     cta_url: '/about',
-    image_url: '/assets/about-facility.jpg',
+    image_url: '/assets/internet/healthcare-team-discussion.jpg',
   });
 
   const areasSec = getSection('areas_of_care', {
-    eyebrow: 'AREAS OF CARE',
-    title: 'Focused expertise. \nPurposeful healthcare.',
+    eyebrow: '',
+    title: 'Areas of Care',
   });
 
   const purposeSec = getSection('our_purpose', {
-    eyebrow: 'OUR PURPOSE',
+    eyebrow: '',
     title: 'Improve care through medicines and healthcare solutions that matter.',
     items: [
       {
@@ -58,11 +58,11 @@ export default function Home() {
   });
 
   const qualitySec = getSection('quality_assurance', {
-    eyebrow: 'QUALITY ASSURANCE',
+    eyebrow: '',
     title: 'Quality is part of the product from the beginning.',
     body: 'Medicines carry responsibility. That is why quality needs to be considered across manufacturing, testing, review and release, not treated as a final checkpoint.',
     subheading: 'Our approach is centered on qualified manufacturing environments, appropriate quality controls and disciplined review before products reach the market.',
-    image_url: '/assets/quality.jpg',
+    image_url: '/assets/internet/lab-chemistry.jpg',
     items: [
       {
         title: 'Consistent standards',
@@ -76,22 +76,22 @@ export default function Home() {
   });
 
   const sustainabilitySec = getSection('sustainability', {
-    eyebrow: 'SUSTAINABILITY',
+    eyebrow: '',
     title: 'Better health and a healthier future belong together.',
     body: 'Our responsibility extends beyond the products we provide. As Onecore grows, we want responsible choices to become part of how we operate, how we source and how we work with our partners.',
     items: [
       {
-        eyebrow: 'RESPONSIBLE OPERATIONS',
+        eyebrow: '',
         title: 'Use resources thoughtfully.',
         desc: 'Work toward more efficient use of energy, water and materials across the operations and manufacturing network that support our products.',
       },
       {
-        eyebrow: 'PACKAGING',
+        eyebrow: '',
         title: 'Reduce what is unnecessary.',
         desc: 'Evaluate packaging choices with the aim of reducing avoidable material use while protecting product quality, safety and stability.',
       },
       {
-        eyebrow: 'RESPONSIBLE PARTNERSHIPS',
+        eyebrow: '',
         title: 'Grow with shared standards.',
         desc: 'Build relationships with partners who share expectations around quality, compliance, ethical conduct and environmental responsibility.',
       }
@@ -99,7 +99,7 @@ export default function Home() {
   });
 
   const lookingAheadSec = getSection('looking_ahead', {
-    eyebrow: 'LOOKING AHEAD',
+    eyebrow: '',
     title: 'Building depth. \nExpanding thoughtfully.',
     body: 'Our roadmap prioritizes therapeutic rigor, medical dialogue, and disciplined expansion that preserves trust.',
     items: [
@@ -123,7 +123,7 @@ export default function Home() {
   });
 
   const newsSec = getSection('news_preview', {
-    eyebrow: 'LATEST FROM ONECORE',
+    eyebrow: '',
     title: 'News & perspectives.',
   });
 
@@ -170,7 +170,7 @@ export default function Home() {
           <div className="absolute inset-0 z-0">
             <img
               src={assetUrl(heroSec.image_url || '/assets/hero-healthcare.jpg')}
-              alt="Onecore Pharma — Committed to better tomorrow"
+              alt="Onecore Pharma — Prescribing a better tomorrow"
               className="w-full h-full object-cover object-center opacity-85 brightness-90"
               loading="eager"
             />
@@ -183,7 +183,7 @@ export default function Home() {
           <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
             <ScrollReveal>
               <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-white tracking-tightest leading-[1.04] max-w-4xl">
-                {heroSec.title || 'Committed to better tomorrow'}
+                {heroSec.title || 'Prescribing a better tomorrow'}
               </h1>
             </ScrollReveal>
 
@@ -225,9 +225,6 @@ export default function Home() {
             {/* Editorial Title with Italicized Punchline */}
             <div className="max-w-4xl mx-auto text-center space-y-6">
               <ScrollReveal>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
-                  {aboutSec.eyebrow || 'ABOUT ONECORE'}
-                </span>
                 <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.12] pt-2 text-balance">
                   Healthcare is personal. <br className="hidden sm:inline" /><em className="lilly-serif-italic font-normal text-[#121212]">Our approach should be too.</em>
                 </h2>
@@ -318,23 +315,15 @@ export default function Home() {
           ========================================================================= */}
       {areasSec.is_active && (
         <section className="py-20 sm:py-28 bg-[#FAF9F6] border-y border-[#E5E7EB]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
 
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-              <div className="max-w-4xl space-y-4">
-                <ScrollReveal>
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
-                    {areasSec.eyebrow || 'AREAS OF CARE'}
-                  </span>
-                  <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight text-balance">
-                    Focused expertise. <br className="hidden sm:inline" />Purposeful healthcare.
-                  </h2>
-                  <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed pt-2 max-w-2xl text-pretty">
-                    Discover the 9 specialized divisions that make up the Onecore portfolio, each dedicated to therapeutic depth, medical dialogue, and clinical outcomes.
-                  </p>
-                </ScrollReveal>
-              </div>
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+              <ScrollReveal>
+                <h2 className="lilly-serif text-4xl sm:text-6xl lg:text-7xl text-[#121212] tracking-tight leading-tight">
+                  Areas of Care
+                </h2>
+              </ScrollReveal>
 
               {/* Circular Carousel Controls */}
               <div className="flex items-center gap-3">
@@ -380,15 +369,12 @@ export default function Home() {
                     {/* Gradient Mask for High Contrast */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
 
-                    {/* Card Content Overlay (Clean text, no artificial chips) */}
-                    <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-between text-white">
-                      <div>
-                        <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white/75 block">
+                    {/* Card Content Overlay (Clean bottom alignment, no top chip) */}
+                    <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end text-white">
+                      <div className="space-y-1.5">
+                        <span className="text-xs font-bold uppercase tracking-wider text-red-300">
                           {item.name}
                         </span>
-                      </div>
-
-                      <div className="space-y-2">
                         <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-snug">
                           {item.specialty}
                         </h3>
@@ -464,15 +450,11 @@ export default function Home() {
                 <ScrollReveal delay={0.15}>
                   <div className="relative rounded-3xl overflow-hidden border border-stone-200 shadow-sm aspect-[16/10] bg-[#FAF9F6]">
                     <img
-                      src={assetUrl('/assets/about-facility.jpg')}
-                      alt="Onecore Pharma laboratory manufacturing facility"
+                      src={assetUrl(aboutSec.image_url || '/assets/internet/healthcare-team-discussion.jpg')}
+                      alt="Onecore Pharma healthcare professionals and clinical dialogue"
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                    <div className="absolute bottom-4 left-6 text-white text-xs tracking-wider uppercase font-mono">
-                      Analytical Testing & Facility Network
-                    </div>
                   </div>
                 </ScrollReveal>
               </div>
@@ -503,81 +485,71 @@ export default function Home() {
       )}
 
       {/* =========================================================================
-          SECTION 5 — QUALITY ASSURANCE (DEEP DARK GRAPHITE CANVAS)
-          Clean photographic frame, disciplined typography, no faux sci-fi widgets
+          SECTION 5 — QUALITY ASSURANCE (FULL-BLEED PHOTOGRAPHIC OVERLAY)
+          Full-page sized authentic imagery with dignified typography overlay
           ========================================================================= */}
       {qualitySec.is_active && (
-        <section className="py-24 sm:py-32 bg-[#0F1115] text-white relative overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <section className="relative min-h-[640px] sm:min-h-[720px] flex items-center py-20 sm:py-28 text-white overflow-hidden">
+          {/* Full-bleed background imagery */}
+          <div className="absolute inset-0 z-0">
+            <img
+              src={assetUrl(qualitySec.image_url || '/assets/quality.jpg')}
+              alt="Onecore Pharma quality assurance and laboratory testing"
+              className="w-full h-full object-cover object-center brightness-50"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/35" />
+          </div>
 
-              {/* Left Content */}
-              <div className="lg:col-span-7 space-y-8">
-                <ScrollReveal>
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                    {qualitySec.eyebrow || 'QUALITY ASSURANCE'}
-                  </span>
-                  <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight pt-2 text-balance">
-                    Quality is part of the product <br className="hidden sm:inline" />from the beginning.
-                  </h2>
-                </ScrollReveal>
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="max-w-3xl space-y-8">
+              <ScrollReveal>
+                <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight text-balance">
+                  Quality is part of the product <br className="hidden sm:inline" />from the beginning.
+                </h2>
+              </ScrollReveal>
 
-                <ScrollReveal delay={0.1}>
-                  <div className="space-y-4 text-stone-300 text-base sm:text-lg leading-relaxed">
-                    <p>
-                      {qualitySec.body || 'Medicines carry responsibility. That is why quality needs to be considered across manufacturing, testing, review and release, not treated as a final checkpoint.'}
+              <ScrollReveal delay={0.1}>
+                <div className="space-y-4 text-stone-200 text-base sm:text-lg leading-relaxed">
+                  <p>
+                    {qualitySec.body || 'Medicines carry responsibility. That is why quality needs to be considered across manufacturing, testing, review and release, not treated as a final checkpoint.'}
+                  </p>
+                  {qualitySec.subheading && (
+                    <p className="text-sm sm:text-base text-stone-300">
+                      {qualitySec.subheading}
                     </p>
-                    {qualitySec.subheading && (
-                      <p className="text-sm sm:text-base text-stone-400">
-                        {qualitySec.subheading}
-                      </p>
-                    )}
-                  </div>
-                </ScrollReveal>
+                  )}
+                </div>
+              </ScrollReveal>
 
-                {/* Principles */}
-                <ScrollReveal delay={0.15}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-white/15">
-                    {qualitySec.items.map((principle, idx) => (
-                      <div key={principle.title || idx} className="space-y-2">
-                        <div className="flex items-center gap-2 text-white font-semibold">
-                          <CheckCircle2 className="w-4 h-4 text-[#D52B1E]" />
-                          <span>{principle.title}</span>
-                        </div>
-                        <p className="text-xs sm:text-sm text-stone-400 leading-relaxed">
-                          {principle.desc || principle.description || principle.text}
-                        </p>
+              {/* Principles */}
+              <ScrollReveal delay={0.15}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-white/20">
+                  {qualitySec.items.map((principle, idx) => (
+                    <div key={principle.title || idx} className="space-y-2">
+                      <div className="flex items-center gap-2 text-white font-semibold">
+                        <CheckCircle2 className="w-4 h-4 text-[#D52B1E]" />
+                        <span>{principle.title}</span>
                       </div>
-                    ))}
-                  </div>
-                </ScrollReveal>
+                      <p className="text-xs sm:text-sm text-stone-300 leading-relaxed">
+                        {principle.desc || principle.description || principle.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </ScrollReveal>
 
-                <ScrollReveal delay={0.2}>
-                  <div className="pt-2">
-                    <Link
-                      to="/quality-manufacturing"
-                      className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-bold uppercase tracking-wider rounded-full transition-colors"
-                    >
-                      <span>Explore Manufacturing & QA</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </div>
-                </ScrollReveal>
-              </div>
-
-              {/* Right Visual Image (Clean photographic frame, no fake badges) */}
-              <div className="lg:col-span-5">
-                <ScrollReveal delay={0.2} direction="left">
-                  <div className="relative rounded-3xl overflow-hidden border border-white/15 shadow-2xl">
-                    <img
-                      src={assetUrl(qualitySec.image_url || '/assets/quality.jpg')}
-                      alt="Onecore Pharma quality assurance and laboratory testing"
-                      className="w-full aspect-[4/3] object-cover"
-                    />
-                  </div>
-                </ScrollReveal>
-              </div>
-
+              <ScrollReveal delay={0.2}>
+                <div className="pt-2">
+                  <Link
+                    to="/areas-of-care"
+                    className="inline-flex items-center gap-2 px-8 py-4 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-bold uppercase tracking-wider rounded-full transition-colors shadow-lg"
+                  >
+                    <span>Explore Areas of Care</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </ScrollReveal>
             </div>
           </div>
         </section>
@@ -594,9 +566,6 @@ export default function Home() {
             {/* Header */}
             <div className="max-w-3xl space-y-4">
               <ScrollReveal>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
-                  {sustainabilitySec.eyebrow || 'SUSTAINABILITY'}
-                </span>
                 <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight text-balance">
                   Better health and a healthier future <br className="hidden sm:inline" />belong together.
                 </h2>
@@ -611,11 +580,6 @@ export default function Home() {
               {sustainabilitySec.items.map((col, idx) => (
                 <ScrollReveal key={col.title || idx} delay={0.05 + idx * 0.05}>
                   <div className="p-8 sm:p-10 rounded-3xl bg-white border border-stone-200/80 shadow-sm flex flex-col h-full space-y-4 group">
-                    {col.eyebrow && (
-                      <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#D52B1E] block">
-                        {col.eyebrow}
-                      </span>
-                    )}
                     <h3 className="text-xl sm:text-2xl font-bold text-[#121212] tracking-tight">
                       {col.title}
                     </h3>
@@ -650,9 +614,6 @@ export default function Home() {
             {/* Left Header */}
             <div className="lg:col-span-5 space-y-6">
               <ScrollReveal>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
-                  {lookingAheadSec.eyebrow || 'LOOKING AHEAD'}
-                </span>
                 <h2 className="lilly-serif text-3xl sm:text-5xl text-[#121212] tracking-tight leading-tight whitespace-pre-line pt-2">
                   {lookingAheadSec.title || 'Building depth. \nExpanding thoughtfully.'}
                 </h2>
@@ -694,9 +655,6 @@ export default function Home() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
               <ScrollReveal>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
-                  {newsSec.eyebrow || 'LATEST FROM ONECORE'}
-                </span>
                 <h2 className="lilly-serif text-3xl sm:text-5xl text-[#121212] tracking-tight leading-tight pt-2">
                   {newsSec.title || 'News & perspectives.'}
                 </h2>

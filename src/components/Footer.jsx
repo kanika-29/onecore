@@ -41,8 +41,8 @@ export default function Footer() {
   const company = [
     { name: 'About Onecore', path: '/about' },
     { name: 'Our Purpose & Vision', path: '/#purpose' },
+    { name: 'Distribution & Franchise Partnerships', path: '/partnerships' },
     { name: 'News & Perspectives', path: '/news' },
-    { name: 'Careers & Partnerships', path: '/contact' },
     { name: 'Contact Us', path: '/contact' },
   ];
 
@@ -56,11 +56,13 @@ export default function Footer() {
           {/* Brand Stature Block */}
           <div className="lg:col-span-4 space-y-4">
             <Link to="/" className="inline-block group focus:outline-none" aria-label="Onecore Pharma">
-              <span className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-white block">
-                Onecore
-              </span>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/80 block pt-1">
-                A MEDICINE COMPANY
+              <img
+                src={assetUrl(siteSettings.logo_url || '/assets/onecore-logo.png')}
+                alt="Onecore Pharma"
+                className="h-9 sm:h-10 w-auto object-contain brightness-0 invert"
+              />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/90 block pt-2">
+                PRESCRIBING A BETTER TOMORROW
               </span>
             </Link>
 

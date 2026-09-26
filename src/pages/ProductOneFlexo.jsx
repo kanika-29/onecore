@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, ArrowDown } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
+import PrescriptionDisclaimer from '../components/PrescriptionDisclaimer';
 import { useProduct } from '../hooks/useProduct';
 import { assetUrl } from '../utils/assetUrl';
 
@@ -438,6 +439,9 @@ export default function ProductOneFlexo() {
           ))}
         </div>
       </section>
+
+      {/* Mandatory Prescription Disclaimer */}
+      <PrescriptionDisclaimer />
 
       {/* 9. Final Stately CTA */}
       <section className="py-20 sm:py-24 bg-[#121212] text-white text-center">

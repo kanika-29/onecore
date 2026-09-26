@@ -116,10 +116,6 @@ export default function QualityManufacturing() {
         <div className="max-w-7xl mx-auto space-y-12">
           
           <div className="max-w-4xl space-y-6">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-              {heroSec.eyebrow || 'QUALITY & MANUFACTURING'}
-            </span>
-
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-[#121212] tracking-tight leading-[1.05]">
               Quality is part of the product <br />
               <span className="italic font-normal text-[#D52B1E]">from the beginning.</span>
@@ -139,10 +135,10 @@ export default function QualityManufacturing() {
               </a>
 
               <Link
-                to={heroSec.secondary_cta_url || '/areas-of-care'}
+                to="/areas-of-care"
                 className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#FAF9F6] hover:bg-[#EBE9E1] text-[#121212] text-xs font-semibold rounded-full transition-colors border border-[#E5E3DC]"
               >
-                <span>{heroSec.secondary_cta_text || 'Explore Formulations'}</span>
+                <span>Explore Formulations</span>
               </Link>
             </div>
           </div>
@@ -154,10 +150,6 @@ export default function QualityManufacturing() {
               alt="Quality assurance laboratory testing and analytical verification"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-            <div className="absolute bottom-4 left-6 sm:bottom-6 sm:left-8 text-white text-xs tracking-wider uppercase font-mono">
-              Analytical Testing & Stability Monitoring Facility
-            </div>
           </div>
 
         </div>
@@ -170,9 +162,6 @@ export default function QualityManufacturing() {
         <section id="principles" className="py-20 sm:py-28 px-4 sm:px-8 max-w-7xl mx-auto space-y-14">
           <div className="max-w-3xl space-y-3">
             <ScrollReveal>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                {principlesSec.eyebrow || 'FOUNDATIONAL PRINCIPLES'}
-              </span>
               <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
                 {principlesSec.title || 'Principles that guide our quality approach.'}
               </h2>
@@ -205,32 +194,32 @@ export default function QualityManufacturing() {
       )}
 
       {/* =========================================================================
-          SECTION 3 — MANUFACTURING DISCIPLINES
+          SECTION 3 — MANUFACTURING DISCIPLINES & EMBEDDED VIDEO
+          Client-provided manufacturing process video embed
           ========================================================================= */}
       {manufacturingSec.is_active && (
         <section className="py-20 sm:py-28 bg-white border-y border-[#E5E3DC] px-4 sm:px-8">
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto space-y-12">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
               
-              {/* Left Visual */}
-              <div className="lg:col-span-6 order-2 lg:order-1">
+              {/* Left Video Embed */}
+              <div className="lg:col-span-7 order-2 lg:order-1">
                 <ScrollReveal delay={0.1}>
-                  <div className="relative rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[4/3] bg-[#FAF9F6]">
-                    <img
-                      src={assetUrl(manufacturingSec.image_url || '/assets/hero-healthcare.jpg')}
-                      alt="Precision pharmaceutical manufacturing cleanroom"
-                      className="w-full h-full object-cover"
+                  <div className="relative rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-lg aspect-video bg-black">
+                    <iframe
+                      src="https://www.youtube-nocookie.com/embed/ZPH-TVw0t6Y?rel=0&modestbranding=1"
+                      title="Onecore Pharma Manufacturing & Facility Operations"
+                      className="w-full h-full border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
                     />
                   </div>
                 </ScrollReveal>
               </div>
 
               {/* Right Content */}
-              <div className="lg:col-span-6 order-1 lg:order-2 space-y-6">
+              <div className="lg:col-span-5 order-1 lg:order-2 space-y-6">
                 <ScrollReveal>
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                    {manufacturingSec.eyebrow || 'MANUFACTURING DISCIPLINES'}
-                  </span>
                   <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
                     {manufacturingSec.title || 'Manufacturing with discipline and control.'}
                   </h2>
@@ -271,9 +260,6 @@ export default function QualityManufacturing() {
         <section className="py-20 sm:py-28 px-4 sm:px-8 max-w-7xl mx-auto space-y-14">
           <div className="max-w-3xl space-y-3">
             <ScrollReveal>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                {assuranceSec.eyebrow || 'QUALITY ASSURANCE'}
-              </span>
               <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
                 {assuranceSec.title || 'Controls throughout the lifecycle.'}
               </h2>
@@ -306,7 +292,7 @@ export default function QualityManufacturing() {
       )}
 
       {/* =========================================================================
-          SECTION 5 — FINAL CTA (Signature Lilly Dark Onyx)
+          SECTION 5 — FINAL CTA
           ========================================================================= */}
       {finalCtaSec.is_active && (
         <section className="py-20 sm:py-28 bg-[#121212] text-white">
@@ -315,9 +301,6 @@ export default function QualityManufacturing() {
               
               <div className="lg:col-span-8 space-y-4">
                 <ScrollReveal>
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                    Portfolio & Standards
-                  </span>
                   <h2 className="text-3xl sm:text-5xl font-serif font-light text-white tracking-tight leading-tight">
                     {finalCtaSec.title || 'Quality you can depend on.'}
                   </h2>
@@ -330,20 +313,12 @@ export default function QualityManufacturing() {
               <div className="lg:col-span-4 flex flex-wrap lg:justify-end gap-4">
                 <ScrollReveal delay={0.1}>
                   <Link
-                    to={finalCtaSec.cta_url || '/areas-of-care'}
+                    to="/areas-of-care"
                     className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-colors shadow-xs cursor-pointer"
                   >
-                    <span>{finalCtaSec.cta_text || 'Explore Areas of Care'}</span>
+                    <span>Explore Areas of Care</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
-                  {finalCtaSec.secondary_cta_text && (
-                    <Link
-                      to={finalCtaSec.secondary_cta_url || '/contact'}
-                      className="inline-flex items-center gap-2 px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-full transition-colors border border-white/15 cursor-pointer"
-                    >
-                      <span>{finalCtaSec.secondary_cta_text}</span>
-                    </Link>
-                  )}
                 </ScrollReveal>
               </div>
 
