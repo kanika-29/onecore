@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import FallbackImage from '../components/FallbackImage';
+import EnlargedSymbolExperience from '../components/EnlargedSymbolExperience';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { useTherapeuticAreas } from '../hooks/useTherapeuticAreas';
 import { useNews } from '../hooks/useNews';
@@ -209,6 +210,12 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      {/* =========================================================================
+          SECTION 1.5 — ENLARGED ONECORE SYMBOL EXPERIENCE
+          Scroll-driven interactive visual portal revealing authentic healthcare imagery
+          ========================================================================= */}
+      <EnlargedSymbolExperience />
 
       {/* =========================================================================
           SECTION 2 — ABOUT ONECORE (EDITORIAL STATEMENT & 3 PILLARS)
