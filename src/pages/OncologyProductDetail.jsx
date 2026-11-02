@@ -405,12 +405,7 @@ export default function OncologyProductDetail() {
       {/* SECTION: MECHANISM OF ACTION */}
       <section id="mechanism" className="bg-[#232126] text-white py-20 px-6 sm:px-16 scroll-mt-24">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-          <div className="lg:col-span-3">
-            <span className="text-xs uppercase tracking-[0.2em] font-mono text-[#D52B1E] font-bold block">
-              Mechanism of Action
-            </span>
-          </div>
-          <div className="lg:col-span-9 space-y-8">
+          <div className="lg:col-span-12 space-y-8">
             <h2 className="font-serif text-4xl sm:text-5xl font-normal leading-tight max-w-3xl">
               How the formula operates in the body.
             </h2>
@@ -436,7 +431,7 @@ export default function OncologyProductDetail() {
       </section>
 
       {/* SECTION: THERAPEUTIC INDICATIONS */}
-      <section id="indications" className="py-16 sm:py-24 px-6 sm:px-12 lg:px-20 bg-white scroll-mt-24">
+      <section id="indications" className="pt-16 sm:pt-20 pb-0 px-6 sm:px-12 lg:px-20 bg-white scroll-mt-24">
         <div className="max-w-6xl mx-auto">
           <div className="text-[11px] tracking-[0.2em] uppercase font-bold text-[#1f4e5b] mb-3">
             Therapeutic Indications
@@ -459,39 +454,11 @@ export default function OncologyProductDetail() {
             </p>
           )}
 
-          {/* In-section exploration links */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-[#e5e3dc] mt-6">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
-              <span className="text-xs text-[#736c74] font-medium shrink-0">Explore Details:</span>
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-                <button
-                  type="button"
-                  onClick={() => scrollToSection('mechanism')}
-                  className="text-xs font-semibold px-4 py-2 sm:py-1.5 rounded-full bg-[#FAF9F6] text-[#232126] border border-[#d4cfc9] hover:border-[#D52B1E] transition-all cursor-pointer shadow-2xs text-center"
-                >
-                  Mechanism of Action →
-                </button>
-                <button
-                  type="button"
-                  onClick={() => scrollToSection('directions')}
-                  className="text-xs font-semibold px-4 py-2 sm:py-1.5 rounded-full bg-[#FAF9F6] text-[#232126] border border-[#d4cfc9] hover:border-[#D52B1E] transition-all cursor-pointer shadow-2xs text-center"
-                >
-                  Administration & Dosage →
-                </button>
-              </div>
-            </div>
-            <Link
-              to={listingRoute}
-              className="text-xs font-semibold text-[#736c74] hover:text-[#232126] underline transition-all self-start sm:self-auto sm:ml-auto"
-            >
-              All Oncology Formulations
-            </Link>
-          </div>
         </div>
       </section>
 
       {/* SECTION: ADMINISTRATION & DOSAGE */}
-      <section id="directions" className="bg-white text-[#232126] py-20 px-6 sm:px-16 scroll-mt-24">
+      <section id="directions" className="bg-white text-[#232126] pt-14 sm:pt-16 pb-16 sm:pb-20 px-6 sm:px-16 scroll-mt-24">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           <div className="lg:col-span-3" />
           <div className="lg:col-span-9 space-y-8">

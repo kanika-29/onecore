@@ -10,8 +10,6 @@ export default function Footer() {
   const location = useLocation();
   const { siteSettings } = useSettings();
 
-  const currentYear = new Date().getFullYear();
-  const copyright = siteSettings.copyright_text || `© ${currentYear} Onecore Pharma Pvt. Ltd. All rights reserved.`;
 
   const areasOfCare = [
     { name: 'Oncology (CYTOS)', path: '/areas-of-care' },
@@ -180,31 +178,26 @@ export default function Footer() {
 
         {/* Regulatory Code, Legal & Disclaimers */}
         <div className="pt-5 space-y-3 text-xs text-white font-semibold">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <p className="font-mono text-[11px] tracking-wider text-white font-bold">
-              CMAT-IN-0104/2026 {copyright}
-            </p>
-            <div className="flex flex-wrap items-center gap-5 text-xs text-white font-semibold">
-              <Link to="/privacy" className="hover:text-white hover:underline underline-offset-4 transition-colors">
-                Privacy Statement
-              </Link>
-              <Link to="/disclaimer" className="hover:text-white hover:underline underline-offset-4 transition-colors">
-                Terms of Use
-              </Link>
-              <Link to="/contact" className="hover:text-white hover:underline underline-offset-4 transition-colors">
-                Accessibility
-              </Link>
-              <Link to="/contact" className="hover:text-white hover:underline underline-offset-4 transition-colors">
-                Contact & Regulatory
-              </Link>
-              <button
-                type="button"
-                onClick={() => openCookiePreferences()}
-                className="hover:text-white hover:underline underline-offset-4 transition-colors cursor-pointer text-left"
-              >
-                Cookie Preferences
-              </button>
-            </div>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-white font-semibold">
+            <Link to="/privacy" className="hover:text-white hover:underline underline-offset-4 transition-colors">
+              Privacy Statement
+            </Link>
+            <Link to="/disclaimer" className="hover:text-white hover:underline underline-offset-4 transition-colors">
+              Terms of Use
+            </Link>
+            <Link to="/contact" className="hover:text-white hover:underline underline-offset-4 transition-colors">
+              Accessibility
+            </Link>
+            <Link to="/contact" className="hover:text-white hover:underline underline-offset-4 transition-colors">
+              Contact & Regulatory
+            </Link>
+            <button
+              type="button"
+              onClick={() => openCookiePreferences()}
+              className="hover:text-white hover:underline underline-offset-4 transition-colors cursor-pointer text-left"
+            >
+              Cookie Preferences
+            </button>
           </div>
 
           <p className="text-[11px] leading-relaxed text-white/85 font-semibold max-w-4xl pt-1">
