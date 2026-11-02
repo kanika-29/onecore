@@ -2,15 +2,17 @@ import { useState, useEffect } from 'react';
 import { newsArticles as fallbackNews } from '../data/news';
 
 export function useNews() {
-  const [articles, setArticles] = useState(fallbackNews);
+  const [articles, setArticles] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
+    setLoading(true);
 
     const fetchNews = async () => {
       try {
-        const res = await fetch('/api/news');
+        const res = await fetch('/api/news', { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const result = await res.json();
 
@@ -29,9 +31,15 @@ export function useNews() {
           }));
 
           setArticles(normalized);
+          setIsError(false);
+        } else {
+          throw new Error('No news items found');
         }
       } catch {
-        // Fallback intact
+        if (isMounted) {
+          setArticles(fallbackNews);
+          setIsError(true);
+        }
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -44,5 +52,5 @@ export function useNews() {
     };
   }, []);
 
-  return { articles, loading };
+  return { articles, loading, isError };
 }

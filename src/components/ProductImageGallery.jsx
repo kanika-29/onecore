@@ -9,7 +9,7 @@ import { assetUrl } from '../utils/assetUrl';
  */
 export default function ProductImageGallery({
   images = [],
-  fallbackImage = '/assets/therapeutic-orthopaedics.jpg',
+  fallbackImage = '',
   brandName = 'Product',
   className = '',
 }) {
@@ -46,15 +46,19 @@ export default function ProductImageGallery({
   };
 
   return (
-    <div className={`flex flex-col items-center w-full ${className}`}>
+    <div className={`flex flex-col items-center justify-center w-full h-full absolute inset-0`}>
       {/* Main Active Image Display */}
-      <div className="relative w-full max-w-[380px] aspect-square bg-[#FAF9F6] border border-[#E5E3DC] rounded-3xl p-6 flex items-center justify-center shadow-xs overflow-hidden group">
+      <div className="relative w-full flex-1 flex items-center justify-center overflow-hidden group p-6 lg:p-12">
         <img
           src={assetUrl(activeImage.image_url)}
           alt={activeImage.alt_text || `${brandName} - Onecore Pharma`}
-          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 mix-blend-multiply drop-shadow-2xl"
           onError={(e) => {
-            e.target.src = assetUrl(fallbackImage);
+            if (fallbackImage && e.target.src !== assetUrl(fallbackImage)) {
+              e.target.src = assetUrl(fallbackImage);
+            } else {
+              e.target.style.display = 'none';
+            }
           }}
         />
 
@@ -100,7 +104,7 @@ export default function ProductImageGallery({
 
       {/* Multiple Photos Thumbnails Strip */}
       {imageList.length > 1 && (
-        <div className="flex items-center gap-2.5 mt-4 overflow-x-auto max-w-full pb-2 scrollbar-none justify-center">
+        <div className="flex items-center gap-2.5 overflow-x-auto max-w-full pb-6 lg:pb-12 scrollbar-none justify-center z-10">
           {imageList.map((img, idx) => {
             const isSelected = idx === activeIndex;
             return (

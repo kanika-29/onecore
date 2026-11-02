@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, Clock, ArrowRight, ArrowDown, CheckCircle2, ArrowUpRight } from 'lucide-react';
+import { Mail, Phone, Clock, ArrowRight, ArrowDown, CheckCircle2, ArrowUpRight, MapPin } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
+import HeroResponsiveImage from '../components/HeroResponsiveImage';
+import PageSkeleton from '../components/PageSkeleton';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { useSettings } from '../hooks/useSettings';
 import { assetUrl } from '../utils/assetUrl';
 
 export default function Contact() {
-  const { getSection } = useCmsPage('contact');
+  const { getSection, loading: cmsLoading, isError: cmsError } = useCmsPage('contact');
   const { contact } = useSettings();
 
   useEffect(() => {
@@ -32,48 +34,79 @@ export default function Contact() {
     }
   };
 
-  const displayEmail = contact?.general_email || contact?.email || 'info@onecorepharma.in';
-  const displayPhone = contact?.phone || '8169255034';
-  const displayHours = contact?.office_hours || contact?.business_hours || '10 AM - 7 PM';
-
-  const heroSec = getSection('hero', {
-    eyebrow: 'CONTACT ONECORE',
-    title: 'Contact',
+  const heroSec = getSection('contact_hero', getSection('hero', {
+    eyebrow: 'CONNECT WITH US',
+    title: 'Get in Touch with Onecore Pharma',
+    heading: 'Get in Touch with Onecore Pharma',
     body: 'Whether you are looking for product information, exploring a business opportunity or simply want to reach our team, we will help direct your enquiry to the appropriate place.',
     cta_text: 'Send an Enquiry',
     cta_url: '#enquiry-form',
     secondary_cta_text: 'Contact Details',
     secondary_cta_url: '#contact-details',
-  });
+    image_url: '/assets/internet/contact-direct-helpline.jpg',
+  }));
 
-  const channelsSec = getSection('direct_channels', {
+  const channelsSec = getSection('contact_info_cards', getSection('direct_channels', {
     eyebrow: 'GET IN TOUCH',
-    title: 'Direct Channels',
-    subheading: 'We’d love to hear from you. Whether you’re a healthcare professional interested in our products or a patient seeking more information, reach out to us',
-    items: [
-      {
-        channel: 'EMAIL',
-        value: displayEmail,
-        desc: 'For general company, medical affairs, and product related enquiries.',
-        cta_text: 'Write to info desk',
-        cta_url: `mailto:${displayEmail}`
-      },
-      {
-        channel: 'PHONE',
-        value: displayPhone,
-        desc: 'Available during regular corporate business hours.',
-        cta_text: 'Call our team',
-        cta_url: `tel:${displayPhone.replace(/[^0-9+]/g, '')}`
-      },
-      {
-        channel: 'BUSINESS HOURS',
-        value: displayHours,
-        desc: 'Dedicated corporate operations & support hours.',
-        cta_text: 'WORKING DAYS // MON – SAT',
-        cta_url: null
-      }
-    ]
-  });
+    title: 'Company Contact Coordinates',
+    heading: 'Company Contact Coordinates',
+    subheading: 'Direct channels and operational hours for healthcare professionals, patients, and partners.',
+    body: 'Onecore Pharma Headquarters, Industrial Area, Hyderabad, India',
+    items: [],
+  }));
+
+  // Parse contact coordinates from MySQL content_json or fallback to settings/defaults
+  const coords = channelsSec.content || (channelsSec.content_json ? (() => {
+    try { return typeof channelsSec.content_json === 'string' ? JSON.parse(channelsSec.content_json) : channelsSec.content_json; }
+    catch { return {}; }
+  })() : {}) || {};
+
+  const displayEmail = coords.support_email || contact?.general_email || contact?.email || 'info@onecorepharma.in';
+  const displayBusinessEmail = coords.business_email || contact?.business_email || 'info@onecorepharma.in';
+  const displayPhone = coords.primary_phone || contact?.phone || '8169255034';
+  const displayHours = coords.working_hours || contact?.office_hours || contact?.business_hours || '10 AM to 7 PM';
+  const displayOffice = coords.registered_office || channelsSec.body || 'Onecore Pharma Headquarters, Industrial Area, Hyderabad, India';
+
+  // Resolved dynamic cards list: use database items if present, otherwise build from coordinates
+  const channelCards = (channelsSec.items && channelsSec.items.length > 0)
+    ? channelsSec.items
+    : [
+        {
+          channel: 'SUPPORT EMAIL',
+          value: displayEmail,
+          desc: 'For general company, medical affairs, and product related enquiries.',
+          cta_text: 'Write to info desk',
+          cta_url: `mailto:${displayEmail}`,
+        },
+        {
+          channel: 'PRIMARY PHONE',
+          value: displayPhone,
+          desc: 'Available during regular corporate business hours.',
+          cta_text: 'Call our team',
+          cta_url: `tel:${displayPhone.replace(/[^0-9+]/g, '')}`,
+        },
+        {
+          channel: 'BUSINESS HOURS',
+          value: displayHours,
+          desc: 'Dedicated corporate operations & support hours.',
+          cta_text: 'WORKING DAYS // MON – SAT',
+          cta_url: null,
+        },
+        {
+          channel: 'BUSINESS EMAIL',
+          value: displayBusinessEmail,
+          desc: 'For institutional distribution, franchise partnerships, and commercial procurement.',
+          cta_text: 'Email business desk',
+          cta_url: `mailto:${displayBusinessEmail}`,
+        },
+        {
+          channel: 'REGISTERED OFFICE',
+          value: displayOffice,
+          desc: 'Registered corporate office and official correspondence location.',
+          cta_text: 'Corporate Office',
+          cta_url: '#contact-details',
+        },
+      ];
 
   const enquiryOptions = [
     { value: 'Product information', label: 'Product information' },
@@ -180,6 +213,7 @@ export default function Contact() {
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   const handleSelectEnquiryType = (val) => {
     setFormData((prev) => ({ ...prev, natureOfEnquiry: val }));
@@ -224,6 +258,7 @@ export default function Contact() {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setSubmitError(null);
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
@@ -231,10 +266,12 @@ export default function Contact() {
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        console.warn('Contact API response not ok, proceeding with graceful feedback:', errorData.message);
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || 'We could not submit your enquiry at this time. Please try again or reach out via phone.');
       }
+
       setIsSubmitted(true);
       setFormData({
         fullName: '',
@@ -247,19 +284,8 @@ export default function Contact() {
         consent: false,
       });
     } catch (err) {
-      console.warn('Contact submission network fallback:', err);
-      // Graceful local submission fallback
-      setIsSubmitted(true);
-      setFormData({
-        fullName: '',
-        email: '',
-        phone: '',
-        organisation: '',
-        contactType: '',
-        natureOfEnquiry: '',
-        message: '',
-        consent: false,
-      });
+      console.error('Contact submission error:', err);
+      setSubmitError(err.message || 'We encountered a connection issue. Please check your network and try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -267,14 +293,21 @@ export default function Contact() {
 
   const renderChannelIcon = (ch, idx) => {
     const upper = (ch || '').toUpperCase();
-    if (upper.includes('EMAIL') || idx === 0) {
+    if (upper.includes('EMAIL')) {
       return <Mail className="w-4 h-4 text-[#888888] group-hover:text-[#D52B1E] transition-colors" />;
     }
-    if (upper.includes('PHONE') || idx === 1) {
+    if (upper.includes('PHONE')) {
       return <Phone className="w-4 h-4 text-[#888888] group-hover:text-[#D52B1E] transition-colors" />;
+    }
+    if (upper.includes('OFFICE') || upper.includes('HEADQUARTERS') || upper.includes('ADDRESS')) {
+      return <MapPin className="w-4 h-4 text-[#888888] group-hover:text-[#D52B1E] transition-colors" />;
     }
     return <Clock className="w-4 h-4 text-[#888888] group-hover:text-[#D52B1E] transition-colors" />;
   };
+
+  if (cmsLoading && !cmsError && !channelsSec.heading) {
+    return <PageSkeleton />;
+  }
 
   return (
     <div className="w-full bg-transparent text-[#121212]">
@@ -284,44 +317,57 @@ export default function Contact() {
           Spacious, dignified, human-scale typography (The Lilly Model)
           ========================================================================= */}
       {heroSec.is_active && (
-        <section className="pt-20 sm:pt-24 pb-10 sm:pb-14 px-4 sm:px-8 border-b border-[#E5E3DC]/80 bg-transparent">
-          <div className="max-w-7xl mx-auto space-y-6">
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-[#121212] tracking-tight leading-[1.05]">
-              {heroSec.title || 'Contact'}. <br />
-              <span className="italic font-normal text-[#D52B1E]">Direct dialogue, dedicated care.</span>
-            </h1>
+        <section className="relative min-h-[90vh] sm:min-h-screen flex items-end pb-16 sm:pb-24 pt-32 px-4 sm:px-8 lg:px-12 bg-black">
+          {/* Hero Background Responsive Photograph */}
+          <div className="absolute inset-0 z-0">
+            <HeroResponsiveImage
+              desktopImage={heroSec.image_url}
+              mobileImage={heroSec.image_mobile_url || heroSec.mobile_image_url}
+              alt="Onecore Pharma medical communication and direct helpline desk"
+              fallback="/assets/internet/contact-direct-helpline.jpg"
+              className="w-full h-full object-cover object-center"
+            />
+            {/* Directional contrast gradient — lessened intensity */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent pointer-events-none" />
+          </div>
 
-            <p className="text-lg sm:text-2xl text-[#555555] font-light leading-relaxed font-sans max-w-3xl">
-              {heroSec.body || 'Whether you are looking for product information, exploring a business opportunity or simply want to reach our team, we will help direct your enquiry to the appropriate place.'}
-            </p>
+          {/* Hero Content Block */}
+          <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
+            <ScrollReveal>
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.04] max-w-4xl">
+                {heroSec.title && heroSec.title !== 'Contact' ? heroSec.title : 'Get in Touch with Onecore Pharma'} <br />
+                <span className="italic font-normal text-[#D52B1E]">Direct dialogue, dedicated care.</span>
+              </h1>
+            </ScrollReveal>
 
-            <div className="pt-4 flex flex-wrap items-center gap-4">
-              <button
-                type="button"
-                onClick={() => scrollToSection(heroSec.cta_url || 'enquiry-form')}
-                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-colors shadow-xs cursor-pointer"
-              >
-                <span>{heroSec.cta_text || 'Send an Enquiry'}</span>
-                <ArrowDown className="w-3.5 h-3.5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollToSection(heroSec.secondary_cta_url || 'contact-details')}
-                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#FAF9F6] hover:bg-[#EBE9E1] text-[#121212] text-xs font-semibold rounded-full transition-colors border border-[#E5E3DC] cursor-pointer"
-              >
-                <span>{heroSec.secondary_cta_text || 'Contact Details'}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
+            <ScrollReveal delay={0.08}>
+              <p className="text-base sm:text-xl lg:text-2xl text-white/90 font-light leading-relaxed font-sans max-w-3xl">
+                {heroSec.body || 'Whether you are looking for product information, exploring a business opportunity or simply want to reach our team, we will help direct your enquiry to the appropriate place.'}
+              </p>
+            </ScrollReveal>
 
-            {/* Stately Healthcare Direct Helpline & Inquiries Banner Frame */}
-            <div className="relative rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/9] lg:aspect-[21/9] bg-[#FAF9F6] mt-8">
-              <img
-                src={assetUrl('/assets/internet/contact-direct-helpline.jpg')}
-                alt="Onecore Pharma medical communication and direct helpline desk"
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <ScrollReveal delay={0.14}>
+              <div className="pt-2 flex flex-wrap items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection(heroSec.cta_url || 'enquiry-form')}
+                  className="inline-flex items-center gap-2.5 px-8 py-4 bg-[#D52B1E] hover:bg-[#B52015] text-white text-sm font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer"
+                >
+                  <span>{heroSec.cta_text || 'Send an Enquiry'}</span>
+                  <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => scrollToSection(heroSec.secondary_cta_url || 'contact-details')}
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white text-sm font-medium rounded-full transition-all duration-200 cursor-pointer"
+                >
+                  <span>{heroSec.secondary_cta_text || 'Contact Details'}</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                </button>
+              </div>
+            </ScrollReveal>
           </div>
         </section>
       )}
@@ -335,7 +381,7 @@ export default function Contact() {
 
             <div className="max-w-3xl space-y-3">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-light text-[#121212] tracking-tight">
-                {channelsSec.title || 'Direct Channels'}
+                {channelsSec.heading || channelsSec.title || 'Company Contact Coordinates'}
               </h2>
               {(channelsSec.subheading || channelsSec.body) && (
                 <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed pt-1 font-sans">
@@ -345,13 +391,13 @@ export default function Contact() {
             </div>
 
             {/* Direct Contact Cards */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
-              {channelsSec.items.map((card, idx) => {
-                const channelName = card.channel || (idx === 0 ? 'EMAIL' : idx === 1 ? 'PHONE' : 'BUSINESS HOURS');
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+              {channelCards.map((card, idx) => {
+                const channelName = card.channel || card.title || (idx === 0 ? 'EMAIL' : idx === 1 ? 'PHONE' : 'BUSINESS HOURS');
                 const channelVal = card.value || (idx === 0 ? displayEmail : idx === 1 ? displayPhone : displayHours);
 
                 return (
-                  <ScrollReveal key={channelName} delay={0.08 * (idx + 1)}>
+                  <ScrollReveal key={channelName + idx} delay={0.06 * (idx + 1)}>
                     <div className="bg-white/80 backdrop-blur-xs p-8 sm:p-10 border border-[#E5E3DC] rounded-3xl h-full flex flex-col justify-between space-y-6 group hover:border-[#121212] transition-all duration-300 shadow-xs hover:shadow-md">
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
@@ -361,14 +407,14 @@ export default function Contact() {
                           {renderChannelIcon(channelName, idx)}
                         </div>
 
-                        {idx === 0 ? (
+                        {channelVal && ((card.cta_url && card.cta_url.startsWith('mailto:')) || channelName.includes('EMAIL')) ? (
                           <a
-                            href={`mailto:${channelVal}`}
+                            href={`mailto:${String(channelVal).trim()}`}
                             className="text-xl sm:text-2xl font-serif font-medium text-[#121212] group-hover:text-[#D52B1E] transition-colors block break-all tracking-tight leading-snug"
                           >
                             {channelVal}
                           </a>
-                        ) : idx === 1 ? (
+                        ) : channelVal && ((card.cta_url && card.cta_url.startsWith('tel:')) || channelName.includes('PHONE')) ? (
                           <a
                             href={`tel:${String(channelVal).replace(/[^0-9+]/g, '')}`}
                             className="text-2xl sm:text-3xl font-serif font-medium text-[#121212] group-hover:text-[#D52B1E] transition-colors block whitespace-nowrap tracking-tight"
@@ -376,7 +422,7 @@ export default function Contact() {
                             {channelVal}
                           </a>
                         ) : (
-                          <span className="text-2xl sm:text-3xl font-serif font-medium text-[#121212] block whitespace-nowrap tracking-tight">
+                          <span className="text-xl sm:text-2xl font-serif font-medium text-[#121212] block tracking-tight leading-snug">
                             {channelVal}
                           </span>
                         )}
@@ -421,10 +467,7 @@ export default function Contact() {
           {/* Header & Strategic Mission */}
           <div className="max-w-4xl space-y-6">
             <ScrollReveal>
-              <span className="text-xs sm:text-sm font-semibold tracking-wider text-[#D52B1E] uppercase font-sans">
-                {partnershipSec.eyebrow || 'Distribution & Franchise Partnerships'}
-              </span>
-              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-[#121212] tracking-tight mt-2 text-balance">
+              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-[#121212] tracking-tight text-balance">
                 {partnershipSec.title || 'Grow with Onecore.'}
               </h2>
             </ScrollReveal>
@@ -575,6 +618,15 @@ export default function Contact() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} noValidate className="space-y-6">
+                    {submitError && (
+                      <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm flex items-start gap-3">
+                        <span className="text-base">⚠️</span>
+                        <div>
+                          <p className="font-semibold text-rose-900">Unable to Submit Message</p>
+                          <p className="mt-0.5 text-rose-700">{submitError}</p>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Row 1: Full name * & Email address * */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

@@ -3,15 +3,17 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import FallbackImage from '../components/FallbackImage';
+import HeroResponsiveImage from '../components/HeroResponsiveImage';
 
 import { useCmsPage } from '../hooks/useCmsPage';
 import { useTherapeuticAreas } from '../hooks/useTherapeuticAreas';
 import { useNews } from '../hooks/useNews';
 import { assetUrl } from '../utils/assetUrl';
+import PageSkeleton from '../components/PageSkeleton';
 
 export default function Home() {
-  const { getSection } = useCmsPage('home');
-  const { areas: dynamicAreas } = useTherapeuticAreas();
+  const { getSection, loading: cmsLoading, isError: cmsError } = useCmsPage('home');
+  const { areas: dynamicAreas, loading: areasLoading } = useTherapeuticAreas();
   const { articles: dynamicNews } = useNews();
   const carouselRef = useRef(null);
 
@@ -32,7 +34,6 @@ export default function Home() {
   const aboutSec = getSection('about_onecore', {
     eyebrow: '',
     title: 'Healthcare is personal. \nOur approach should be too.',
-    body: 'Onecore Pharma is a pharmaceutical company focused on purposeful formulations, dependable quality and the needs of patients and healthcare professionals.',
     cta_text: 'Discover Onecore',
     cta_url: '/about',
     image_url: '/assets/internet/healthcare-team-discussion.jpg',
@@ -49,11 +50,11 @@ export default function Home() {
     items: [
       {
         title: 'Our Vision',
-        desc: 'To be a trusted partner for healthcare professionals across India, known for our innovation, reliability, and commitment to excellence in prescription medicine.'
+        desc: 'To become one of India’s most trusted healthcare companies, shaping better health and better lives through quality, innovation and purpose.'
       },
       {
         title: 'Our Mission',
-        desc: 'To improve patient health outcomes by delivering high-quality, prescription-based products that address the unique needs of Orthopaedic, Gynaecological, Paediatric and General Segment.'
+        desc: 'To provide the medical fraternity with trusted medicines and innovative healthcare solutions, while empowering our people and stakeholders through intellectual, professional and financial growth.'
       }
     ]
   });
@@ -81,7 +82,6 @@ export default function Home() {
   const sustainabilitySec = getSection('sustainability', {
     eyebrow: '',
     title: 'Better health and a healthier future belong together.',
-    body: 'Our responsibility extends beyond the products we provide. As Onecore grows, we want responsible choices to become part of how we operate, how we source and how we work with our partners.',
     items: [
       {
         eyebrow: '',
@@ -104,7 +104,6 @@ export default function Home() {
   const lookingAheadSec = getSection('looking_ahead', {
     eyebrow: '',
     title: 'Building depth. \nExpanding thoughtfully.',
-    body: 'Our roadmap prioritizes therapeutic rigor, medical dialogue, and disciplined expansion that preserves trust.',
     items: [
       {
         title: "Deepen therapeutic expertise",
@@ -139,26 +138,72 @@ export default function Home() {
     secondary_cta_url: '/contact',
   });
 
+  // Division fallback map for distinct specialty imagery
+  const divisionImageMap = {
+    femme: '/assets/therapeutic-womens-health.jpg',
+    'womens-health': '/assets/therapeutic-womens-health.jpg',
+    'women-health': '/assets/therapeutic-womens-health.jpg',
+    pediaplus: '/assets/pediaplus.jpg',
+    pediatrics: '/assets/pediaplus.jpg',
+    paediatrics: '/assets/pediaplus.jpg',
+    ortheon: '/assets/ortheon.jpg',
+    orthopaedics: '/assets/ortheon.jpg',
+    orthopedic: '/assets/ortheon.jpg',
+    orthopedics: '/assets/ortheon.jpg',
+    neurix: '/assets/neurix.jpg',
+    neurology: '/assets/neurix.jpg',
+    neuro: '/assets/neurix.jpg',
+    eyerix: '/assets/eyerix.jpg',
+    ophthalmology: '/assets/eyerix.jpg',
+    ocular: '/assets/eyerix.jpg',
+    vellis: '/assets/vellis.webp',
+    dermatology: '/assets/vellis.webp',
+    derma: '/assets/vellis.webp',
+    otira: '/assets/otira.jpg',
+    ent: '/assets/otira.jpg',
+    'ear-nose-throat': '/assets/otira.jpg',
+    cytos: '/assets/cytos.jpg',
+    oncology: '/assets/cytos.jpg',
+    omnara: '/assets/therapeutic-general-medicine.jpg',
+    'general-medicine': '/assets/therapeutic-general-medicine.jpg',
+    general: '/assets/therapeutic-general-medicine.jpg',
+  };
+
+  const getDivisionFallback = (rawKey) => {
+    const k = (rawKey || '').toLowerCase().trim();
+    return divisionImageMap[k] || '/assets/therapeutic-general-medicine.jpg';
+  };
+
   // Map dynamic areas to division cards
   const divisions = (dynamicAreas && dynamicAreas.length > 0)
-    ? dynamicAreas.map((a) => ({
-      name: a.divisionName || a.displayName || a.title,
-      specialty: a.therapeuticArea || a.displayName || a.title,
-      description: a.description || a.shortDescription || 'Targeted therapeutic formulations developed to address real clinical needs.',
-      image: a.image || a.image_url || '/assets/therapeutic-general-medicine.jpg',
-      path: `/areas-of-care/${(a.slug || a.id || a.divisionName || '').toLowerCase().trim()}`,
-    }))
+    ? dynamicAreas.map((a) => {
+        const key = (a.slug || a.id || a.divisionName || a.name || '').toLowerCase().trim();
+        const fallback = getDivisionFallback(key);
+        const hasCustomImg = a.image_url && a.image_url.trim().length > 0;
+        return {
+          name: a.divisionName || a.displayName || a.title || a.name,
+          specialty: a.therapeuticArea || a.displayName || a.title || a.name,
+          description: a.description || a.shortDescription || 'Targeted therapeutic formulations developed to address real clinical needs.',
+          image: hasCustomImg ? a.image_url : fallback,
+          fallbackImage: fallback,
+          path: `/areas-of-care/${(a.slug || a.id || a.divisionName || '').toLowerCase().trim()}`,
+        };
+      })
     : [
-      { name: "CYTOS", specialty: "Oncology", description: "Targeted therapeutics and supportive oncology care.", image: "/assets/cytos.jpg", path: "/areas-of-care/cytos" },
-      { name: "FEMME", specialty: "Women’s Health", description: "Formulations supporting maternal wellness and hormonal balance.", image: "/assets/therapeutic-womens-health.jpg", path: "/areas-of-care/femme" },
-      { name: "NEURIX", specialty: "Neurology", description: "Neuroprotective and cognitive formulations for CNS care.", image: "/assets/neurix.jpg", path: "/areas-of-care/neurix" },
-      { name: "ORTHEON", specialty: "Orthopaedics", description: "Musculoskeletal mobility and cartilage protection solutions.", image: "/assets/ortheon.jpg", path: "/areas-of-care/ortheon" },
-      { name: "VELLIS", specialty: "Dermatology", description: "Dermatological formulations restoring barrier integrity.", image: "/assets/vellis.webp", path: "/areas-of-care/vellis" },
-      { name: "EYERIX", specialty: "Ophthalmology", description: "Precision ocular care and anti-inflammatory eye formulations.", image: "/assets/eyerix.jpg", path: "/areas-of-care/eyerix" },
-      { name: "OTIRA", specialty: "ENT", description: "Targeted airway and otolaryngology formulations.", image: "/assets/otira.jpg", path: "/areas-of-care/otira" },
-      { name: "PEDIAPLUS", specialty: "Paediatrics", description: "Safe, child-friendly dosage forms and pediatric wellness.", image: "/assets/pediaplus.jpg", path: "/areas-of-care/pediaplus" },
-      { name: "OMNARA", specialty: "General Medicine", description: "Essential broad-spectrum therapeutics for daily practice.", image: "/assets/therapeutic-general-medicine.jpg", path: "/areas-of-care/omnara" },
+      { name: "CYTOS", specialty: "Oncology", description: "Targeted therapeutics and supportive oncology care.", image: "/assets/cytos.jpg", fallbackImage: "/assets/cytos.jpg", path: "/areas-of-care/cytos" },
+      { name: "FEMME", specialty: "Women’s Health", description: "Formulations supporting maternal wellness and hormonal balance.", image: "/assets/therapeutic-womens-health.jpg", fallbackImage: "/assets/therapeutic-womens-health.jpg", path: "/areas-of-care/femme" },
+      { name: "NEURIX", specialty: "Neurology", description: "Neuroprotective and cognitive formulations for CNS care.", image: "/assets/neurix.jpg", fallbackImage: "/assets/neurix.jpg", path: "/areas-of-care/neurix" },
+      { name: "ORTHEON", specialty: "Orthopaedics", description: "Musculoskeletal mobility and cartilage protection solutions.", image: "/assets/ortheon.jpg", fallbackImage: "/assets/ortheon.jpg", path: "/areas-of-care/ortheon" },
+      { name: "VELLIS", specialty: "Dermatology", description: "Dermatological formulations restoring barrier integrity.", image: "/assets/vellis.webp", fallbackImage: "/assets/vellis.webp", path: "/areas-of-care/vellis" },
+      { name: "EYERIX", specialty: "Ophthalmology", description: "Precision ocular care and anti-inflammatory eye formulations.", image: "/assets/eyerix.jpg", fallbackImage: "/assets/eyerix.jpg", path: "/areas-of-care/eyerix" },
+      { name: "OTIRA", specialty: "ENT", description: "Targeted airway and otolaryngology formulations.", image: "/assets/otira.jpg", fallbackImage: "/assets/otira.jpg", path: "/areas-of-care/otira" },
+      { name: "PEDIAPLUS", specialty: "Paediatrics", description: "Safe, child-friendly dosage forms and pediatric wellness.", image: "/assets/pediaplus.jpg", fallbackImage: "/assets/pediaplus.jpg", path: "/areas-of-care/pediaplus" },
+      { name: "OMNARA", specialty: "General Medicine", description: "Essential broad-spectrum therapeutics for daily practice.", image: "/assets/therapeutic-general-medicine.jpg", fallbackImage: "/assets/therapeutic-general-medicine.jpg", path: "/areas-of-care/omnara" },
     ];
+
+  if ((cmsLoading && !cmsError) || (areasLoading && !dynamicAreas)) {
+    return <PageSkeleton />;
+  }
 
   return (
     <div className="w-full bg-transparent overflow-x-clip">
@@ -169,17 +214,18 @@ export default function Home() {
           ========================================================================= */}
       {heroSec.is_active && (
         <section className="relative min-h-[90vh] sm:min-h-screen flex items-end pb-16 sm:pb-24 pt-32 px-4 sm:px-8 lg:px-12 bg-black">
-          {/* Hero Background Photograph */}
+          {/* Hero Background Responsive Photograph */}
           <div className="absolute inset-0 z-0">
-            <img
-              src={assetUrl(heroSec.image_url || '/assets/hero-healthcare.jpg')}
+            <HeroResponsiveImage
+              desktopImage={heroSec.image_url}
+              mobileImage={heroSec.image_mobile_url || heroSec.mobile_image_url}
               alt="Onecore Pharma — Prescribing a better tomorrow"
-              className="w-full h-full object-cover object-center opacity-85 brightness-90"
-              loading="eager"
+              fallback="/assets/hero-healthcare.jpg"
+              className="w-full h-full object-cover object-center"
             />
-            {/* Directional contrast gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-black/20" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
+            {/* Directional contrast gradient — lessened intensity for vibrant clarity */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent pointer-events-none" />
           </div>
 
           {/* Hero Content Block */}
@@ -221,17 +267,11 @@ export default function Home() {
           <div className="space-y-8 sm:space-y-10">
 
             {/* Editorial Title with Italicized Punchline */}
-            <div className="max-w-4xl mx-auto text-center space-y-6">
+            <div className="max-w-4xl mx-auto text-center">
               <ScrollReveal>
                 <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.12] pt-2 text-balance">
                   Healthcare is personal. <br className="hidden sm:inline" /><em className="lilly-serif-italic font-normal text-[#121212]">Our approach should be too.</em>
                 </h2>
-              </ScrollReveal>
-
-              <ScrollReveal delay={0.1}>
-                <p className="text-base sm:text-lg text-[#4B5563] max-w-2xl mx-auto leading-relaxed pt-2">
-                  {aboutSec.body || 'Onecore Pharma is a pharmaceutical company focused on purposeful formulations, dependable quality and the needs of patients and healthcare professionals.'}
-                </p>
               </ScrollReveal>
             </div>
 
@@ -347,43 +387,55 @@ export default function Home() {
               ref={carouselRef}
               className="flex gap-6 overflow-x-auto scrollbar-none pb-4 pt-2 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth snap-x snap-mandatory"
             >
-              {divisions.map((item) => (
-                <div
-                  key={item.name}
-                  className="snap-start flex-shrink-0 w-[280px] sm:w-[340px] lg:w-[380px]"
-                >
-                  <Link
-                    to={item.path || '/areas-of-care'}
-                    className="group relative block aspect-[4/5] rounded-[28px] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 bg-stone-900 border border-stone-200/80"
+              {areasLoading && (!dynamicAreas || dynamicAreas.length === 0) ? (
+                [1, 2, 3, 4].map((n) => (
+                  <div
+                    key={n}
+                    className="snap-start flex-shrink-0 w-[280px] sm:w-[340px] lg:w-[380px]"
                   >
-                    {/* Background Imagery */}
-                    <img
-                      src={assetUrl(item.image)}
-                      alt={`${item.name} — ${item.specialty}`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                      loading="lazy"
-                    />
+                    <div className="aspect-[4/5] rounded-[28px] bg-stone-200/80 animate-pulse border border-stone-200/80" />
+                  </div>
+                ))
+              ) : (
+                (divisions || []).map((item) => (
+                  <div
+                    key={item.name}
+                    className="snap-start flex-shrink-0 w-[280px] sm:w-[340px] lg:w-[380px]"
+                  >
+                    <Link
+                      to={item.path || '/areas-of-care'}
+                      className="group relative block aspect-[4/5] rounded-[28px] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 bg-stone-900 border border-stone-200/80"
+                    >
+                      {/* Background Imagery */}
+                      <img
+                        src={assetUrl(item.image)}
+                        alt={`${item.name} — ${item.specialty}`}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = item.fallbackImage || '/assets/therapeutic-general-medicine.jpg';
+                        }}
+                      />
 
-                    {/* Gradient Mask for High Contrast */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
+                      {/* Gradient Mask for High Contrast */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
 
-                    {/* Card Content Overlay (Clean bottom alignment, no top chip) */}
-                    <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end text-white">
-                      <div className="space-y-1.5">
-                        <span className="text-xs font-bold uppercase tracking-wider text-red-300">
-                          {item.name}
-                        </span>
-                        <h3 className="text-2xl sm:text-3xl font-serif font-medium tracking-tight text-white leading-snug">
-                          {item.specialty}
-                        </h3>
-                        <p className="text-xs sm:text-sm text-white/80 line-clamp-2 leading-relaxed font-normal">
-                          {item.description}
-                        </p>
+                      {/* Card Content Overlay (Clean bottom alignment, no top chip) */}
+                      <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end text-white">
+                        <div className="space-y-1.5">
+                          <span className="text-xs font-bold uppercase tracking-wider text-red-300">
+                            {item.name}
+                          </span>
+                          <h3 className="text-2xl sm:text-3xl font-serif font-medium tracking-tight text-white leading-snug">
+                            {item.specialty}
+                          </h3>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                </div>
-              ))}
+                    </Link>
+                  </div>
+                ))
+              )}
             </div>
 
           </div>
@@ -399,11 +451,8 @@ export default function Home() {
           <div className="space-y-8 sm:space-y-10">
 
             {/* Header */}
-            <div className="max-w-4xl mx-auto text-center space-y-6">
+            <div className="max-w-4xl mx-auto text-center">
               <ScrollReveal>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#6B7280] block">
-                  {purposeSec.eyebrow || 'OUR PURPOSE'}
-                </span>
                 <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-[1.1] text-balance">
                   Improve care through medicines <br className="hidden sm:inline" /><em className="lilly-serif-italic">and healthcare solutions that matter.</em>
                 </h2>
@@ -452,6 +501,10 @@ export default function Home() {
                       alt="Onecore Pharma healthcare professionals and clinical dialogue"
                       className="w-full h-full object-cover"
                       loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = '/assets/internet/healthcare-team-discussion.jpg';
+                      }}
                     />
                   </div>
                 </ScrollReveal>
@@ -545,20 +598,17 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
 
             {/* Header */}
-            <div className="max-w-3xl space-y-4">
+            <div className="max-w-3xl">
               <ScrollReveal>
                 <h2 className="lilly-serif text-3xl sm:text-5xl lg:text-6xl text-[#121212] tracking-tight leading-tight text-balance">
                   Better health and a healthier future <br className="hidden sm:inline" />belong together.
                 </h2>
-                <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed pt-2">
-                  {sustainabilitySec.body || 'Our responsibility extends beyond the products we provide. As Onecore grows, we want responsible choices to become part of how we operate, how we source and how we work with our partners.'}
-                </p>
               </ScrollReveal>
             </div>
 
             {/* 3 Sustainability Cards (Clean typography, no tacky icon containers) */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 pt-4">
-              {sustainabilitySec.items.map((col, idx) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+              {(sustainabilitySec.items || []).map((col, idx) => (
                 <ScrollReveal key={col.title || idx} delay={0.05 + idx * 0.05}>
                   <div className="p-8 sm:p-10 rounded-3xl bg-white/80 backdrop-blur-xs border border-stone-200/90 shadow-sm flex flex-col h-full space-y-4 group hover:bg-white/95 transition-all">
                     <h3 className="text-xl sm:text-2xl font-serif font-medium text-[#121212] tracking-tight">
@@ -593,21 +643,18 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
 
             {/* Left Header */}
-            <div className="lg:col-span-5 space-y-6">
+            <div className="lg:col-span-5">
               <ScrollReveal>
-                <h2 className="lilly-serif text-3xl sm:text-5xl text-[#121212] tracking-tight leading-tight whitespace-pre-line pt-2">
+                <h2 className="lilly-serif text-3xl sm:text-5xl text-[#121212] tracking-tight leading-tight whitespace-pre-line">
                   {lookingAheadSec.title || 'Building depth. \nExpanding thoughtfully.'}
                 </h2>
-                <p className="text-sm sm:text-base text-[#4B5563] leading-relaxed pt-2 whitespace-pre-line">
-                  {lookingAheadSec.body || 'Our roadmap prioritizes therapeutic rigor, medical dialogue, and disciplined expansion that preserves trust.'}
-                </p>
               </ScrollReveal>
             </div>
 
             {/* Right Strategic Rows */}
             <div className="lg:col-span-7">
               <div className="border-t border-stone-200 divide-y divide-stone-200">
-                {lookingAheadSec.items.map((item, idx) => (
+                {(lookingAheadSec.items || []).map((item, idx) => (
                   <ScrollReveal key={item.title || idx} delay={idx * 0.08}>
                     <div className="py-6 sm:py-7 space-y-2 group hover:bg-[#FAF9F6] transition-colors px-4 -mx-4 rounded-2xl">
                       <h3 className="text-lg sm:text-xl font-serif font-medium text-[#121212] tracking-tight group-hover:text-[#D52B1E] transition-colors">
@@ -654,47 +701,58 @@ export default function Home() {
 
             {/* 3 News Articles */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
-              {dynamicNews.slice(0, 3).map((article, idx) => (
-                <ScrollReveal key={article.id} delay={idx * 0.08}>
-                  <article className="group flex flex-col h-full space-y-4">
-                    <div className="relative aspect-[16/10] overflow-hidden rounded-3xl border border-stone-200 bg-stone-100">
-                      <FallbackImage
-                        src={article.image}
-                        alt={article.title}
-                        aspectRatio="aspect-[16/10]"
-                        className="group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
+              {(!dynamicNews || dynamicNews.length === 0) ? (
+                [1, 2, 3].map((n) => (
+                  <div key={n} className="flex flex-col h-full space-y-4 animate-pulse">
+                    <div className="aspect-[16/10] rounded-3xl bg-stone-200/80 border border-stone-200/80" />
+                    <div className="h-4 bg-stone-200/80 rounded w-1/3" />
+                    <div className="h-6 bg-stone-200/80 rounded w-3/4" />
+                    <div className="h-10 bg-stone-200/80 rounded w-full" />
+                  </div>
+                ))
+              ) : (
+                dynamicNews.slice(0, 3).map((article, idx) => (
+                  <ScrollReveal key={article.id || idx} delay={idx * 0.08}>
+                    <article className="group flex flex-col h-full space-y-4">
+                      <div className="relative aspect-[16/10] overflow-hidden rounded-3xl border border-stone-200 bg-stone-100">
+                        <FallbackImage
+                          src={article.image || article.featured_image_url}
+                          alt={article.title || 'Onecore News'}
+                          aspectRatio="aspect-[16/10]"
+                          className="group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
 
-                    <div className="flex items-center justify-between text-xs text-stone-500 pt-1">
-                      <span className="font-bold tracking-wider text-[#D52B1E] uppercase">
-                        {article.category}
-                      </span>
-                      <time dateTime={article.date}>{article.date}</time>
-                    </div>
+                      <div className="flex items-center justify-between text-xs text-stone-500 pt-1">
+                        <span className="font-bold tracking-wider text-[#D52B1E] uppercase">
+                          {article.category || 'UPDATE'}
+                        </span>
+                        <time dateTime={article.date}>{article.date || 'Recent'}</time>
+                      </div>
 
-                    <h3 className="text-lg sm:text-xl font-serif font-medium text-[#121212] group-hover:text-[#D52B1E] transition-colors leading-snug">
-                      <Link to={`/news/${article.slug || article.id}`}>
-                        {article.title}
-                      </Link>
-                    </h3>
+                      <h3 className="text-lg sm:text-xl font-serif font-medium text-[#121212] group-hover:text-[#D52B1E] transition-colors leading-snug">
+                        <Link to={`/news/${article.slug || article.id}`}>
+                          {article.title}
+                        </Link>
+                      </h3>
 
-                    <p className="text-sm text-[#4B5563] leading-relaxed line-clamp-2">
-                      {article.excerpt}
-                    </p>
+                      <p className="text-sm text-[#4B5563] leading-relaxed line-clamp-2">
+                        {article.excerpt}
+                      </p>
 
-                    <div className="pt-2 mt-auto">
-                      <Link
-                        to={`/news/${article.slug || article.id}`}
-                        className="lilly-red-underline text-xs inline-flex items-center gap-1"
-                      >
-                        <span>Read article</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
-                  </article>
-                </ScrollReveal>
-              ))}
+                      <div className="pt-2 mt-auto">
+                        <Link
+                          to={`/news/${article.slug || article.id}`}
+                          className="lilly-red-underline text-xs inline-flex items-center gap-1"
+                        >
+                          <span>Read article</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                    </article>
+                  </ScrollReveal>
+                ))
+              )}
             </div>
 
           </div>

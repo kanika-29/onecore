@@ -51,8 +51,12 @@ export function useSettings() {
             copyright_text: map.copyright_text || staticSettings.copyright_text,
             contact_email: map.contact_email || map.general_email || apiContact.email || staticSettings.contact.general_email,
             contact_phone: map.contact_phone || map.phone || apiContact.phone || staticSettings.contact.phone,
-            contact_hours: map.contact_hours || map.office_hours || apiContact.business_hours || staticSettings.contact.office_hours,
             primary_cta_text: map.primary_cta_text || staticSettings.primary_cta_text,
+            cookie_banner_enabled: map.cookie_banner_enabled !== undefined ? map.cookie_banner_enabled : 'true',
+            cookie_banner_title: map.cookie_banner_title || 'Cookie & Privacy Preferences',
+            cookie_banner_desc: map.cookie_banner_desc || 'Onecore Pharma uses cookies to ensure website security, analyze site usage, and support our clinical and corporate communications in accordance with our Privacy Policy.',
+            cookie_privacy_url: map.cookie_privacy_url || '/privacy',
+            google_analytics_id: map.google_analytics_id || '',
           });
         }
       } catch {

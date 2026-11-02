@@ -22,7 +22,6 @@ import { AdminCard } from '../../components/admin/AdminCard';
 import ToastNotification from '../../components/admin/ToastNotification';
 import MediaSelectorModal from '../../components/admin/MediaSelectorModal';
 import { useAdminAuth } from '../../context/AdminAuthContext';
-import { allProducts } from '../../data/allProducts';
 
 function FieldLabel({ children, required }) {
   return (
@@ -131,6 +130,11 @@ export default function AdminProductEditor() {
     brand_name: '',
     slug: '',
     therapeutic_area_id: 3,
+    therapeutic_area_ids: [3],
+    division: '',
+    divisionSlug: '',
+    therapeuticArea: '',
+    category: '',
     short_description: '',
     full_description: '',
     packshot_url: '',
@@ -138,6 +142,8 @@ export default function AdminProductEditor() {
     display_order: 1,
     seo_title: '',
     seo_description: '',
+    link_url: '',
+    link_label: '',
     images: [],
     compositions: [],
     benefits: [],
@@ -179,8 +185,16 @@ export default function AdminProductEditor() {
           setForm({
             id: p.id,
             brand_name: p.brand_name || p.name || '',
+            brandName: p.brand_name || p.name || '',
             slug: p.slug || '',
             therapeutic_area_id: p.therapeutic_area_id || 3,
+            therapeutic_area_ids: (Array.isArray(p.therapeutic_area_ids) && p.therapeutic_area_ids.length > 0)
+              ? p.therapeutic_area_ids
+              : [p.therapeutic_area_id || 3],
+            division: p.division || p.divisionSlug || p.therapeutic_area_slug || '',
+            divisionSlug: p.divisionSlug || p.division || p.therapeutic_area_slug || '',
+            therapeuticArea: p.therapeuticArea || p.therapeutic_area_name || '',
+            category: p.category || p.division || p.therapeutic_area_slug || '',
             short_description: p.short_description || '',
             full_description: p.full_description || p.description || '',
             packshot_url: p.packshot_url || p.image || '',
@@ -188,6 +202,8 @@ export default function AdminProductEditor() {
             display_order: p.display_order || 1,
             seo_title: p.seo_title || '',
             seo_description: p.seo_description || '',
+            link_url: p.link_url || p.external_link || '',
+            link_label: p.link_label || p.external_link_label || '',
             images: (Array.isArray(p.images) && p.images.length > 0)
               ? p.images.map((img, idx) => ({
                   id: img.id,
@@ -204,35 +220,7 @@ export default function AdminProductEditor() {
             safetySections: p.safetySections || p.safety_sections || [],
           });
         } else {
-          // Check static data fallback
-          const fallback = allProducts.find((item) => item.slug === id || String(item.id) === id);
-          if (fallback) {
-            setForm({
-              brand_name: fallback.name,
-              slug: fallback.slug,
-              therapeutic_area_id: 3,
-              short_description: fallback.composition || fallback.usedFor || '',
-              full_description: fallback.description || '',
-              packshot_url: fallback.image || '',
-              status: 'published',
-              display_order: 1,
-              seo_title: '',
-              seo_description: '',
-              images: fallback.image
-                ? [{ image_url: fallback.image, alt_text: fallback.name || '', is_primary: 1, display_order: 1 }]
-                : [],
-              compositions: [
-                { ingredient_name: fallback.composition || fallback.name, ingredient_description: '', strength: '' }
-              ],
-              benefits: [],
-              dosage: { heading: 'How it should be taken.', description: fallback.direction || 'Use as directed by a healthcare professional.' },
-              mechanisms: fallback.mechanism ? [{ title: 'Mechanism of Action', description: fallback.mechanism }] : [],
-              safetySections: (fallback.precautions || []).map((prec, idx) => ({
-                title: `Safety Note ${idx + 1}`,
-                description: prec,
-              })),
-            });
-          }
+          showToast('error', d.message || 'Product not found in database.');
         }
       })
       .catch((err) => {
@@ -241,15 +229,44 @@ export default function AdminProductEditor() {
       .finally(() => setLoading(false));
   }, [id, isNew, token]);
 
-  const handleSave = async () => {
+  const handleSave = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
     if (!form.brand_name.trim()) {
       showToast('error', 'Brand name is required.');
       return;
     }
 
     setSaving(true);
-    const method = isNew ? 'POST' : 'PUT';
-    const endpoint = isNew ? '/api/products' : `/api/products/${form.id || id}`;
+    const productId = form.id || (id && id !== 'new' ? id : null);
+    const isEditing = Boolean(productId);
+    const method = isEditing ? 'PUT' : 'POST';
+    const endpoint = isEditing ? `/api/products/${productId}` : '/api/products';
+
+    const selectedArea = areas.find((a) => a.id === form.therapeutic_area_id);
+    const selectedDivisionSlug = selectedArea?.slug || form.divisionSlug || form.division || 'general-medicine';
+    const selectedDivisionLabel = selectedArea?.name || form.therapeuticArea || 'General Medicine';
+
+    const payload = {
+      ...form,
+      id: form.id || (isEditing ? productId : undefined),
+      brand_name: (form.brand_name || form.brandName || '').trim(),
+      brandName: (form.brand_name || form.brandName || '').trim(),
+      name: (form.brand_name || form.brandName || '').trim(),
+      slug: (form.slug || '').trim().toLowerCase(),
+      therapeuticArea: selectedDivisionLabel,
+      division: selectedDivisionSlug,
+      divisionSlug: selectedDivisionSlug,
+      division_slug: selectedDivisionSlug,
+      therapeutic_area: selectedDivisionLabel,
+      category: selectedDivisionSlug,
+      therapeutic_area_id: form.therapeutic_area_id,
+      therapeutic_area_ids: form.therapeutic_area_ids || [form.therapeutic_area_id],
+      link_url: form.link_url ? form.link_url.trim() : null,
+      link_label: form.link_label ? form.link_label.trim() : null,
+      external_link: form.link_url ? form.link_url.trim() : null,
+      external_link_label: form.link_label ? form.link_label.trim() : null,
+      updatedAt: new Date()
+    };
 
     try {
       const res = await fetch(endpoint, {
@@ -258,20 +275,23 @@ export default function AdminProductEditor() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
       if (res.ok && data.success) {
-        showToast('success', isNew ? 'Product created successfully.' : 'Product updated successfully.');
-        if (isNew && data.data?.id) {
+        showToast('success', isEditing ? 'Product updated successfully.' : 'Product created successfully.');
+        if (!isEditing && data.data?.id) {
+          setForm((prev) => ({ ...prev, id: data.data.id, slug: data.data.slug || prev.slug }));
           navigate(`/admin/products/${data.data.id}`, { replace: true });
+        } else if (isEditing && data.data?.id) {
+          setForm((prev) => ({ ...prev, id: data.data.id }));
         }
       } else {
-        showToast('error', data.message || 'Failed to save product.');
+        showToast('error', data.error || data.message || 'Failed to save product.');
       }
     } catch (err) {
-      showToast('error', err.message);
+      showToast('error', err.message || 'Failed to save product.');
     } finally {
       setSaving(false);
     }
@@ -354,7 +374,7 @@ export default function AdminProductEditor() {
         <div className="flex items-center gap-2.5">
           {!isNew && form.slug && (
             <a
-              href={`/areas-of-care/orthopaedics/${form.slug}`}
+              href={`/areas-of-care/${form.divisionSlug || form.division || (areas.find((a) => a.id === form.therapeutic_area_id)?.slug) || 'general-medicine'}/${form.slug}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-lg transition-all shadow-xs"
@@ -415,12 +435,17 @@ export default function AdminProductEditor() {
               </div>
 
               <div>
-                <FieldLabel required>Therapeutic Area / Division</FieldLabel>
+                <FieldLabel required>Primary Division / Specialty</FieldLabel>
                 <select
                   value={form.therapeutic_area_id}
-                  onChange={(e) =>
-                    setForm((p) => ({ ...p, therapeutic_area_id: parseInt(e.target.value, 10) }))
-                  }
+                  onChange={(e) => {
+                    const newPrimary = parseInt(e.target.value, 10);
+                    setForm((p) => {
+                      const prevIds = Array.isArray(p.therapeutic_area_ids) ? p.therapeutic_area_ids : [];
+                      const updatedIds = prevIds.includes(newPrimary) ? prevIds : [newPrimary, ...prevIds];
+                      return { ...p, therapeutic_area_id: newPrimary, therapeutic_area_ids: updatedIds };
+                    });
+                  }}
                   className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
                 >
                   {areas.map((a) => (
@@ -429,6 +454,60 @@ export default function AdminProductEditor() {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* Multi-Specialty Category Checkboxes */}
+              <div className="md:col-span-3 bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                    Multi-Specialty Display (Appear in Multiple Categories)
+                  </span>
+                  <span className="text-[10px] text-[#0D5C75] font-semibold bg-[#0D5C75]/10 px-2 py-0.5 rounded-full">
+                    {(form.therapeutic_area_ids || []).length} Categories Selected
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  Select all specialty pages where this product should be displayed. For example, if a medicine is prescribed in both Orthopaedics (Ortheon) and General Medicine (Omnara), check both.
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 pt-1">
+                  {areas.map((a) => {
+                    const isPrimary = a.id === form.therapeutic_area_id;
+                    const isChecked = isPrimary || (form.therapeutic_area_ids || []).includes(a.id);
+                    return (
+                      <label
+                        key={a.id}
+                        className={`flex items-center gap-2 p-2 rounded-lg border text-xs cursor-pointer transition-colors ${
+                          isChecked
+                            ? 'bg-[#0D5C75]/5 border-[#0D5C75]/40 text-[#0D5C75] font-semibold'
+                            : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          disabled={isPrimary}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setForm((prev) => {
+                              const setIds = new Set(prev.therapeutic_area_ids || [prev.therapeutic_area_id]);
+                              if (checked) {
+                                setIds.add(a.id);
+                              } else {
+                                setIds.delete(a.id);
+                              }
+                              setIds.add(prev.therapeutic_area_id); // ensure primary is always kept
+                              return { ...prev, therapeutic_area_ids: Array.from(setIds) };
+                            });
+                          }}
+                          className="rounded border-slate-300 text-[#0D5C75] focus:ring-[#0D5C75]"
+                        />
+                        <span className="truncate">
+                          {a.name} {isPrimary && <span className="text-[10px] font-normal text-[#0D5C75]">(Primary)</span>}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="md:col-span-3">
@@ -797,6 +876,34 @@ export default function AdminProductEditor() {
                   value={form.seo_description}
                   onChange={set('seo_description')}
                   placeholder="Clinical product monograph for OneFLEXO, its formulation, composition and joint health information..."
+                />
+              </div>
+            </div>
+          </AdminCard>
+
+          {/* Section 8: External / Direct Product Link */}
+          <AdminCard
+            title="Product Action Link (Bottom of Product Page)"
+            subtitle="Optional custom destination URL and button label displayed at the very end of this product monograph"
+          >
+            <div className="space-y-4">
+              <div>
+                <FieldLabel>Link URL / Destination</FieldLabel>
+                <TextInput
+                  value={form.link_url}
+                  onChange={set('link_url')}
+                  placeholder="e.g. https://example.com/order-product or /contact"
+                />
+                <span className="text-[11px] text-slate-500 mt-1.5 block">
+                  Enter an external URL (e.g. <code>https://...</code>) or internal page (e.g. <code>/contact</code>). If provided, a direct action button will be rendered at the end of the product page.
+                </span>
+              </div>
+              <div>
+                <FieldLabel>Button / Link Label</FieldLabel>
+                <TextInput
+                  value={form.link_label}
+                  onChange={set('link_label')}
+                  placeholder="e.g. Buy Online / Order Product / Request Monograph (defaults to 'Learn More')"
                 />
               </div>
             </div>

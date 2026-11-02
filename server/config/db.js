@@ -1,15 +1,8 @@
 import mysql from 'mysql2/promise';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-dotenv.config({ path: path.join(__dirname, '..', '.env') });
+import './env.js';
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.DB_HOST || '127.0.0.1',
   port: parseInt(process.env.DB_PORT || '3306', 10),
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
@@ -19,6 +12,7 @@ const pool = mysql.createPool({
   queueLimit: 0,
   enableKeepAlive: true,
   keepAliveInitialDelay: 0,
+  connectTimeout: 5000, // 5s connection timeout to prevent hanging requests
 });
 
 export const query = async (sql, params = []) => {
@@ -31,17 +25,27 @@ export const query = async (sql, params = []) => {
   }
 };
 
-export const testConnection = async () => {
-  try {
+export const testConnection = async (timeoutMs = 5000) => {
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error(`MySQL connection timed out after ${timeoutMs}ms`)), timeoutMs)
+  );
+
+  const connectPromise = (async () => {
     const connection = await pool.getConnection();
-    console.log('✅ MySQL Database Connected successfully to:', process.env.DB_NAME || 'onecore_pharma');
+    const dbName = process.env.DB_NAME || 'onecore_pharma';
+    console.log(`✅ MySQL Database Connected successfully to: ${dbName}`);
     connection.release();
     return true;
+  })();
+
+  try {
+    return await Promise.race([connectPromise, timeoutPromise]);
   } catch (error) {
-    console.warn('⚠️ MySQL Database Connection failed:', error.message);
-    console.warn('👉 Please verify MySQL is running and check server/.env credentials.');
+    console.warn(`⚠️ MySQL Database Connection warning: ${error.message}`);
+    console.warn('👉 Please verify MySQL service is running and check server/.env credentials.');
     return false;
   }
 };
 
 export default pool;
+

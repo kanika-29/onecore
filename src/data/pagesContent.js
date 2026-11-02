@@ -30,11 +30,11 @@ export const pagesContent = {
         items: [
           {
             title: 'Our Vision',
-            desc: 'To be a trusted partner for healthcare professionals across India, known for our innovation, reliability, and commitment to excellence in prescription medicine.'
+            desc: 'To become one of India’s most trusted healthcare companies, shaping better health and better lives through quality, innovation and purpose.'
           },
           {
             title: 'Our Mission',
-            desc: 'To improve patient health outcomes by delivering high-quality, prescription-based products that address the unique needs of Orthopaedic, Gynaecological, Paediatric and General Segment.'
+            desc: 'To provide the medical fraternity with trusted medicines and innovative healthcare solutions, while empowering our people and stakeholders through intellectual, professional and financial growth.'
           }
         ]
       },
@@ -122,11 +122,11 @@ export const pagesContent = {
         items: [
           {
             title: 'Our Vision',
-            desc: 'To be a trusted partner for healthcare professionals across India, known for our innovation, reliability, and commitment to excellence in prescription medicine.'
+            desc: 'To become one of India’s most trusted healthcare companies, shaping better health and better lives through quality, innovation and purpose.'
           },
           {
             title: 'Our Mission',
-            desc: 'To improve patient health outcomes by delivering high-quality, prescription-based products that address the unique needs of Orthopaedic, Gynaecological, Paediatric and General Segment.'
+            desc: 'To provide the medical fraternity with trusted medicines and innovative healthcare solutions, while empowering our people and stakeholders through intellectual, professional and financial growth.'
           }
         ]
       },
@@ -187,6 +187,66 @@ export const pagesContent = {
         title: 'Connect with Onecore Pharma.',
         body: 'Whether you have inquiries regarding our therapeutic divisions, medical products, or corporate partnerships, our team is ready to assist you.',
         image_url: '/assets/contact-hero.jpg',
+      }
+    }
+  },
+
+  privacy: {
+    seo_title: 'Privacy Policy | Onecore Pharma',
+    seo_description: 'Onecore Pharma privacy statement, data protection guidelines, and handling of voluntarily submitted user information.',
+    sections: {
+      banner: {
+        eyebrow: 'LEGAL & COMPLIANCE',
+        title: 'Privacy Policy',
+        heading: 'Privacy Policy',
+        subheading: 'How Onecore Pharma collects, protects, and handles personal data.',
+        body: 'Onecore Pharma is committed to protecting your privacy and ensuring responsible, transparent handling of all communications and interactions.',
+        image_url: '/assets/about-facility.jpg',
+      },
+      information_collection: {
+        eyebrow: 'ARTICLE 01',
+        title: '1. Information Collection',
+        heading: '1. Information Collection',
+        body: 'Onecore Pharma collects information voluntarily submitted through our contact and inquiry forms, including names, professional affiliations, and contact details necessary to respond to product or partnership communications.',
+      },
+      use_of_information: {
+        eyebrow: 'ARTICLE 02',
+        title: '2. Use of Information',
+        heading: '2. Use of Information',
+        body: 'Submitted details are used solely to route inquiries to the appropriate departmental function, such as medical information, business partnerships, or customer support.',
+      },
+      data_protection: {
+        eyebrow: 'ARTICLE 03',
+        title: '3. Data Protection & Confidentiality',
+        heading: '3. Data Protection & Confidentiality',
+        body: 'We maintain reasonable technical and organizational standards to protect communications from unauthorized disclosure, access, or alteration.',
+      }
+    }
+  },
+
+  disclaimer: {
+    seo_title: 'Disclaimer | Onecore Pharma',
+    seo_description: 'Official medical information notice, product availability specifications, and regulatory disclaimers for Onecore Pharma.',
+    sections: {
+      banner: {
+        eyebrow: 'LEGAL & REGULATORY',
+        title: 'Disclaimer',
+        heading: 'Disclaimer',
+        subheading: 'Regulatory notices, medical boundaries, and conditions of website use.',
+        body: 'Please review the following legal disclosures regarding medical information, product specifications, and regulatory frameworks.',
+        image_url: '/assets/hero-healthcare.jpg',
+      },
+      medical_information_notice: {
+        eyebrow: 'NOTICE 01',
+        title: 'Medical Information Notice',
+        heading: 'Medical Information Notice',
+        body: 'The content provided on this website is for informational and educational purposes only and is not intended to replace consultation with a qualified medical professional.',
+      },
+      product_availability: {
+        eyebrow: 'NOTICE 02',
+        title: 'Product Availability',
+        heading: 'Product Availability',
+        body: 'Product specifications and availability are subject to local regulatory authorizations and marketed formulation guidelines.',
       }
     }
   }

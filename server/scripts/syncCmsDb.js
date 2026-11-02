@@ -44,6 +44,7 @@ async function syncCms() {
     await ensureColumn('items_json', 'items_json LONGTEXT NULL AFTER body');
     await ensureColumn('secondary_cta_text', 'secondary_cta_text VARCHAR(100) NULL AFTER cta_url');
     await ensureColumn('secondary_cta_url', 'secondary_cta_url VARCHAR(255) NULL AFTER secondary_cta_text');
+    await ensureColumn('image_mobile_url', 'image_mobile_url VARCHAR(255) NULL AFTER image_url');
 
     // 2. Ensure pages exist
     const pages = [
@@ -181,11 +182,11 @@ async function syncCms() {
         items_json: JSON.stringify([
           {
             title: 'OUR VISION',
-            desc: 'To be a trusted pharmaceutical company for patients and healthcare professionals across the areas of care we serve.'
+            desc: 'To become one of India’s most trusted healthcare companies, shaping better health and better lives through quality, innovation and purpose.'
           },
           {
             title: 'OUR MISSION',
-            desc: 'To develop and deliver purposeful formulations that address real clinical needs, uphold dependable quality and expand responsibly into areas where we can make a meaningful difference.'
+            desc: 'To provide the medical fraternity with trusted medicines and innovative healthcare solutions, while empowering our people and stakeholders through intellectual, professional and financial growth.'
           }
         ]),
         cta_text: null,

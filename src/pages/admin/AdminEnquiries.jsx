@@ -128,7 +128,10 @@ export default function AdminEnquiries() {
     return (
       (e.full_name || '').toLowerCase().includes(q) ||
       (e.email || '').toLowerCase().includes(q) ||
+      (e.phone || '').toLowerCase().includes(q) ||
       (e.organisation || '').toLowerCase().includes(q) ||
+      (e.contacting_as || '').toLowerCase().includes(q) ||
+      (e.enquiry_type || '').toLowerCase().includes(q) ||
       (e.message || '').toLowerCase().includes(q)
     );
   });
@@ -324,7 +327,7 @@ export default function AdminEnquiries() {
                   <label className="block text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
                     Message Content
                   </label>
-                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto">
+                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 leading-relaxed whitespace-pre-wrap max-h-72 overflow-y-auto">
                     {selectedEnquiry.message}
                   </div>
                 </div>

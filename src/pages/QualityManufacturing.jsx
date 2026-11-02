@@ -1,13 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, ShieldCheck, Microscope, Layers } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
+import HeroResponsiveImage from '../components/HeroResponsiveImage';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { assetUrl } from '../utils/assetUrl';
+import PageSkeleton from '../components/PageSkeleton';
 
 export default function QualityManufacturing() {
-  const { getSection } = useCmsPage('quality-manufacturing');
+  const { getSection, loading: cmsLoading, isError: cmsError } = useCmsPage('quality-manufacturing');
   const videoRef = useRef(null);
+  const [videoReady, setVideoReady] = useState(false);
 
   useEffect(() => {
     document.title = "Quality & Manufacturing | Onecore Pharma";
@@ -41,7 +44,7 @@ export default function QualityManufacturing() {
   const principlesSec = getSection('principles', {
     eyebrow: 'FOUNDATIONAL PRINCIPLES',
     title: 'Principles that guide our quality approach.',
-    body: 'A disciplined commitment to patient safety, regulatory compliance, and formulation excellence across every batch.',
+    body: '',
     items: [
       {
         title: "Consistent Standards",
@@ -62,7 +65,7 @@ export default function QualityManufacturing() {
     ]
   });
 
-  const manufacturingSec = getSection('manufacturing_standards', {
+  const manufacturingSec = getSection('manufacturing_standards') || getSection('manufacturing_excellence') || getSection('manufacturing_standards', {
     eyebrow: 'MANUFACTURING DISCIPLINES',
     title: 'Manufacturing with discipline and control.',
     body: 'Onecore formulations are produced in qualified manufacturing environments adhering strictly to cGMP and regulatory standards.',
@@ -82,7 +85,7 @@ export default function QualityManufacturing() {
   const assuranceSec = getSection('assurance_steps', {
     eyebrow: 'QUALITY ASSURANCE',
     title: 'Controls throughout the lifecycle.',
-    subtitle: 'Key assurance stages designed to support formulation reliability from raw ingredient selection to clinical availability.',
+    subtitle: '',
     items: [
       {
         title: "Raw material and supplier oversight",
@@ -111,14 +114,9 @@ export default function QualityManufacturing() {
     ]
   });
 
-  const finalCtaSec = getSection('final_cta', {
-    title: 'Quality you can depend on.',
-    body: 'Explore the therapeutic areas and formulations that make up the Onecore portfolio, or speak with our Medical & Quality Affairs desk.',
-    cta_text: 'EXPLORE OUR QUALITY',
-    cta_url: '/quality-manufacturing',
-    secondary_cta_text: 'Contact Quality Team',
-    secondary_cta_url: '/contact',
-  });
+  if (cmsLoading && !cmsError) {
+    return <PageSkeleton />;
+  }
 
   return (
     <div className="w-full bg-transparent text-[#121212]">
@@ -128,33 +126,45 @@ export default function QualityManufacturing() {
           Headline & body overlaid directly on video with contrast grading & smooth looping
           ========================================================================= */}
       <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-end pb-16 sm:pb-24 pt-32 px-4 sm:px-8 lg:px-12 bg-[#071324] overflow-hidden">
-        {/* Background Video with Cinematic Grading & Color Filter */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          <video
-            ref={videoRef}
-            src={assetUrl(heroSec.video_url || '/assets/quality-manufacturing.mp4')}
-            poster={assetUrl(heroSec.image_url || '/assets/quality.jpg')}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="w-full h-full object-cover object-center scale-[1.02] filter brightness-[0.72] contrast-[1.12] saturate-[0.88]"
-          />
+        {/* Background Video or Responsive Mobile Image */}
+        <div className="absolute inset-0 z-0 overflow-hidden bg-[#071324]">
+          {/* Mobile view if a dedicated mobile hero image is uploaded */}
+          {heroSec.image_mobile_url ? (
+            <div className="block md:hidden w-full h-full">
+              <HeroResponsiveImage
+                desktopImage={heroSec.image_url}
+                mobileImage={heroSec.image_mobile_url}
+                alt={heroSec.heading || heroSec.title || 'Onecore Pharma Quality and Manufacturing'}
+                fallback="/assets/quality.jpg"
+                className="w-full h-full object-cover object-center"
+              />
+            </div>
+          ) : null}
 
-          {/* Clinical Color Contrast Grading Filters */}
-          <div className="absolute inset-0 bg-[#071324]/35 mix-blend-multiply pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/30 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent pointer-events-none" />
+          {/* High Performance Video (Desktop or default fallback) */}
+          <div className={`w-full h-full ${heroSec.image_mobile_url ? 'hidden md:block' : 'block'}`}>
+            <video
+              ref={videoRef}
+              src={assetUrl(heroSec.video_url || '/assets/quality-manufacturing.mp4')}
+              poster={assetUrl(heroSec.poster_url || heroSec.image_url || '/assets/quality.jpg')}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              onLoadedData={() => setVideoReady(true)}
+              className={`w-full h-full object-cover object-center scale-[1.01] transition-opacity duration-500 ${videoReady ? 'opacity-100' : 'opacity-90'}`}
+            />
+          </div>
+
+          {/* Clean minimal readable vignette — heavy black film removed */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent pointer-events-none" />
         </div>
 
         {/* Hero Content Block Overlaid On Video */}
         <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
           <ScrollReveal>
-            <span className="text-xs sm:text-sm font-semibold tracking-wider text-[#FF5A4E] uppercase font-sans">
-              {heroSec.eyebrow || 'Quality & Manufacturing'}
-            </span>
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.05] mt-2 max-w-4xl text-balance">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.05] max-w-4xl text-balance">
               Quality is part of the product <br />
               <span className="italic font-normal text-[#FF5A4E]">from the beginning.</span>
             </h1>
@@ -198,15 +208,12 @@ export default function QualityManufacturing() {
           SECTION 2 — FOUNDATIONAL PRINCIPLES (4 Cards)
           ========================================================================= */}
       {principlesSec.is_active && (
-        <section id="principles" className="py-12 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto space-y-8 sm:space-y-10">
-          <div className="max-w-3xl space-y-3">
+        <section id="principles" className="py-10 sm:py-14 px-4 sm:px-8 max-w-7xl mx-auto space-y-6 sm:space-y-8">
+          <div className="max-w-3xl">
             <ScrollReveal>
               <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
                 {principlesSec.title || 'Principles that guide our quality approach.'}
               </h2>
-              <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed">
-                {principlesSec.body}
-              </p>
             </ScrollReveal>
           </div>
 
@@ -249,6 +256,10 @@ export default function QualityManufacturing() {
                       src={assetUrl(manufacturingSec.image_url || '/assets/pharma.jpg')}
                       alt="Onecore Pharma Manufacturing & Facility Operations"
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = '/assets/pharma.jpg';
+                      }}
                     />
                   </div>
                 </ScrollReveal>
@@ -294,15 +305,12 @@ export default function QualityManufacturing() {
           SECTION 4 — QUALITY ASSURANCE (6-Step Lifecycle Grid)
           ========================================================================= */}
       {assuranceSec.is_active && (
-        <section className="py-12 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto space-y-8 sm:space-y-10">
-          <div className="max-w-3xl space-y-3">
+        <section className="pt-10 sm:pt-14 pb-16 sm:pb-20 px-4 sm:px-8 max-w-7xl mx-auto space-y-6 sm:space-y-8">
+          <div className="max-w-3xl">
             <ScrollReveal>
               <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
                 {assuranceSec.title || 'Controls throughout the lifecycle.'}
               </h2>
-              <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed">
-                {assuranceSec.subtitle || 'Key assurance stages designed to support formulation reliability from raw ingredient selection to clinical availability.'}
-              </p>
             </ScrollReveal>
           </div>
 
@@ -324,42 +332,6 @@ export default function QualityManufacturing() {
                 </div>
               </ScrollReveal>
             ))}
-          </div>
-        </section>
-      )}
-
-      {/* =========================================================================
-          SECTION 5 — FINAL CTA
-          ========================================================================= */}
-      {finalCtaSec.is_active && (
-        <section className="py-12 sm:py-16 bg-[#121212] text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center justify-between">
-              
-              <div className="lg:col-span-8 space-y-4">
-                <ScrollReveal>
-                  <h2 className="text-3xl sm:text-5xl font-serif font-light text-white tracking-tight leading-tight">
-                    {finalCtaSec.title || 'Quality you can depend on.'}
-                  </h2>
-                  <p className="text-base sm:text-lg text-white/70 font-light leading-relaxed max-w-2xl font-sans pt-1">
-                    {finalCtaSec.body || 'Explore the therapeutic areas and formulations that make up the Onecore portfolio.'}
-                  </p>
-                </ScrollReveal>
-              </div>
-
-              <div className="lg:col-span-4 flex flex-wrap lg:justify-end gap-4">
-                <ScrollReveal delay={0.1}>
-                  <Link
-                    to={finalCtaSec.cta_url || '/quality-manufacturing'}
-                    className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-colors shadow-xs cursor-pointer"
-                  >
-                    <span>{finalCtaSec.cta_text || 'EXPLORE OUR QUALITY'}</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </ScrollReveal>
-              </div>
-
-            </div>
           </div>
         </section>
       )}

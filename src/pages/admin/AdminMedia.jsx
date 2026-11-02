@@ -181,7 +181,8 @@ export default function AdminMedia() {
                         alt={item.alt_text || item.filename}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
-                          e.target.style.display = 'none';
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='100%25' height='100%25' fill='%23f1f5f9' stroke='%23cbd5e1'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2364748b' font-family='sans-serif' font-size='10'%3EPreview 404%3C/text%3E%3C/svg%3E";
                         }}
                       />
                     ) : (

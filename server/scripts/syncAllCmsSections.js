@@ -201,12 +201,12 @@ async function syncAllCmsSections() {
         {
           num: '01',
           title: 'Our Vision',
-          desc: 'To be a trusted partner for healthcare professionals across India, known for innovation, reliability, and commitment to excellence in prescription medicine.',
+          desc: 'To become one of India’s most trusted healthcare companies, shaping better health and better lives through quality, innovation and purpose.',
         },
         {
           num: '02',
           title: 'Our Mission',
-          desc: 'To improve patient health outcomes by delivering high-quality, prescription-based products that address the unique needs of Orthopaedic, Gynaecological, Paediatric and General Segment.',
+          desc: 'To provide the medical fraternity with trusted medicines and innovative healthcare solutions, while empowering our people and stakeholders through intellectual, professional and financial growth.',
         },
       ],
       display_order: 1,

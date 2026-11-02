@@ -2,13 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowDown, CheckCircle2, ShieldCheck, X } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
+import HeroResponsiveImage from '../components/HeroResponsiveImage';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { assetUrl } from '../utils/assetUrl';
+import PageSkeleton from '../components/PageSkeleton';
 
 export default function PatientsCaregivers() {
-  const { getSection } = useCmsPage('patients-caregivers');
+  const { getSection, loading: cmsLoading, isError: cmsError } = useCmsPage('patients-caregivers');
   const [activeSafetyModal, setActiveSafetyModal] = useState(null);
   const [modalSubmitted, setModalSubmitted] = useState(false);
+  const [safetySubmitting, setSafetySubmitting] = useState(false);
+  const [safetyError, setSafetyError] = useState(null);
+  const [safetyForm, setSafetyForm] = useState({
+    fullName: '',
+    email: '',
+    productOrBatch: '',
+    observation: '',
+  });
 
   useEffect(() => {
     document.title = "Patients & Caregivers | Onecore Pharma";
@@ -27,13 +37,44 @@ export default function PatientsCaregivers() {
     }
   };
 
-  const handleModalSubmit = (e) => {
+  const handleModalSubmit = async (e) => {
     e.preventDefault();
-    setModalSubmitted(true);
-    setTimeout(() => {
-      setModalSubmitted(false);
-      setActiveSafetyModal(null);
-    }, 2500);
+    setSafetySubmitting(true);
+    setSafetyError(null);
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: safetyForm.fullName,
+          email: safetyForm.email,
+          productOrBatch: safetyForm.productOrBatch,
+          contactType: activeSafetyModal === 'patient' ? 'Patient / Family Caregiver' : 'Healthcare Professional',
+          natureOfEnquiry: 'Pharmacovigilance & Quality Observation',
+          message: safetyForm.observation,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || 'Unable to submit your observation report. Please try again.');
+      }
+
+      setModalSubmitted(true);
+      setSafetyForm({
+        fullName: '',
+        email: '',
+        productOrBatch: '',
+        observation: '',
+      });
+    } catch (err) {
+      console.error('Safety report error:', err);
+      setSafetyError(err.message || 'Connection error. Please try again or notify our medical safety team directly.');
+    } finally {
+      setSafetySubmitting(false);
+    }
   };
 
   // Section 1: Hero
@@ -136,23 +177,23 @@ export default function PatientsCaregivers() {
     items: [
       {
         stage: '01',
-        title: 'Healthcare Professional',
-        desc: 'Clinical assessment, diagnostic evaluation, and evidence-based therapeutic selection.'
+        title: 'Healthcare professional',
+        desc: 'Clinical assessment, diagnosis and evidence-based therapeutic evaluation.'
       },
       {
         stage: '02',
-        title: 'Treatment Decision',
-        desc: 'Selecting appropriate formulation, dosage schedule, and patient-specific regimen guidance.'
+        title: 'Treatment decision',
+        desc: 'Selecting appropriate formulation, dosage schedule and treatment guidance.'
       },
       {
         stage: '03',
-        title: 'Patient Understanding',
-        desc: 'Clear comprehension of administration directions, storage conditions, and factual precautions.'
+        title: 'Patient',
+        desc: 'Understanding administration instructions, storage conditions and safety facts.'
       },
       {
         stage: '04',
-        title: 'Everyday Care',
-        desc: 'Managing treatment adherence, family support, and monitoring recovery in everyday life.'
+        title: 'Everyday care',
+        desc: 'Managing treatment adherence and monitoring recovery in home routine.'
       }
     ]
   });
@@ -180,26 +221,48 @@ export default function PatientsCaregivers() {
     ]
   });
 
+  if (cmsLoading && !cmsError) {
+    return <PageSkeleton />;
+  }
+
   return (
     <div className="w-full bg-transparent text-[#121212]">
       
       {/* =========================================================================
-          SECTION 1 — EDITORIAL HERO
-          Spacious, dignified typography with signature crimson accent
+          SECTION 1 — HERO BANNER
+          Clean, stately, high-contrast human photography with bold typography
           ========================================================================= */}
-      <section className="pt-20 sm:pt-24 pb-10 sm:pb-14 px-4 sm:px-8 border-b border-[#E5E3DC]/80 bg-transparent">
-        <div className="max-w-7xl mx-auto space-y-8">
-          
-          <div className="max-w-4xl space-y-6">
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-[#121212] tracking-tight leading-[1.05]">
+      <section className="relative min-h-[90vh] sm:min-h-screen flex items-end pb-16 sm:pb-24 pt-32 px-4 sm:px-8 lg:px-12 bg-black">
+        {/* Hero Background Responsive Photograph */}
+        <div className="absolute inset-0 z-0">
+          <HeroResponsiveImage
+            desktopImage={heroSec.image_url}
+            mobileImage={heroSec.image_mobile_url || heroSec.mobile_image_url}
+            alt="Onecore Pharma — Patients and Caregivers"
+            fallback="/assets/patients-caregivers.jpg"
+            className="w-full h-full object-cover object-center"
+          />
+          {/* Directional contrast gradient — lessened intensity */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent pointer-events-none" />
+        </div>
+
+        {/* Hero Content Block */}
+        <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
+          <ScrollReveal>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.04] max-w-4xl">
               Patients & Caregivers. <br />
               <span className="italic font-normal text-[#D52B1E]">Partners in healthcare.</span>
             </h1>
+          </ScrollReveal>
 
-            <p className="text-lg sm:text-2xl text-[#555555] font-light leading-relaxed font-sans max-w-3xl">
-              {heroSec.body || 'Patients live the experience of a health condition. Healthcare professionals bring the knowledge and judgement needed to manage it. At Onecore, both perspectives matter.'}
+          <ScrollReveal delay={0.08}>
+            <p className="text-base sm:text-xl lg:text-2xl text-white/90 font-light leading-relaxed font-sans max-w-3xl">
+              {heroSec.body || 'Patients live the experience of a health condition. Healthcare professionals bring the knowledge and judgement needed to manage it. At Onecore, both perspectives matter. Our role is to support them with dependable products, clear information and responsible communication.'}
             </p>
+          </ScrollReveal>
 
+          <ScrollReveal delay={0.14}>
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <button
                 type="button"
@@ -208,10 +271,10 @@ export default function PatientsCaregivers() {
                   const el = document.getElementById(targetId);
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-colors shadow-xs cursor-pointer"
+                className="inline-flex items-center gap-2.5 px-8 py-4 bg-[#D52B1E] hover:bg-[#B52015] text-white text-sm font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer"
               >
                 <span>{heroSec.cta_text || 'For Patients & Families'}</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
 
               <button
@@ -221,22 +284,12 @@ export default function PatientsCaregivers() {
                   const el = document.getElementById(targetId);
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#FAF9F6] hover:bg-[#EBE9E1] text-[#121212] text-xs font-semibold rounded-full transition-colors border border-[#E5E3DC] cursor-pointer"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white text-sm font-medium rounded-full transition-all duration-200 cursor-pointer"
               >
                 <span>{heroSec.secondary_cta_text || 'For Healthcare Professionals'}</span>
               </button>
             </div>
-          </div>
-
-          {/* Stately Hero Photograph Frame */}
-          <div className="relative rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/9] lg:aspect-[21/9] bg-[#FAF9F6]">
-            <img
-              src={assetUrl(heroSec.image_url || '/assets/patients-caregivers.jpg')}
-              alt="Elderly Indian patient in wheelchair with compassionate healthcare caregiver"
-              className="w-full h-full object-cover"
-            />
-          </div>
-
+          </ScrollReveal>
         </div>
       </section>
 
@@ -250,9 +303,6 @@ export default function PatientsCaregivers() {
             
             <div className="lg:col-span-6 space-y-6">
               <ScrollReveal>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                  {perspectivesSec.eyebrow || 'TWO PERSPECTIVES'}
-                </span>
                 <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
                   Different experiences. <br />
                   <span className="italic font-normal text-[#D52B1E]">The same goal.</span>
@@ -275,6 +325,10 @@ export default function PatientsCaregivers() {
                     src={assetUrl(perspectivesSec.image_url || '/assets/two-perspectives.jpg')}
                     alt="Clinical consultation and dialogue between Indian doctor and patient"
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/assets/two-perspectives.jpg';
+                    }}
                   />
                 </div>
               </ScrollReveal>
@@ -290,11 +344,8 @@ export default function PatientsCaregivers() {
       {roleSec.is_active && (
         <section className="py-12 sm:py-16 bg-transparent border-y border-[#E5E3DC]/80 px-4 sm:px-8">
           <div className="max-w-7xl mx-auto space-y-8 sm:space-y-10">
-            <div className="max-w-3xl space-y-3">
+            <div className="max-w-3xl">
               <ScrollReveal>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                  {roleSec.eyebrow || 'OUR ROLE'}
-                </span>
                 <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
                   Listen carefully. Support responsibly. Keep the person behind the medicine in view.
                 </h2>
@@ -336,13 +387,10 @@ export default function PatientsCaregivers() {
         <section id="for-patients" className="py-12 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto space-y-8 sm:space-y-10 scroll-mt-24">
           <div className="max-w-3xl space-y-4">
             <ScrollReveal>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                {forPatientsSec.eyebrow || 'FOR PATIENTS AND CAREGIVERS'}
-              </span>
               <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
                 You should be able to understand the medicines that are part of your care.
               </h2>
-              <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-2">
+              <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-3">
                 Clear information helps patients and caregivers take a more informed role in the treatment journey. Onecore provides factual information about its products and encourages patients to speak with their doctor or pharmacist.
               </p>
             </ScrollReveal>
@@ -392,6 +440,10 @@ export default function PatientsCaregivers() {
                     src={assetUrl(forPatientsSec.image_url || '/assets/internet/compassionate-care.jpg')}
                     alt="Compassionate healthcare support for patients and families"
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/assets/internet/compassionate-care.jpg';
+                    }}
                   />
                 </div>
               </ScrollReveal>
@@ -411,9 +463,6 @@ export default function PatientsCaregivers() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-7 space-y-6">
                 <ScrollReveal>
-                  <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                    {forProfessionalsSec.eyebrow || 'FOR HEALTHCARE PROFESSIONALS'}
-                  </span>
                   <h2 className="text-3xl sm:text-5xl font-serif font-light text-white tracking-tight leading-tight">
                     Supporting clinical practice with clear product information.
                   </h2>
@@ -433,6 +482,10 @@ export default function PatientsCaregivers() {
                       src={assetUrl(forProfessionalsSec.image_url || '/assets/healthcare-professionals.jpg')}
                       alt="Doctor reviewing clinical monographs"
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = '/assets/healthcare-professionals.jpg';
+                      }}
                     />
                   </div>
                 </ScrollReveal>
@@ -481,52 +534,62 @@ export default function PatientsCaregivers() {
       )}
 
       {/* =========================================================================
-          SECTION 6 — THE TREATMENT JOURNEY (Progressive 4 Stages)
+          SECTION 6 — THE TREATMENT JOURNEY (Hero Banner Design)
+          Clean, stately, high-contrast human photography with bold typography
           ========================================================================= */}
       {treatmentJourneySec.is_active && (
-        <section className="py-12 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto space-y-8 sm:space-y-10">
-          <div className="max-w-3xl space-y-4">
+        <section className="relative min-h-[90vh] sm:min-h-screen flex items-end pb-16 sm:pb-24 pt-32 px-4 sm:px-8 lg:px-12 bg-black">
+          {/* Hero Background Photograph */}
+          <div className="absolute inset-0 z-0">
+            <img
+              src={assetUrl(treatmentJourneySec.image_url || '/assets/treatment-journey.jpg')}
+              alt="Doctor-patient consultation in Indian healthcare clinic"
+              className="w-full h-full object-cover object-center opacity-85 brightness-90"
+              loading="lazy"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = '/assets/treatment-journey.jpg';
+              }}
+            />
+            {/* Directional contrast gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-black/20" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
+          </div>
+
+          {/* Hero Content Block */}
+          <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
             <ScrollReveal>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                {treatmentJourneySec.eyebrow || 'TREATMENT JOURNEY'}
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
+              <h2 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.04] max-w-4xl">
                 A prescription begins in the clinic. <br />
                 <span className="italic font-normal text-[#D52B1E]">Care continues beyond it.</span>
               </h2>
-              <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-2">
+            </ScrollReveal>
+
+            <ScrollReveal delay={0.08}>
+              <p className="text-base sm:text-xl lg:text-2xl text-white/90 font-light leading-relaxed font-sans max-w-3xl">
                 Healthcare professionals make treatment decisions in the clinical setting. Patients then carry those decisions into everyday life. A responsible pharmaceutical company should support both parts of that journey.
               </p>
             </ScrollReveal>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {treatmentJourneySec.items.map((step, idx) => (
-              <ScrollReveal key={step.title || idx} delay={idx * 0.06}>
-                <div className="p-8 rounded-3xl bg-white/80 backdrop-blur-xs border border-[#E5E3DC] hover:border-[#121212] transition-colors space-y-4 h-full flex flex-col justify-between shadow-xs">
-                  <div className="space-y-3">
-                    <span className="text-xs font-mono text-[#D52B1E] font-bold block">
-                      Stage {step.stage || `0${idx + 1}`}
-                    </span>
-                    <h3 className="text-xl font-serif font-bold text-[#121212] tracking-tight">
-                      {step.title}
-                    </h3>
-                    <p className="text-sm text-[#555555] leading-relaxed font-sans">
-                      {step.desc || step.description || step.text}
-                    </p>
+            {/* Treatment journey steps */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 pt-2 sm:pt-4">
+              {treatmentJourneySec.items.map((step, idx) => (
+                <ScrollReveal key={step.title || idx} delay={0.12 + idx * 0.05}>
+                  <div className="p-6 sm:p-7 rounded-3xl bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/20 transition-all space-y-3 h-full flex flex-col justify-between">
+                    <div className="space-y-2">
+                      <span className="text-xs font-mono text-[#D52B1E] font-bold block">
+                        Stage {step.stage || step.num || `0${idx + 1}`}
+                      </span>
+                      <h3 className="text-lg sm:text-xl font-serif font-bold text-white tracking-tight">
+                        {step.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-white/80 leading-relaxed font-sans">
+                        {step.desc || step.description || step.text}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-
-          <div className="pt-4">
-            <div className="rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[21/9] bg-white">
-              <img
-                src={assetUrl(treatmentJourneySec.image_url || '/assets/treatment-journey.jpg')}
-                alt="Doctor-patient consultation in Indian healthcare clinic"
-                className="w-full h-full object-cover"
-              />
+                </ScrollReveal>
+              ))}
             </div>
           </div>
         </section>
@@ -539,15 +602,12 @@ export default function PatientsCaregivers() {
         <section id="patient-safety" className="py-12 sm:py-16 bg-transparent border-t border-[#E5E3DC]/80 scroll-mt-24 px-4 sm:px-8">
           <div className="max-w-7xl mx-auto space-y-8">
             
-            <div className="max-w-3xl space-y-3">
+            <div className="max-w-3xl">
               <ScrollReveal>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D52B1E] block">
-                  {safetySec.eyebrow || 'PATIENT SAFETY'}
-                </span>
                 <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
                   Safety information deserves a clear way to reach us.
                 </h2>
-                <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans">
+                <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-3">
                   {safetySec.body}
                 </p>
               </ScrollReveal>
@@ -558,9 +618,6 @@ export default function PatientsCaregivers() {
                 <ScrollReveal key={card.title || idx} delay={idx * 0.08}>
                   <div className="bg-white/80 backdrop-blur-xs p-8 sm:p-12 rounded-[28px] border border-[#E5E3DC] shadow-sm h-full flex flex-col justify-between space-y-8">
                     <div className="space-y-3">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-[#D52B1E] block">
-                        {card.eyebrow}
-                      </span>
                       <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#121212] tracking-tight">
                         {card.title}
                       </h3>
@@ -625,6 +682,13 @@ export default function PatientsCaregivers() {
                   </h3>
                 </div>
 
+                {safetyError && (
+                  <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5">
+                    <span>⚠️</span>
+                    <p className="font-medium">{safetyError}</p>
+                  </div>
+                )}
+
                 <div className="space-y-3 text-sm pt-2">
                   <div>
                     <label className="block text-xs font-semibold uppercase tracking-wider text-[#121212] mb-1.5">
@@ -633,6 +697,8 @@ export default function PatientsCaregivers() {
                     <input
                       type="text"
                       required
+                      value={safetyForm.fullName}
+                      onChange={(e) => setSafetyForm({ ...safetyForm, fullName: e.target.value })}
                       placeholder="Your name"
                       className="w-full px-4 py-2.5 bg-[#FAF9F6] border border-[#E5E3DC] text-sm rounded-xl focus:outline-none focus:border-[#D52B1E] transition-colors text-[#121212]"
                     />
@@ -645,6 +711,8 @@ export default function PatientsCaregivers() {
                     <input
                       type="email"
                       required
+                      value={safetyForm.email}
+                      onChange={(e) => setSafetyForm({ ...safetyForm, email: e.target.value })}
                       placeholder="name@domain.com"
                       className="w-full px-4 py-2.5 bg-[#FAF9F6] border border-[#E5E3DC] text-sm rounded-xl focus:outline-none focus:border-[#D52B1E] transition-colors text-[#121212]"
                     />
@@ -656,6 +724,8 @@ export default function PatientsCaregivers() {
                     </label>
                     <input
                       type="text"
+                      value={safetyForm.productOrBatch}
+                      onChange={(e) => setSafetyForm({ ...safetyForm, productOrBatch: e.target.value })}
                       placeholder="e.g. Calmme, Oneflexo, Batch 24B01"
                       className="w-full px-4 py-2.5 bg-[#FAF9F6] border border-[#E5E3DC] text-sm rounded-xl focus:outline-none focus:border-[#D52B1E] transition-colors text-[#121212]"
                     />
@@ -668,6 +738,8 @@ export default function PatientsCaregivers() {
                     <textarea
                       required
                       rows={3}
+                      value={safetyForm.observation}
+                      onChange={(e) => setSafetyForm({ ...safetyForm, observation: e.target.value })}
                       placeholder="Please describe the side effect, packaging irregularity, or quality concern in detail..."
                       className="w-full px-4 py-2.5 bg-[#FAF9F6] border border-[#E5E3DC] text-sm rounded-xl focus:outline-none focus:border-[#D52B1E] transition-colors text-[#121212] resize-none"
                     />
@@ -684,9 +756,10 @@ export default function PatientsCaregivers() {
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-colors cursor-pointer shadow-xs"
+                    disabled={safetySubmitting}
+                    className="px-6 py-2.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-colors cursor-pointer shadow-xs disabled:opacity-50"
                   >
-                    Submit Report
+                    {safetySubmitting ? 'Transmitting...' : 'Submit Report'}
                   </button>
                 </div>
               </form>

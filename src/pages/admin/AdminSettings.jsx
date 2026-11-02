@@ -37,6 +37,11 @@ export default function AdminSettings() {
     office_hours: '10 AM - 7 PM',
     default_seo_title: 'Onecore Pharma — Purposeful Formulations, Dependable Quality',
     default_seo_desc: 'Onecore Pharma is a modern pharmaceutical company developing purposeful formulations and healthcare solutions centered on patients and healthcare professionals.',
+    cookie_banner_enabled: 'true',
+    cookie_banner_title: 'Cookie & Privacy Preferences',
+    cookie_banner_desc: 'Onecore Pharma uses cookies to ensure website security, analyze site usage, and support our clinical and corporate communications in accordance with our Privacy Policy.',
+    cookie_privacy_url: '/privacy',
+    google_analytics_id: '',
   });
 
   const [isSaving, setIsSaving] = useState(false);
@@ -305,6 +310,97 @@ export default function AdminSettings() {
                 onChange={set('safety_email')}
                 className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
               />
+            </div>
+          </div>
+        </AdminCard>
+
+        {/* Section 4: Cookie Consent & Privacy Compliance */}
+        <AdminCard
+          title="Cookie Consent & Privacy Compliance"
+          subtitle="Manage website cookie banners, DPDP Act consent requirements, and Google Analytics tracking"
+        >
+          <div className="space-y-4">
+            {/* Enable/Disable Banner Switch */}
+            <div className="flex items-center justify-between p-3.5 bg-slate-50 border border-slate-200 rounded-xl">
+              <div>
+                <span className="text-xs font-semibold text-slate-800 block">
+                  Enable Cookie Consent Banner
+                </span>
+                <span className="text-[11px] text-slate-500 block pt-0.5">
+                  Display floating banner on first visit and enable user granular cookie preferences
+                </span>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.cookie_banner_enabled === 'true' || formData.cookie_banner_enabled === true}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      cookie_banner_enabled: e.target.checked ? 'true' : 'false',
+                    }))
+                  }
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0D5C75]"></div>
+              </label>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-600 font-medium mb-1.5">
+                  Banner Heading
+                </label>
+                <input
+                  type="text"
+                  value={formData.cookie_banner_title}
+                  onChange={set('cookie_banner_title')}
+                  placeholder="Cookie & Privacy Preferences"
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-600 font-medium mb-1.5">
+                  Privacy Policy Link URL
+                </label>
+                <input
+                  type="text"
+                  value={formData.cookie_privacy_url}
+                  onChange={set('cookie_privacy_url')}
+                  placeholder="/privacy"
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-600 font-medium mb-1.5">
+                  Banner Notice Text
+                </label>
+                <textarea
+                  rows={2}
+                  value={formData.cookie_banner_desc}
+                  onChange={set('cookie_banner_desc')}
+                  placeholder="Explain why cookies are used..."
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75] resize-y"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-600 font-medium mb-1.5">
+                  Google Analytics 4 Measurement ID (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={formData.google_analytics_id}
+                  onChange={set('google_analytics_id')}
+                  placeholder="e.g. G-XXXXXXXXXX"
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
+                />
+                <p className="text-[11px] text-slate-500 mt-1 italic">
+                  Privacy Safe: Tracking will only initialize if the visitor explicitly accepts Analytics Cookies.
+                </p>
+              </div>
             </div>
           </div>
         </AdminCard>

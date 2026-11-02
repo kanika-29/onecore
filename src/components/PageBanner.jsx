@@ -1,33 +1,28 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { assetUrl } from '../utils/assetUrl';
+import HeroResponsiveImage from './HeroResponsiveImage';
 
 export default function PageBanner({
   title,
   imageUrl,
+  imageMobileUrl,
   imageAlt = 'Onecore Pharma',
   className = '',
 }) {
-  const fallbackImage = assetUrl('/assets/hero-healthcare.jpg');
-  const bgImage = assetUrl(imageUrl) || fallbackImage;
-
   return (
     <section className={`relative w-full overflow-hidden rounded-b-[2rem] sm:rounded-b-[2.75rem] lg:rounded-b-[3.5rem] shadow-md ${className}`}>
       {/* Background Image Container */}
       <div className="relative w-full h-[240px] sm:h-[300px] md:h-[360px] lg:h-[400px] bg-brand-dark flex items-center justify-center">
-        <img
-          src={bgImage}
+        <HeroResponsiveImage
+          desktopImage={imageUrl}
+          mobileImage={imageMobileUrl}
           alt={imageAlt}
+          fallback="/assets/hero-healthcare.jpg"
           className="absolute inset-0 w-full h-full object-cover object-center"
-          onError={(e) => {
-            if (e.target.src !== fallbackImage) {
-              e.target.src = fallbackImage;
-            }
-          }}
         />
 
-        {/* Subtle Dark Gradient Overlay for optimal contrast */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/45 to-black/35" />
+        {/* Softened Gradient Overlay for vibrant contrast */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/25 to-transparent pointer-events-none" />
 
         {/* Centered Bold White Title */}
         <div className="relative z-10 max-w-5xl mx-auto px-6 sm:px-8 text-center">

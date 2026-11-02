@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate, Link, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import CookieConsentBanner from './components/CookieConsentBanner';
 import TechnicalGridBackground from './components/TechnicalGridBackground';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -26,6 +27,7 @@ import DistributionPartnerships from './pages/DistributionPartnerships';
 import Privacy from './pages/Privacy';
 import Disclaimer from './pages/Disclaimer';
 import NotFound from './pages/NotFound';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Admin Context & Components
 import { AdminAuthProvider } from './context/AdminAuthContext';
@@ -43,6 +45,8 @@ import AdminMedia from './pages/admin/AdminMedia';
 import AdminEnquiries from './pages/admin/AdminEnquiries';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminUsers from './pages/admin/AdminUsers';
+
+import ProductDetailDispatcher from './components/ProductDetailDispatcher';
 
 function HashRedirect() {
   const navigate = useNavigate();
@@ -197,6 +201,8 @@ function PublicRoutes() {
             <Route path="/patients-caregivers" element={<PatientsCaregivers />} />
             <Route path="/areas-of-care" element={<AreasOfCare />} />
             <Route path="/areas-of-care/femme/:productSlug" element={<FemmeProductDetail />} />
+            <Route path="/areas-of-care/womens-health/:productSlug" element={<FemmeProductDetail />} />
+            <Route path="/areas-of-care/women-health/:productSlug" element={<FemmeProductDetail />} />
             <Route path="/areas-of-care/pediaplus/:productSlug" element={<PediatricsProductDetail />} />
             <Route path="/areas-of-care/pediatrics/:productSlug" element={<PediatricsProductDetail />} />
             <Route path="/areas-of-care/paediatrics/:productSlug" element={<PediatricsProductDetail />} />
@@ -227,6 +233,7 @@ function PublicRoutes() {
             <Route path="/areas-of-care/cytos/:productSlug" element={<OncologyProductDetail />} />
             <Route path="/areas-of-care/oncology/:productSlug" element={<OncologyProductDetail />} />
             <Route path="/areas-of-care/cancer-care/:productSlug" element={<OncologyProductDetail />} />
+            <Route path="/areas-of-care/:divisionSlug/:productSlug" element={<ProductDetailDispatcher />} />
             <Route path="/areas-of-care/:slug" element={<AreaOfCareDetail />} />
             <Route path="/news" element={<News />} />
             <Route path="/news/:slug" element={<NewsDetail />} />
@@ -249,6 +256,7 @@ function PublicRoutes() {
           </Routes>
         </main>
         <Footer />
+        <CookieConsentBanner />
       </div>
     </div>
   );
@@ -271,7 +279,9 @@ export default function App() {
       <AdminAuthProvider>
         <HashRedirect />
         <ScrollToTop />
-        <AppRoutes />
+        <ErrorBoundary>
+          <AppRoutes />
+        </ErrorBoundary>
       </AdminAuthProvider>
     </BrowserRouter>
   );

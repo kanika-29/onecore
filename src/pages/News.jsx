@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ScrollReveal from '../components/ScrollReveal';
+import HeroResponsiveImage from '../components/HeroResponsiveImage';
 import { useNews } from '../hooks/useNews';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { ArrowRight, Clock } from 'lucide-react';
 import { assetUrl } from '../utils/assetUrl';
+import PageSkeleton from '../components/PageSkeleton';
 
 export default function News() {
-  const { getSection } = useCmsPage('news');
-  const { articles: newsArticles } = useNews();
+  const { getSection, loading: cmsLoading, isError: cmsError } = useCmsPage('news');
+  const { articles: newsArticles, loading: newsLoading } = useNews();
 
   useEffect(() => {
     document.title = "News & Perspectives | Onecore Pharma";
@@ -21,28 +23,50 @@ export default function News() {
     image_url: '/assets/news-1.jpg',
   });
 
-  const featuredArticle = newsArticles.length > 0 ? newsArticles[0] : null;
-  const remainingArticles = newsArticles.length > 1 ? newsArticles.slice(1) : [];
+  const articlesList = newsArticles || [];
+  const featuredArticle = articlesList.length > 0 ? articlesList[0] : null;
+  const remainingArticles = articlesList.length > 1 ? articlesList.slice(1) : [];
+
+  if ((cmsLoading && !cmsError) || (newsLoading && !newsArticles)) {
+    return <PageSkeleton />;
+  }
 
   return (
     <div className="w-full bg-transparent text-[#121212] min-h-screen">
       
       {/* =========================================================================
-          SECTION 1 — EDITORIAL HERO
-          Spacious, dignified typography with signature crimson accent
+          SECTION 1 — HERO BANNER
+          Clean, stately, high-contrast human photography with bold typography
           ========================================================================= */}
-      <section className="pt-20 sm:pt-24 pb-8 sm:pb-10 px-4 sm:px-8 border-b border-[#E5E3DC]/80 bg-[#FAF9F6]/50 backdrop-blur-[1px]">
-        <div className="max-w-7xl mx-auto space-y-6">
-          <div className="max-w-3xl space-y-4">
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-[#121212] tracking-tight leading-[1.05]">
+      <section className="relative min-h-[90vh] sm:min-h-screen flex items-end pb-16 sm:pb-24 pt-32 px-4 sm:px-8 lg:px-12 bg-black">
+        {/* Hero Background Responsive Photograph */}
+        <div className="absolute inset-0 z-0">
+          <HeroResponsiveImage
+            desktopImage={heroSec.image_url}
+            mobileImage={heroSec.image_mobile_url || heroSec.mobile_image_url}
+            alt="Onecore Pharma News & Perspectives"
+            fallback="/assets/news-1.jpg"
+            className="w-full h-full object-cover object-center"
+          />
+          {/* Directional contrast gradient — lessened intensity */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent pointer-events-none" />
+        </div>
+
+        {/* Hero Content Block */}
+        <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
+          <ScrollReveal>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.04] max-w-4xl">
               News & <br />
               <span className="italic font-normal text-[#D52B1E]">Clinical Perspectives.</span>
             </h1>
+          </ScrollReveal>
 
-            <p className="text-lg sm:text-xl text-[#555555] font-light leading-relaxed font-sans pt-1">
+          <ScrollReveal delay={0.08}>
+            <p className="text-base sm:text-xl lg:text-2xl text-white/90 font-light leading-relaxed font-sans max-w-3xl">
               {heroSec.body || 'Stay updated with formulation research insights, therapeutic milestones, and manufacturing disciplines from Onecore Pharma.'}
             </p>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 

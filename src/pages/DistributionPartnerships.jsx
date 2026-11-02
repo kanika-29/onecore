@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, ArrowRight, ShieldCheck, Building2, MapPin, Mail, Phone, Users, TrendingUp } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
+import HeroResponsiveImage from '../components/HeroResponsiveImage';
 import { useSettings } from '../hooks/useSettings';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { assetUrl } from '../utils/assetUrl';
+import PageSkeleton from '../components/PageSkeleton';
 
 export default function DistributionPartnerships() {
   const { contact } = useSettings();
-  const { getSection } = useCmsPage('partnerships');
+  const { getSection, loading: cmsLoading, isError: cmsError } = useCmsPage('partnerships');
   const heroSection = getSection('hero');
   const pillarsSection = getSection('pillars');
 
@@ -35,14 +37,58 @@ export default function DistributionPartnerships() {
 
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
+    setSubmitError(null);
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          partnerName: formData.partnerName,
+          firmName: formData.firmName,
+          email: formData.email,
+          phone: formData.phone,
+          state: formData.state,
+          city: formData.city,
+          experienceYears: formData.experienceYears,
+          drugLicense: formData.drugLicense,
+          gstNumber: formData.gstNumber,
+          therapeuticInterest: formData.therapeuticInterest,
+          message: formData.message,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || 'Unable to submit your application. Please verify your details and try again.');
+      }
+
       setSubmitted(true);
-    }, 800);
+      setFormData({
+        partnerName: '',
+        firmName: '',
+        email: '',
+        phone: '',
+        state: '',
+        city: '',
+        experienceYears: '',
+        drugLicense: '',
+        gstNumber: '',
+        therapeuticInterest: 'All Divisions',
+        message: '',
+      });
+    } catch (err) {
+      console.error('Partnership submission error:', err);
+      setSubmitError(err.message || 'Connection error. Please try again or email us directly.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const partnerAdvantages = [
@@ -68,28 +114,55 @@ export default function DistributionPartnerships() {
     },
   ];
 
+  if (cmsLoading && !cmsError) {
+    return <PageSkeleton />;
+  }
+
   return (
     <div className="w-full bg-transparent text-[#121212]">
 
       {/* =========================================================================
-          SECTION 1 — HERO
+          SECTION 1 — HERO BANNER
+          Clean, stately, high-contrast human photography with bold typography
           ========================================================================= */}
-      <section className="pt-20 sm:pt-24 pb-10 sm:pb-14 px-4 sm:px-8 border-b border-[#E5E3DC]/80 bg-transparent">
-        <div className="max-w-7xl mx-auto space-y-8">
-          
-          <div className="max-w-4xl space-y-6">
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-[#121212] tracking-tight leading-[1.05]">
+      <section className="relative min-h-[90vh] sm:min-h-screen flex items-end pb-16 sm:pb-24 pt-32 px-4 sm:px-8 lg:px-12 bg-black">
+        {/* Hero Background Responsive Photograph */}
+        <div className="absolute inset-0 z-0">
+          <HeroResponsiveImage
+            desktopImage={heroSection?.image_url}
+            mobileImage={heroSection?.image_mobile_url || heroSection?.mobile_image_url}
+            alt="Onecore Pharma pan-India pharmaceutical supply network"
+            fallback="/assets/about-facility.jpg"
+            className="w-full h-full object-cover object-center"
+          />
+          {/* Directional contrast gradient — lessened intensity */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent pointer-events-none" />
+        </div>
+
+        {/* Hero Content Block */}
+        <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
+          <ScrollReveal>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.04] max-w-4xl">
               {heroSection?.heading || 'Distribution & Franchise Partnerships'}
+              {(heroSection?.subheading || 'Grow with Onecore.') && (
+                <>
+                  <br />
+                  <span className="italic font-normal text-[#D52B1E]">
+                    {heroSection?.subheading || 'Grow with Onecore.'}
+                  </span>
+                </>
+              )}
             </h1>
+          </ScrollReveal>
 
-            <p className="text-2xl sm:text-3xl font-serif italic text-[#D52B1E]">
-              {heroSection?.subheading || 'Grow with Onecore.'}
-            </p>
-
-            <p className="text-lg sm:text-xl text-[#555555] font-light leading-relaxed font-sans max-w-3xl">
+          <ScrollReveal delay={0.08}>
+            <p className="text-base sm:text-xl lg:text-2xl text-white/90 font-light leading-relaxed font-sans max-w-3xl">
               {heroSection?.body || 'We are expanding our distribution network across India and are looking to partner with pharmaceutical distributors and franchise partners who understand their markets and want to build for the long term.'}
             </p>
+          </ScrollReveal>
 
+          <ScrollReveal delay={0.14}>
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <button
                 type="button"
@@ -99,45 +172,32 @@ export default function DistributionPartnerships() {
                     el.scrollIntoView({ behavior: 'smooth' });
                   }
                 }}
-                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-semibold rounded-full transition-colors shadow-xs cursor-pointer"
+                className="inline-flex items-center gap-2.5 px-8 py-4 bg-[#D52B1E] hover:bg-[#B52015] text-white text-sm font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer"
               >
                 <span>{heroSection?.cta_text || 'Apply for Partnership'}</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
 
               <Link
                 to={heroSection?.secondary_cta_url || '/areas-of-care'}
-                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#FAF9F6] hover:bg-[#EBE9E1] text-[#121212] text-xs font-semibold rounded-full transition-colors border border-[#E5E3DC]"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white text-sm font-medium rounded-full transition-all duration-200"
               >
                 <span>{heroSection?.secondary_cta_text || 'View Product Portfolio'}</span>
               </Link>
             </div>
-          </div>
-
-          {/* Stately Indian Corporate / Clinical Photo Frame */}
-          <div className="relative rounded-[28px] overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/9] lg:aspect-[21/9] bg-[#FAF9F6]">
-            <img
-              src={assetUrl(heroSection?.image_url || '/assets/about-facility.jpg')}
-              alt="Onecore Pharma pan-India pharmaceutical supply network"
-              className="w-full h-full object-cover"
-            />
-          </div>
-
+          </ScrollReveal>
         </div>
       </section>
 
       {/* =========================================================================
           SECTION 2 — WHY PARTNER WITH ONECORE (4 PILLARS)
           ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto space-y-8 sm:space-y-10">
-        <div className="max-w-3xl space-y-4">
+      <section className="py-10 sm:py-14 px-4 sm:px-8 max-w-7xl mx-auto space-y-6 sm:space-y-8">
+        <div className="max-w-3xl">
           <ScrollReveal>
             <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
               {pillarsSection?.heading || 'Why partner with Onecore'}
             </h2>
-            <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed">
-              {pillarsSection?.subheading || pillarsSection?.body || 'We partner with ethical distributors, PCD franchises, and institutional supply associates who share our vision for medical integrity and clinical excellence.'}
-            </p>
           </ScrollReveal>
         </div>
 
@@ -255,15 +315,12 @@ export default function DistributionPartnerships() {
           SECTION 2.7 — LOGISTICS & INFRASTRUCTURE SHOWCASE
           ========================================================================= */}
       <section className="py-12 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto space-y-8 sm:space-y-10">
-        <div className="max-w-3xl space-y-3">
+        <div className="max-w-3xl">
           <ScrollReveal>
-            <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#D52B1E]">
-              DISTRIBUTION INFRASTRUCTURE
-            </span>
             <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight">
               Pan-India Cold Chain & High-Throughput Logistics
             </h2>
-            <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed">
+            <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed pt-3">
               Every shipment leaving our central hubs is protected by disciplined temperature logging, certified primary packaging, and rapid logistics dispatch.
             </p>
           </ScrollReveal>
@@ -363,6 +420,15 @@ export default function DistributionPartnerships() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="p-8 sm:p-12 rounded-3xl bg-white/80 backdrop-blur-xs border border-[#E5E3DC] space-y-6 shadow-xs">
+              {submitError && (
+                <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm flex items-start gap-3">
+                  <span className="text-base">⚠️</span>
+                  <div>
+                    <p className="font-semibold text-rose-900">Application Submission Issue</p>
+                    <p className="mt-0.5 text-rose-700">{submitError}</p>
+                  </div>
+                </div>
+              )}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider text-[#333333] mb-2">

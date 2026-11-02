@@ -2,6 +2,10 @@ import { query } from '../config/db.js';
 
 export const getTherapeuticAreas = async (req, res, next) => {
   try {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
     const isPublic = !req.user;
     let sql = `
       SELECT ta.*, COUNT(p.id) as product_count
@@ -36,8 +40,26 @@ export const getTherapeuticAreas = async (req, res, next) => {
 
 export const getTherapeuticAreaById = async (req, res, next) => {
   try {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
     const { id } = req.params;
-    const areas = await query('SELECT * FROM therapeutic_areas WHERE id = ? OR slug = ?', [id, id]);
+    const cleanId = (id || '').toLowerCase().trim();
+    const slugAliasMap = {
+      omnara: 'general-medicine',
+      ortheon: 'orthopaedics',
+      femme: 'womens-health',
+      pediaplus: 'paediatrics',
+      pediatrics: 'paediatrics',
+      neurix: 'neurology',
+      eyerix: 'ophthalmology',
+      vellis: 'dermatology',
+      otira: 'ent',
+      cytos: 'oncology',
+    };
+    const mappedSlug = slugAliasMap[cleanId] || cleanId;
+    const areas = await query('SELECT * FROM therapeutic_areas WHERE id = ? OR slug = ? OR slug = ?', [cleanId, cleanId, mappedSlug]);
 
     if (!areas || areas.length === 0) {
       return res.status(404).json({ success: false, message: 'Therapeutic area not found.' });
@@ -51,8 +73,11 @@ export const getTherapeuticAreaById = async (req, res, next) => {
     area.tags = tags.map(t => t.name);
     area.tagObjects = tags;
 
-    // Also get products in this area
-    area.products = await query('SELECT id, brand_name, slug, packshot_url, status FROM products WHERE therapeutic_area_id = ?', [area.id]);
+    // Also get published products in this area with full details
+    area.products = await query(
+      'SELECT id, brand_name, slug, short_description, full_description, composition_summary, packshot_url, status FROM products WHERE therapeutic_area_id = ? AND status = "published" ORDER BY display_order ASC, id ASC',
+      [area.id]
+    );
 
     return res.status(200).json({
       success: true,

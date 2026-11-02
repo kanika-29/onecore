@@ -8,7 +8,7 @@ export default function NewsDetail() {
   const { slug } = useParams();
   const { articles, loading } = useNews();
 
-  const article = articles.find(a => a.slug === slug);
+  const article = articles?.find(a => a.slug === slug);
 
   useEffect(() => {
     if (article) {
@@ -71,6 +71,11 @@ export default function NewsDetail() {
               src={assetUrl(article.image || '/assets/hero-healthcare.jpg')}
               alt={article.title}
               className="w-full h-full object-cover"
+              loading="lazy"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = '/assets/hero-healthcare.jpg';
+              }}
             />
           </div>
 

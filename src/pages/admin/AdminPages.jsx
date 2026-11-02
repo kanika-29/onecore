@@ -19,6 +19,9 @@ const DEFAULT_PAGES = [
   { id: 6, page_key: 'news', title: 'News & Perspectives', route: '/news', meta_description: 'Corporate announcements and press releases.', section_count: 1 },
   { id: 7, page_key: 'contact', title: 'Contact Us', route: '/contact', meta_description: 'Commercial and medical communication channels.', section_count: 7 },
   { id: 8, page_key: 'healthcare-professionals', title: 'Healthcare Professionals', route: '/healthcare-professionals', meta_description: 'Medical dialogue and scientific portfolio data.', section_count: 3 },
+  { id: 55, page_key: 'partnerships', title: 'Distribution & Partnerships', route: '/partnerships', meta_description: 'Distribution network and franchise partner criteria.', section_count: 4 },
+  { id: 56, page_key: 'privacy', title: 'Privacy Statement', route: '/privacy', meta_description: 'Information collection, usage, and data protection policies.', section_count: 4 },
+  { id: 57, page_key: 'disclaimer', title: 'Terms of Use & Disclaimer', route: '/disclaimer', meta_description: 'Medical information notice, regulatory boundaries, and website terms.', section_count: 3 },
 ];
 
 export default function AdminPages() {

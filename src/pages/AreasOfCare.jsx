@@ -7,30 +7,28 @@ import {
   CheckCircle2, 
   ArrowLeft 
 } from 'lucide-react';
-import { allProducts, searchFormulations } from '../data/allProducts';
 import { useTherapeuticAreas } from '../hooks/useTherapeuticAreas';
+import { THERAPEUTIC_DIVISIONS } from '../data/areasOfCare';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { assetUrl } from '../utils/assetUrl';
+import { formatProductName } from '../utils/formatProductName';
+import PageSkeleton from '../components/PageSkeleton';
 
 export default function AreasOfCare() {
   const [searchParams, setSearchParams] = useSearchParams();
   const urlQuery = searchParams.get('q') || '';
 
-  const { areas: dynamicAreas } = useTherapeuticAreas();
+  const { areas: dynamicAreas, loading: areasLoading } = useTherapeuticAreas();
   const areasList = dynamicAreas || [];
-  const { getSection } = useCmsPage('areas-of-care');
+  const { getSection, loading: cmsLoading, isError: cmsError } = useCmsPage('areas-of-care');
   const heroSection = getSection('hero');
 
   // Local search input
   const [searchQuery, setSearchQuery] = useState(urlQuery);
   const [activeSpecialtyId, setActiveSpecialtyId] = useState(areasList[0]?.id || 'femme');
-
-  // Sync state if urlQuery changes
-  useEffect(() => {
-    if (urlQuery) {
-      setSearchQuery(urlQuery);
-    }
-  }, [urlQuery]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [totalProductsCount, setTotalProductsCount] = useState(null);
 
   // Form state for institutional catalogue request
   const [formState, setFormState] = useState({
@@ -44,10 +42,62 @@ export default function AreasOfCare() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Search Results
-  const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return [];
-    return searchFormulations(searchQuery);
+  // Sync state if urlQuery changes
+  useEffect(() => {
+    if (urlQuery) {
+      setSearchQuery(urlQuery);
+    }
+  }, [urlQuery]);
+
+  // Fetch total products count from database for stats counter
+  useEffect(() => {
+    fetch('/api/products', {
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache' },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        const items = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
+        setTotalProductsCount(items.length);
+      })
+      .catch(() => {});
+  }, []);
+
+  // Search exclusively from database
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    let isMounted = true;
+    setSearchLoading(true);
+
+    fetch(`/api/products?q=${encodeURIComponent(searchQuery.trim())}`, {
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache' },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        if (!isMounted) return;
+        const items = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
+        setSearchResults(items);
+      })
+      .catch(() => {
+        if (isMounted) setSearchResults([]);
+      })
+      .finally(() => {
+        if (isMounted) setSearchLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [searchQuery]);
 
   // Handle Search Input submit
@@ -76,6 +126,8 @@ export default function AreasOfCare() {
     }
   };
 
+  const [formError, setFormError] = useState(null);
+
   const isFormValid =
     formState.fullName.trim() !== '' &&
     formState.organisation.trim() !== '' &&
@@ -84,16 +136,47 @@ export default function AreasOfCare() {
     formState.country.trim() !== '' &&
     formState.consent === true;
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!isFormValid) return;
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setFormError(null);
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: formState.fullName,
+          workEmail: formState.workEmail,
+          organisation: formState.organisation,
+          role: formState.role,
+          country: formState.country,
+          contactType: formState.role || 'Institutional Healthcare Representative',
+          natureOfEnquiry: 'Institutional Access & Dossier Request',
+          message: `Institutional access and dossier request for ${formState.organisation} (Country/Region: ${formState.country}). Designated Role: ${formState.role}.`,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || 'Unable to submit your institutional request. Please verify your details.');
+      }
+
       setFormSubmitted(true);
-    }, 400);
+    } catch (err) {
+      console.error('Institutional request error:', err);
+      setFormError(err.message || 'Connection error. Please try again or email us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (areasLoading || (cmsLoading && !cmsError && !dynamicAreas)) {
+    return <PageSkeleton />;
+  }
 
   return (
     <div className="w-full bg-transparent text-[#121212] min-h-screen overflow-x-hidden">
@@ -128,7 +211,7 @@ export default function AreasOfCare() {
               <div className="h-10 w-[1px] bg-[#E5E3DC]" />
               <div>
                 <span className="block text-3xl sm:text-4xl font-serif font-light text-[#D52B1E]">
-                  {allProducts.length}+
+                  {totalProductsCount !== null ? `${totalProductsCount}+` : '60+'}
                 </span>
                 <span className="text-xs font-semibold uppercase tracking-wider text-[#777777]">
                   Formulations
@@ -205,7 +288,11 @@ export default function AreasOfCare() {
               </button>
             </div>
 
-            {searchResults.length === 0 ? (
+            {searchLoading ? (
+              <div className="py-12 text-center text-xs text-[#777777] font-mono tracking-wider uppercase">
+                Searching active database formulations...
+              </div>
+            ) : searchResults.length === 0 ? (
               <div className="py-12 text-center bg-[#FAF9F6] rounded-3xl border border-[#E5E3DC] p-8 space-y-3 max-w-lg mx-auto">
                 <p className="text-base font-serif font-medium text-[#121212]">
                   No matching formulations found
@@ -223,31 +310,40 @@ export default function AreasOfCare() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {searchResults.map((product) => {
-                  const productImage = product.image || '/assets/therapeutic-general-medicine.jpg';
+                  const divSlug = product.division || product.divisionSlug || product.therapeutic_area_slug || 'general-medicine';
+                  const productUrl = product.productUrl || (product.slug === 'oneflexo' ? '/areas-of-care/orthopaedics/oneflexo' : `/areas-of-care/${divSlug}/${product.slug}`);
+                  const title = product.brandName || product.name || product.brand_name || 'Unnamed Product';
+                  const comp = product.composition || product.composition_summary || product.shortDescription || '';
+                  const productImage = product.packshot_url || product.productPrimaryPackshotImage || product.image || '/assets/therapeutic-general-medicine.jpg';
+
                   return (
                     <Link
-                      key={product.division + product.slug + product.name}
-                      to={product.productUrl}
+                      key={product.id || divSlug + product.slug + title}
+                      to={productUrl}
                       className="bg-white/80 backdrop-blur-xs border border-[#E5E3DC] hover:border-[#D52B1E] transition-all duration-300 rounded-3xl overflow-hidden flex flex-col group shadow-xs hover:shadow-md block cursor-pointer"
                     >
-                      {/* Product Image — Flush to top, left, and right */}
-                      <div className="w-full aspect-[4/3] bg-[#FAF9F6] overflow-hidden">
+                      {/* Product Image — Contained with padding to avoid carton clipping */}
+                      <div className="w-full aspect-[4/3] bg-[#FAF9F6] overflow-hidden flex items-center justify-center p-3 sm:p-4">
                         <img
                           src={assetUrl(productImage)}
-                          alt={`${product.name} - Onecore Pharma`}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          alt={`${title} - Onecore Pharma`}
+                          className={`w-full h-full ${productImage.includes('/products/') ? 'object-contain mix-blend-multiply' : 'object-cover'} group-hover:scale-105 transition-transform duration-500`}
                           loading="lazy"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = '/assets/therapeutic-general-medicine.jpg';
+                          }}
                         />
                       </div>
 
-                      {/* Product Details: Just Name and Salt */}
+                      {/* Product Details: Clear Legible Name and Active Salt */}
                       <div className="p-5 sm:p-6 flex flex-col flex-1">
                         <h3 className="text-xl sm:text-2xl font-serif font-medium text-[#121212] group-hover:text-[#D52B1E] transition-colors mb-2 leading-snug">
-                          {product.name}
+                          {formatProductName(title)}
                         </h3>
 
-                        <p className="text-xs sm:text-sm text-[#555555] font-light leading-relaxed">
-                          {product.composition}
+                        <p className="text-sm sm:text-base text-[#222222] font-normal leading-relaxed line-clamp-3">
+                          {comp}
                         </p>
                       </div>
                     </Link>
@@ -293,98 +389,111 @@ export default function AreasOfCare() {
           SECTION 2 — THE 9 SPECIALTY DIVISIONS (ALTERNATING EDITORIAL SHOWCASE)
           ========================================================================= */}
       <section className="py-8 sm:py-12 px-4 sm:px-8 max-w-7xl mx-auto space-y-12 sm:space-y-16">
-        {areasList.map((area, index) => {
-          const isEven = index % 2 === 0;
-          const divisionSlug = (area.divisionName || area.slug || area.id || '').toLowerCase();
-          const divisionUrl = `/areas-of-care/${divisionSlug}`;
-          const formulationCount = area.products ? area.products.length : 0;
-
-          return (
-            <div
-              key={area.id}
-              id={area.id}
-              className="scroll-mt-28 border-b border-[#E5E3DC] pb-20 sm:pb-28 last:border-b-0"
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-                
-                {/* Text Column */}
-                <div
-                  className={`order-2 lg:col-span-6 space-y-6 ${
-                    isEven ? 'lg:order-2' : 'lg:order-1'
-                  }`}
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#D52B1E]">
-                        {area.divisionName || area.displayName}
-                      </span>
-                      {formulationCount > 0 && (
-                        <span className="text-xs font-mono text-[#777777]">
-                          ({formulationCount} Formulations)
-                        </span>
-                      )}
+        {areasLoading && (!areasList || areasList.length === 0) ? (
+          // Neutral loading skeleton state directly inside layout to prevent visual flash/jitter
+          <div className="space-y-12">
+            {[1, 2, 3].map((idx) => (
+              <div key={idx} className="border-b border-[#E5E3DC] pb-14 sm:pb-20">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+                  <div className="order-2 lg:col-span-6 space-y-6">
+                    <div className="h-4 w-32 bg-gray-200 animate-pulse rounded" />
+                    <div className="h-10 w-3/4 bg-gray-200 animate-pulse rounded" />
+                    <div className="space-y-2">
+                      <div className="h-4 w-full bg-gray-200 animate-pulse rounded" />
+                      <div className="h-4 w-5/6 bg-gray-200 animate-pulse rounded" />
                     </div>
-                    <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-[1.1]">
-                      {area.therapeuticArea || area.displayName}
-                    </h2>
+                    <div className="h-12 w-48 bg-gray-200 animate-pulse rounded-full" />
+                  </div>
+                  <div className="order-1 lg:col-span-6">
+                    <div className="rounded-3xl border border-[#E5E3DC] aspect-[16/11] bg-gray-200 animate-pulse" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          areasList.map((area, index) => {
+            const isEven = index % 2 === 0;
+            const divisionSlug = (area.divisionName || area.slug || area.id || '').toLowerCase();
+            const divisionUrl = `/areas-of-care/${divisionSlug}`;
+            const formulationCount = area.products ? area.products.length : 0;
+            const divisionConfig = THERAPEUTIC_DIVISIONS[divisionSlug] || THERAPEUTIC_DIVISIONS[area.slug] || THERAPEUTIC_DIVISIONS[area.id] || {};
+            const unifiedHeroImage = area.image_url || area.image || divisionConfig.heroImage;
+
+            return (
+              <div
+                key={area.id}
+                id={area.id}
+                className="scroll-mt-28 border-b border-[#E5E3DC] pb-14 sm:pb-20 last:border-b-0"
+              >
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+                  
+                  {/* Text Column */}
+                  <div
+                    className={`order-2 lg:col-span-6 space-y-6 ${
+                      isEven ? 'lg:order-2' : 'lg:order-1'
+                    }`}
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#D52B1E]">
+                          {area.divisionName || area.displayName}
+                        </span>
+                        {formulationCount > 0 && (
+                          <span className="text-xs font-mono text-[#777777]">
+                            ({formulationCount} Formulations)
+                          </span>
+                        )}
+                      </div>
+                      <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-[1.1]">
+                        {area.therapeuticArea || area.displayName}
+                      </h2>
+                    </div>
+
+                    <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans">
+                      {area.description || area.heading}
+                    </p>
+
+                    {/* Single Clean Action Button */}
+                    <div className="pt-2">
+                      <Link
+                        to={divisionUrl}
+                        className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-bold uppercase tracking-wider rounded-full transition-colors shadow-xs group cursor-pointer"
+                      >
+                        <span>Explore {area.divisionName || area.displayName} Products</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </div>
                   </div>
 
-                  <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans">
-                    {area.description || area.heading}
-                  </p>
-
-                  {/* Key Clinical Focus Items */}
-                  {area.keyTherapeuticInfo && area.keyTherapeuticInfo.length > 0 && (
-                    <div className="pt-2 space-y-2">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-[#777777] block">
-                        Clinical Scope & Formulations:
-                      </span>
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#333333]">
-                        {area.keyTherapeuticInfo.slice(0, 4).map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#D52B1E] mt-1.5 shrink-0" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Single Clean Action Button (No redundant Filter in Directory button) */}
-                  <div className="pt-4">
+                  {/* Image Column */}
+                  <div
+                    className={`order-1 lg:col-span-6 ${
+                      isEven ? 'lg:order-1' : 'lg:order-2'
+                    }`}
+                  >
                     <Link
                       to={divisionUrl}
-                      className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#D52B1E] hover:bg-[#B52015] text-white text-xs font-bold uppercase tracking-wider rounded-full transition-colors shadow-xs group cursor-pointer"
+                      className="block group rounded-3xl overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/11] bg-white division-hero-media"
                     >
-                      <span>Explore {area.divisionName || area.displayName} Products</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      <img
+                        src={assetUrl(unifiedHeroImage)}
+                        alt={`${divisionConfig.brand || area.therapeuticArea} ${divisionConfig.name || area.displayName} Portfolio - Onecore Pharma`}
+                        className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = '/assets/therapeutic-general-medicine.jpg';
+                        }}
+                      />
                     </Link>
                   </div>
-                </div>
 
-                {/* Image Column */}
-                <div
-                  className={`order-1 lg:col-span-6 ${
-                    isEven ? 'lg:order-1' : 'lg:order-2'
-                  }`}
-                >
-                  <Link
-                    to={divisionUrl}
-                    className="block group rounded-3xl overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/11] bg-white"
-                  >
-                    <img
-                      src={assetUrl(area.image)}
-                      alt={`${area.therapeuticArea} Portfolio - Onecore Pharma`}
-                      className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700"
-                      loading="lazy"
-                    />
-                  </Link>
                 </div>
-
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </section>
 
       {/* =========================================================================
@@ -438,6 +547,15 @@ export default function AreasOfCare() {
               </div>
             ) : (
               <form onSubmit={handleFormSubmit} className="space-y-6">
+                {formError && (
+                  <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs sm:text-sm flex items-start gap-3">
+                    <span className="text-base">⚠️</span>
+                    <div>
+                      <p className="font-semibold text-rose-900">Request Submission Issue</p>
+                      <p className="mt-0.5 text-rose-700">{formError}</p>
+                    </div>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-xs font-semibold uppercase tracking-wider text-[#121212] block">

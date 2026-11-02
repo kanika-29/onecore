@@ -38,6 +38,8 @@ async function main() {
   await addColumnIfMissing('products', 'dosage_form', "VARCHAR(150) NULL DEFAULT NULL AFTER full_description");
   await addColumnIfMissing('products', 'tagline', "VARCHAR(255) NULL DEFAULT NULL AFTER dosage_form");
   await addColumnIfMissing('products', 'composition_summary', "VARCHAR(500) NULL DEFAULT NULL AFTER tagline");
+  await addColumnIfMissing('products', 'link_url', "VARCHAR(500) NULL DEFAULT NULL AFTER seo_description");
+  await addColumnIfMissing('products', 'link_label', "VARCHAR(150) NULL DEFAULT NULL AFTER link_url");
 
   // page_sections — ensure items_json exists (may have been added by syncCmsDb)
   await addColumnIfMissing('page_sections', 'items_json', "JSON NULL DEFAULT NULL AFTER body");

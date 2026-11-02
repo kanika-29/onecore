@@ -2,56 +2,140 @@ import { query } from '../config/db.js';
 
 export const submitContactEnquiry = async (req, res, next) => {
   try {
-    const {
-      fullName,
-      email,
-      phone,
-      organisation,
-      contactType,
-      natureOfEnquiry,
-      message,
-    } = req.body;
+    const raw = req.body || {};
 
-    // Strict backend validation
-    if (!fullName || !fullName.trim()) {
-      return res.status(400).json({ success: false, message: 'Full name is required.' });
+    // Universal field normalization supporting all website forms:
+    // 1. General Contact Form (/contact)
+    // 2. Distribution & Franchise Application (/partnerships)
+    // 3. Institutional Access & Monograph Request (/areas-of-care)
+    // 4. Pharmacovigilance & Safety Report (/patients-caregivers)
+    const fullName = (
+      raw.fullName ||
+      raw.partnerName ||
+      raw.name ||
+      raw.contactName ||
+      ''
+    ).trim();
+
+    const email = (
+      raw.email ||
+      raw.workEmail ||
+      ''
+    ).trim().toLowerCase();
+
+    const phone = (
+      raw.phone ||
+      raw.mobile ||
+      raw.phoneNumber ||
+      ''
+    ).trim() || null;
+
+    const organisation = (
+      raw.organisation ||
+      raw.organization ||
+      raw.firmName ||
+      raw.hospital ||
+      raw.institution ||
+      ''
+    ).trim() || null;
+
+    const contactType = (
+      raw.contactType ||
+      raw.role ||
+      raw.contacting_as ||
+      (raw.partnerName || raw.firmName
+        ? 'Prospective Partner / Distributor'
+        : raw.workEmail
+        ? 'Institutional / Healthcare Representative'
+        : raw.productOrBatch
+        ? 'Patient / Healthcare Professional (Safety Desk)'
+        : 'General Public')
+    ).trim();
+
+    const natureOfEnquiry = (
+      raw.natureOfEnquiry ||
+      raw.enquiry_type ||
+      raw.enquiryType ||
+      (raw.partnerName || raw.firmName
+        ? 'Distribution & Franchise Application'
+        : raw.workEmail
+        ? 'Institutional Portfolio & Dossier Request'
+        : raw.productOrBatch
+        ? 'Pharmacovigilance & Quality Observation'
+        : 'General Enquiry')
+    ).trim();
+
+    // Validation
+    if (!fullName) {
+      return res.status(400).json({ success: false, message: 'Please provide your name.' });
     }
-    if (!email || !email.trim()) {
-      return res.status(400).json({ success: false, message: 'Email address is required.' });
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Please provide a valid email address.' });
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email.trim())) {
-      return res.status(400).json({ success: false, message: 'Valid email address is required.' });
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ success: false, message: 'The email address format is invalid.' });
     }
-    if (!contactType || !contactType.trim()) {
-      return res.status(400).json({ success: false, message: 'Contact role category is required.' });
+
+    // Build structured message body with any specialized metadata
+    const userMessage = (
+      raw.message ||
+      raw.observationSummary ||
+      raw.observation ||
+      raw.details ||
+      ''
+    ).trim();
+
+    const metaItems = [];
+    if (raw.city || raw.state || raw.country) {
+      const loc = [raw.city, raw.state, raw.country].filter(Boolean).join(', ');
+      if (loc) metaItems.push(`Location / Territory: ${loc}`);
     }
-    if (!natureOfEnquiry || !natureOfEnquiry.trim()) {
-      return res.status(400).json({ success: false, message: 'Nature of enquiry is required.' });
+    if (raw.experienceYears) {
+      metaItems.push(`Pharma Distribution Experience: ${raw.experienceYears} Years`);
     }
-    if (!message || !message.trim()) {
-      return res.status(400).json({ success: false, message: 'Message content is required.' });
+    if (raw.drugLicense) {
+      metaItems.push(`Drug License: ${raw.drugLicense}`);
+    }
+    if (raw.gstNumber) {
+      metaItems.push(`GST Number: ${raw.gstNumber}`);
+    }
+    if (raw.therapeuticInterest) {
+      metaItems.push(`Therapeutic Interest: ${raw.therapeuticInterest}`);
+    }
+    if (raw.productOrBatch) {
+      metaItems.push(`Reported Product / Batch: ${raw.productOrBatch}`);
+    }
+
+    let finalMessage = '';
+    if (metaItems.length > 0) {
+      finalMessage = `[SUBMISSION METADATA]\n${metaItems.join('\n')}\n\n`;
+      if (userMessage) {
+        finalMessage += `[DETAILS]\n${userMessage}`;
+      }
+    } else {
+      finalMessage = userMessage || `Request for ${natureOfEnquiry} submitted through the website portal.`;
     }
 
     // Sanitize & insert into MySQL with default status 'new'
     const result = await query(
-      `INSERT INTO contact_enquiries
+      `INSERT INTO contact_enquiries 
        (full_name, email, phone, organisation, contacting_as, enquiry_type, message, status, submitted_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, 'new', NOW())`,
       [
-        fullName.trim().slice(0, 120),
-        email.trim().toLowerCase().slice(0, 150),
-        phone ? phone.trim().slice(0, 50) : null,
-        organisation ? organisation.trim().slice(0, 150) : null,
-        contactType.trim().slice(0, 80),
-        natureOfEnquiry.trim().slice(0, 80),
-        message.trim().slice(0, 5000),
+        fullName.slice(0, 120),
+        email.slice(0, 150),
+        phone ? phone.slice(0, 50) : null,
+        organisation ? organisation.slice(0, 150) : null,
+        contactType.slice(0, 80),
+        natureOfEnquiry.slice(0, 80),
+        finalMessage.slice(0, 5000),
       ]
     );
 
     return res.status(201).json({
       success: true,
-      message: 'Thank you. Your enquiry has been received.',
+      message: 'Thank you. Your enquiry has been received and routed to our team.',
       data: {
         enquiryId: result.insertId,
       },

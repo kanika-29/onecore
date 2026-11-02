@@ -4,7 +4,7 @@ import { Menu, X, Search, ArrowRight, ArrowUpRight, ShieldCheck } from 'lucide-r
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSettings } from '../hooks/useSettings';
 import { assetUrl } from '../utils/assetUrl';
-import { searchFormulations } from '../data/allProducts';
+import { formatProductName } from '../utils/formatProductName';
 
 export default function Navbar() {
   const { siteSettings } = useSettings();
@@ -12,6 +12,8 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const [liveResults, setLiveResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -32,10 +34,38 @@ export default function Navbar() {
     setSearchOpen(false);
   }, [location.pathname]);
 
-  // Live matching products as user types
-  const liveResults = useMemo(() => {
-    if (!searchQuery.trim()) return [];
-    return searchFormulations(searchQuery).slice(0, 8);
+  // Live matching database products as user types
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setLiveResults([]);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setIsSearching(true);
+      fetch(`/api/products?q=${encodeURIComponent(searchQuery.trim())}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+        },
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
+        })
+        .then((data) => {
+          const items = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
+          setLiveResults(items.slice(0, 8));
+        })
+        .catch(() => {
+          setLiveResults([]);
+        })
+        .finally(() => {
+          setIsSearching(false);
+        });
+    }, 200);
+
+    return () => clearTimeout(timer);
   }, [searchQuery]);
 
   const handleSearchSubmit = (e) => {
@@ -204,33 +234,44 @@ export default function Navbar() {
               {/* Live Search Results List */}
               <div className="overflow-y-auto flex-1 divide-y divide-white/10 pr-1 space-y-1">
                 {searchQuery.trim() ? (
-                  liveResults.length > 0 ? (
-                    liveResults.map((product) => (
-                      <Link
-                        key={product.name + product.slug}
-                        to={product.productUrl}
-                        onClick={() => setSearchOpen(false)}
-                        className="block p-3.5 rounded-2xl hover:bg-white/10 transition-colors group"
-                      >
-                        <div className="flex items-baseline justify-between gap-4">
-                          <h4 className="text-base font-bold text-white group-hover:text-[#D52B1E] transition-colors">
-                            {product.name}
-                          </h4>
-                          <span className="text-[11px] font-semibold tracking-wider uppercase text-white/50 group-hover:text-white/80">
-                            {product.division} • {product.category}
-                          </span>
-                        </div>
-                        {product.composition && (
-                          <p className="text-xs text-white/70 pt-1 font-mono">
-                            {product.composition}
-                          </p>
-                        )}
-                        <div className="flex items-center gap-1 text-[11px] text-[#D52B1E] pt-2 font-semibold group-hover:underline">
-                          <span>Open Formulation Monograph</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </div>
-                      </Link>
-                    ))
+                  isSearching ? (
+                    <div className="py-8 text-center text-xs text-white/50 font-mono tracking-wider uppercase">
+                      Searching active database formulations...
+                    </div>
+                  ) : liveResults.length > 0 ? (
+                    liveResults.map((product) => {
+                      const title = product.brandName || product.name || product.brand_name || '';
+                      const division = product.therapeuticArea || product.therapeutic_area_name || product.division || 'General';
+                      const composition = product.composition || product.composition_summary || product.shortDescription || '';
+                      const productLink = product.productUrl || (product.slug === 'oneflexo' ? '/areas-of-care/orthopaedics/oneflexo' : `/areas-of-care/${product.divisionSlug || product.division || 'general-medicine'}/${product.slug}`);
+
+                      return (
+                        <Link
+                          key={product.id || title + product.slug}
+                          to={productLink}
+                          onClick={() => setSearchOpen(false)}
+                          className="block p-3.5 rounded-2xl hover:bg-white/10 transition-colors group"
+                        >
+                          <div className="flex items-baseline justify-between gap-4">
+                            <h4 className="text-base font-bold text-white group-hover:text-[#D52B1E] transition-colors">
+                              {formatProductName(title)}
+                            </h4>
+                            <span className="text-[11px] font-semibold tracking-wider uppercase text-white/50 group-hover:text-white/80">
+                              {division}
+                            </span>
+                          </div>
+                          {composition && (
+                            <p className="text-xs text-white/70 pt-1 font-mono">
+                              {composition}
+                            </p>
+                          )}
+                          <div className="flex items-center gap-1 text-[11px] text-[#D52B1E] pt-2 font-semibold group-hover:underline">
+                            <span>Open Formulation Monograph</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </div>
+                        </Link>
+                      );
+                    })
                   ) : (
                     <div className="py-8 text-center text-sm text-white/60 space-y-2">
                       <p>No formulations found matching "{searchQuery}".</p>

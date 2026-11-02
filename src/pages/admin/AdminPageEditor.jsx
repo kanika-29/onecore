@@ -25,6 +25,7 @@ import ToastNotification from '../../components/admin/ToastNotification';
 import ConfirmModal from '../../components/admin/ConfirmModal';
 import MediaSelectorModal from '../../components/admin/MediaSelectorModal';
 import { useAdminAuth } from '../../context/AdminAuthContext';
+import { assetUrl } from '../../utils/assetUrl';
 
 // ─── Inline Repeatable Items Manager ──────────────────────────────────────────
 function SectionItemsManager({ items, onChange, onOpenMedia }) {
@@ -341,6 +342,37 @@ function SectionEditorPanel({ section, onSave, onCancel, onOpenMedia }) {
     }
   }
 
+  let initialContent = {};
+  if (section.content_json) {
+    try {
+      initialContent = typeof section.content_json === 'string'
+        ? JSON.parse(section.content_json)
+        : section.content_json;
+    } catch {
+      initialContent = {};
+    }
+  }
+
+  const isContactCoords =
+    section.section_type === 'contact_info_cards' ||
+    section.section_key === 'contact_info_cards' ||
+    section.section_key === 'direct_channels';
+
+  const [contactCoords, setContactCoords] = useState({
+    registered_office: initialContent.registered_office || section.body || 'Onecore Pharma Headquarters, Industrial Area, Hyderabad, India',
+    primary_phone: initialContent.primary_phone || initialItems.find((i) => (i.channel || '').includes('PHONE'))?.value || '+91 40 0000 0000',
+    support_email: initialContent.support_email || initialItems.find((i) => (i.channel || '').includes('SUPPORT') || (i.channel || '') === 'EMAIL')?.value || 'contact@onecorepharma.com',
+    business_email: initialContent.business_email || initialItems.find((i) => (i.channel || '').includes('BUSINESS'))?.value || 'business@onecorepharma.com',
+    working_hours: initialContent.working_hours || initialItems.find((i) => (i.channel || '').includes('HOURS'))?.value || 'Monday – Friday: 9:00 AM – 6:00 PM IST',
+  });
+
+  const [contentProps, setContentProps] = useState(initialContent || {});
+  const [showRawJson, setShowRawJson] = useState(false);
+  const [rawJsonStr, setRawJsonStr] = useState(JSON.stringify(initialContent || {}, null, 2));
+  const [rawJsonError, setRawJsonError] = useState(null);
+  const [newPropKey, setNewPropKey] = useState('');
+  const [newPropVal, setNewPropVal] = useState('');
+
   const [form, setForm] = useState({
     eyebrow: section.eyebrow || '',
     heading: section.heading || section.title || '',
@@ -351,14 +383,103 @@ function SectionEditorPanel({ section, onSave, onCancel, onOpenMedia }) {
     secondary_cta_text: section.secondary_cta_text || '',
     secondary_cta_url: section.secondary_cta_url || '',
     image_url: section.image_url || '',
+    image_mobile_url: section.image_mobile_url || initialContent.image_mobile_url || initialContent.mobile_image_url || '',
     video_url: section.video_url || '',
     is_active: section.is_active !== 0,
     items_json: JSON.stringify(initialItems),
+    content_json: section.content_json || JSON.stringify(initialContent),
   });
 
   const [parsedItems, setParsedItems] = useState(initialItems);
 
   const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
+
+  const handlePropChange = (key, val) => {
+    const updated = { ...contentProps, [key]: val };
+    setContentProps(updated);
+    setRawJsonStr(JSON.stringify(updated, null, 2));
+    setRawJsonError(null);
+  };
+
+  const handleRemoveProp = (key) => {
+    const updated = { ...contentProps };
+    delete updated[key];
+    setContentProps(updated);
+    setRawJsonStr(JSON.stringify(updated, null, 2));
+    setRawJsonError(null);
+  };
+
+  const handleAddProp = () => {
+    if (!newPropKey.trim()) return;
+    const cleanKey = newPropKey.trim().replace(/\s+/g, '_');
+    let val = newPropVal;
+    if (val === 'true') val = true;
+    if (val === 'false') val = false;
+    const updated = { ...contentProps, [cleanKey]: val };
+    setContentProps(updated);
+    setRawJsonStr(JSON.stringify(updated, null, 2));
+    setNewPropKey('');
+    setNewPropVal('');
+  };
+
+  const handleRawJsonChange = (text) => {
+    setRawJsonStr(text);
+    try {
+      const parsed = JSON.parse(text);
+      setContentProps(parsed);
+      setRawJsonError(null);
+    } catch (err) {
+      setRawJsonError(err.message);
+    }
+  };
+
+  const handleCoordsChange = (field, val) => {
+    const updated = { ...contactCoords, [field]: val };
+    setContactCoords(updated);
+    handlePropChange(field, val);
+
+    // Synchronize parsedItems so item cards always reflect the new contact values
+    const newItems = parsedItems.map((item) => {
+      const ch = (item.channel || '').toUpperCase();
+      if (ch.includes('SUPPORT') || ch === 'EMAIL') {
+        return {
+          ...item,
+          value: updated.support_email,
+          cta_url: `mailto:${updated.support_email}`,
+        };
+      }
+      if (ch.includes('BUSINESS')) {
+        return {
+          ...item,
+          value: updated.business_email,
+          cta_url: `mailto:${updated.business_email}`,
+        };
+      }
+      if (ch.includes('PHONE')) {
+        return {
+          ...item,
+          value: updated.primary_phone,
+          cta_url: `tel:${updated.primary_phone.replace(/[^0-9+]/g, '')}`,
+        };
+      }
+      if (ch.includes('HOURS')) {
+        return {
+          ...item,
+          value: updated.working_hours,
+        };
+      }
+      if (ch.includes('OFFICE') || ch.includes('REGISTERED')) {
+        return {
+          ...item,
+          value: updated.registered_office,
+          desc: updated.registered_office,
+        };
+      }
+      return item;
+    });
+
+    setParsedItems(newItems);
+  };
 
   const handleItemsChange = (newItems) => {
     setParsedItems(newItems);
@@ -366,9 +487,57 @@ function SectionEditorPanel({ section, onSave, onCancel, onOpenMedia }) {
   };
 
   const handleSave = () => {
+    let finalContent = { ...contentProps };
+    if (isContactCoords) {
+      finalContent = {
+        ...finalContent,
+        registered_office: contactCoords.registered_office,
+        primary_phone: contactCoords.primary_phone,
+        support_email: contactCoords.support_email,
+        business_email: contactCoords.business_email,
+        working_hours: contactCoords.working_hours,
+      };
+    }
+
+    // Keep modular copy in sync with primary form values
+    if (form.heading) {
+      if ('headline' in finalContent) finalContent.headline = form.heading;
+      if ('heading' in finalContent) finalContent.heading = form.heading;
+      if ('title' in finalContent) finalContent.title = form.heading;
+    }
+    if (form.subheading) {
+      if ('subheadline' in finalContent) finalContent.subheadline = form.subheading;
+      if ('subtext' in finalContent) finalContent.subtext = form.subheading;
+      if ('lead' in finalContent) finalContent.lead = form.subheading;
+      if ('subheading' in finalContent) finalContent.subheading = form.subheading;
+    }
+    if (form.body) {
+      if ('body' in finalContent) finalContent.body = form.body;
+      if ('description' in finalContent) finalContent.description = form.body;
+      if ('mission' in finalContent) finalContent.mission = form.body;
+    }
+    if (form.cta_text) {
+      if ('cta_text' in finalContent) finalContent.cta_text = form.cta_text;
+    }
+    if (form.cta_url) {
+      if ('cta_link' in finalContent) finalContent.cta_link = form.cta_url;
+      if ('cta_url' in finalContent) finalContent.cta_url = form.cta_url;
+    }
+    if (form.image_url) {
+      if ('image_url' in finalContent) finalContent.image_url = form.image_url;
+    }
+    if (form.image_mobile_url !== undefined) {
+      finalContent.image_mobile_url = form.image_mobile_url;
+    }
+
+    const finalContentJson = JSON.stringify(finalContent);
+
     onSave({
       ...form,
+      image_mobile_url: form.image_mobile_url || '',
+      body: isContactCoords ? contactCoords.registered_office : form.body,
       items_json: JSON.stringify(parsedItems),
+      content_json: finalContentJson,
     });
   };
 
@@ -384,6 +553,195 @@ function SectionEditorPanel({ section, onSave, onCancel, onOpenMedia }) {
         <span className="text-[10px] font-mono text-slate-600 uppercase bg-slate-100 px-2.5 py-0.5 rounded font-medium border border-slate-200">
           Type: {section.section_type || 'editorial'}
         </span>
+      </div>
+
+      {/* Dedicated Contact Coordinates Editor Card */}
+      {isContactCoords && (
+        <div className="p-4 bg-amber-50/70 border border-amber-200 rounded-xl space-y-3.5">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-amber-900 uppercase tracking-wider">
+              Company Contact Coordinates (Phone, Email, Office & Hours)
+            </span>
+          </div>
+          <p className="text-xs text-amber-800">
+            Editing these coordinates updates both the backend database record (<code className="bg-amber-100 px-1 py-0.5 rounded font-mono text-[11px]">content_json</code>) and the interactive contact cards automatically.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-1">
+            <div className="md:col-span-2">
+              <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-700 font-semibold mb-1">
+                Registered Corporate Office Address *
+              </label>
+              <textarea
+                rows={2}
+                value={contactCoords.registered_office}
+                onChange={(e) => handleCoordsChange('registered_office', e.target.value)}
+                placeholder="e.g. Onecore Pharma Headquarters, Industrial Area, Hyderabad, India"
+                className="w-full bg-white border border-amber-200 rounded-lg px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-700 font-semibold mb-1">
+                Primary Phone Number *
+              </label>
+              <input
+                type="text"
+                value={contactCoords.primary_phone}
+                onChange={(e) => handleCoordsChange('primary_phone', e.target.value)}
+                placeholder="e.g. +91 40 0000 0000"
+                className="w-full bg-white border border-amber-200 rounded-lg px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-700 font-semibold mb-1">
+                Support / General Email *
+              </label>
+              <input
+                type="email"
+                value={contactCoords.support_email}
+                onChange={(e) => handleCoordsChange('support_email', e.target.value)}
+                placeholder="e.g. contact@onecorepharma.com"
+                className="w-full bg-white border border-amber-200 rounded-lg px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-700 font-semibold mb-1">
+                Business / Partnerships Email
+              </label>
+              <input
+                type="email"
+                value={contactCoords.business_email}
+                onChange={(e) => handleCoordsChange('business_email', e.target.value)}
+                placeholder="e.g. business@onecorepharma.com"
+                className="w-full bg-white border border-amber-200 rounded-lg px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-700 font-semibold mb-1">
+                Working Days & Operational Hours
+              </label>
+              <input
+                type="text"
+                value={contactCoords.working_hours}
+                onChange={(e) => handleCoordsChange('working_hours', e.target.value)}
+                placeholder="e.g. Monday – Friday: 9:00 AM – 6:00 PM IST"
+                className="w-full bg-white border border-amber-200 rounded-lg px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modular JSON Properties Editor */}
+      <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Layers size={14} className="text-[#0D5C75]" />
+            <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+              Modular Content Properties (<code className="font-mono text-[#0D5C75]">content_json</code>)
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowRawJson(!showRawJson)}
+            className="text-[11px] font-mono font-semibold px-2.5 py-1 bg-white border border-slate-200 hover:bg-slate-100 text-slate-600 rounded transition-colors"
+          >
+            {showRawJson ? 'Switch to Fields View' : 'Toggle Raw JSON View'}
+          </button>
+        </div>
+        <p className="text-xs text-slate-500">
+          Structured configuration parameters stored directly in MySQL <code className="bg-slate-200 px-1 py-0.5 rounded font-mono text-[11px]">page_sections.content_json</code>.
+        </p>
+
+        {showRawJson ? (
+          <div>
+            <textarea
+              rows={6}
+              value={rawJsonStr}
+              onChange={(e) => handleRawJsonChange(e.target.value)}
+              className="w-full font-mono text-xs bg-slate-900 text-emerald-400 p-3 rounded-lg border border-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-400"
+            />
+            {rawJsonError && (
+              <p className="text-[11px] text-rose-600 font-mono mt-1">⚠️ Invalid JSON: {rawJsonError}</p>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-2.5">
+            {Object.keys(contentProps).length === 0 ? (
+              <p className="text-[11px] text-slate-400 italic">No custom JSON properties currently defined.</p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {Object.entries(contentProps).map(([propKey, propVal]) => {
+                  const isBool = typeof propVal === 'boolean';
+                  return (
+                    <div key={propKey} className="bg-white border border-slate-200 rounded-lg p-2.5 shadow-2xs space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-[#0D5C75] font-bold">
+                          {propKey}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveProp(propKey)}
+                          className="text-slate-400 hover:text-rose-600 transition-colors"
+                          title="Remove property"
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                      {isBool ? (
+                        <label className="flex items-center gap-2 cursor-pointer pt-1">
+                          <input
+                            type="checkbox"
+                            checked={propVal}
+                            onChange={(e) => handlePropChange(propKey, e.target.checked)}
+                            className="rounded text-[#0D5C75] focus:ring-[#0D5C75]"
+                          />
+                          <span className="text-xs font-mono text-slate-700">{propVal ? 'true' : 'false'}</span>
+                        </label>
+                      ) : (
+                        <input
+                          type="text"
+                          value={typeof propVal === 'object' ? JSON.stringify(propVal) : (propVal ?? '')}
+                          onChange={(e) => handlePropChange(propKey, e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1 text-xs text-slate-800 focus:outline-none focus:border-[#0D5C75]"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Add Property Row */}
+            <div className="flex items-center gap-2 pt-2 border-t border-slate-200">
+              <input
+                type="text"
+                placeholder="New property key (e.g. cta_link)"
+                value={newPropKey}
+                onChange={(e) => setNewPropKey(e.target.value)}
+                className="flex-1 bg-white border border-slate-200 rounded px-2.5 py-1 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75]"
+              />
+              <input
+                type="text"
+                placeholder="Value"
+                value={newPropVal}
+                onChange={(e) => setNewPropVal(e.target.value)}
+                className="flex-1 bg-white border border-slate-200 rounded px-2.5 py-1 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75]"
+              />
+              <button
+                type="button"
+                onClick={handleAddProp}
+                className="px-3 py-1 bg-[#0D5C75] hover:bg-[#094153] text-white text-xs font-semibold rounded transition-colors"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -495,11 +853,21 @@ function SectionEditorPanel({ section, onSave, onCancel, onOpenMedia }) {
           />
         </div>
 
-        {/* Image URL & Selector */}
+        {/* Image URL & Selector (Desktop / Default) */}
         <div>
-          <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-600 font-medium mb-1">
-            Section Image URL
-          </label>
+          <div className="flex items-center justify-between mb-1">
+            <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-700 font-semibold">
+              {form.video_url || section.section_key === 'hero' ? 'Section Image / Video Poster' : 'Section Image (Desktop / Default)'}
+            </label>
+            <span className="text-[10px] text-slate-500">
+              {form.video_url ? 'Video Poster & Desktop' : 'Standard & Desktop'}
+            </span>
+          </div>
+          {form.video_url && (
+            <p className="text-[11px] text-slate-500 mb-2 leading-relaxed">
+              <span className="font-semibold text-[#0D5C75]">Video Poster:</span> This image displays instantly as the crisp preview frame while the background video buffers.
+            </p>
+          )}
           <div className="flex gap-2">
             <input
               type="text"
@@ -511,24 +879,93 @@ function SectionEditorPanel({ section, onSave, onCancel, onOpenMedia }) {
             <button
               type="button"
               onClick={() => onOpenMedia((url) => setForm((p) => ({ ...p, image_url: url })))}
-              className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 hover:bg-slate-100 rounded-lg text-xs font-semibold text-slate-700 transition-all"
+              className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 hover:bg-slate-100 rounded-lg text-xs font-semibold text-slate-700 transition-all cursor-pointer"
             >
               <ImageIcon size={14} />
               <span>Choose</span>
             </button>
+            {form.image_url && (
+              <button
+                type="button"
+                onClick={() => setForm((p) => ({ ...p, image_url: '' }))}
+                className="shrink-0 px-2.5 py-2 bg-slate-50 border border-slate-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 rounded-lg text-xs font-semibold text-slate-500 transition-all cursor-pointer"
+                title="Clear image (reset to section default)"
+              >
+                Clear
+              </button>
+            )}
           </div>
           {form.image_url && (
             <div className="mt-2.5 flex items-center gap-3 p-2 bg-slate-50 border border-slate-200 rounded-lg">
               <img
-                src={form.image_url}
-                alt="Section Preview"
+                src={assetUrl(form.image_url)}
+                alt="Desktop Preview"
                 className="w-16 h-10 object-cover rounded border border-slate-200 bg-white"
                 onError={(e) => {
-                  e.target.style.display = 'none';
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = '/placeholder.png';
                 }}
               />
               <span className="text-[11px] text-slate-500 font-mono truncate">{form.image_url}</span>
             </div>
+          )}
+        </div>
+
+        {/* Mobile Image URL & Selector (Optional) */}
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-700 font-semibold">
+              Section Mobile Image (Optional)
+            </label>
+            <span className="text-[10px] text-slate-500">Used on Mobile (&lt;768px)</span>
+          </div>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={form.image_mobile_url}
+              onChange={set('image_mobile_url')}
+              placeholder="e.g. /uploads/hero-mobile.jpg"
+              className="flex-1 bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
+            />
+            <button
+              type="button"
+              onClick={() => onOpenMedia((url) => setForm((p) => ({ ...p, image_mobile_url: url })))}
+              className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-slate-50 border border-slate-200 hover:bg-slate-100 rounded-lg text-xs font-semibold text-slate-700 transition-all cursor-pointer"
+            >
+              <ImageIcon size={14} />
+              <span>Choose</span>
+            </button>
+            {form.image_mobile_url && (
+              <button
+                type="button"
+                onClick={() => setForm((p) => ({ ...p, image_mobile_url: '' }))}
+                className="shrink-0 px-2.5 py-2 bg-slate-50 border border-slate-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 rounded-lg text-xs font-semibold text-slate-500 transition-all cursor-pointer"
+                title="Clear mobile image (will use desktop image instead)"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+          {form.image_mobile_url ? (
+            <div className="mt-2.5 flex items-center gap-3 p-2 bg-slate-50 border border-slate-200 rounded-lg">
+              <img
+                src={assetUrl(form.image_mobile_url)}
+                alt="Mobile Preview"
+                className="w-10 h-14 object-cover rounded border border-slate-200 bg-white"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = '/placeholder.png';
+                }}
+              />
+              <div className="flex flex-col min-w-0">
+                <span className="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider">Active on Mobile Screens</span>
+                <span className="text-[11px] text-slate-500 font-mono truncate">{form.image_mobile_url}</span>
+              </div>
+            </div>
+          ) : (
+            <p className="text-[11px] text-slate-400 mt-1 italic">
+              No mobile image set. Mobile visitors will automatically see the Desktop image.
+            </p>
           )}
         </div>
 
@@ -691,7 +1128,7 @@ export default function AdminPageEditor() {
   // Save / Update Section
   const handleSaveSection = async (sectionId, updatedFields) => {
     try {
-      const res = await fetch(`/api/pages/sections/${sectionId}`, {
+      let res = await fetch(`/api/admin/sections/${sectionId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -699,6 +1136,16 @@ export default function AdminPageEditor() {
         },
         body: JSON.stringify(updatedFields),
       });
+      if (!res.ok && res.status === 404) {
+        res = await fetch(`/api/pages/sections/${sectionId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedFields),
+        });
+      }
       const data = await res.json();
       if (res.ok && data.success) {
         showToast('success', 'Section updated successfully.');
@@ -725,14 +1172,36 @@ export default function AdminPageEditor() {
     }
 
     try {
-      const res = await fetch(`/api/pages/${page.id}/sections`, {
+      const payload = {
+        ...newSectionForm,
+        content_json: newSectionForm.content_json || JSON.stringify({
+          heading: newSectionForm.heading,
+          subheading: newSectionForm.subheading || '',
+          body: newSectionForm.body || '',
+          cta_text: newSectionForm.cta_text || '',
+          cta_url: newSectionForm.cta_url || '',
+          image_url: newSectionForm.image_url || '',
+        }),
+      };
+
+      let res = await fetch(`/api/admin/pages/${page.id}/sections`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(newSectionForm),
+        body: JSON.stringify(payload),
       });
+      if (!res.ok && res.status === 404) {
+        res = await fetch(`/api/pages/${page.id}/sections`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+      }
       const data = await res.json();
       if (res.ok && data.success) {
         showToast('success', 'Section added successfully.');
@@ -750,6 +1219,8 @@ export default function AdminPageEditor() {
           cta_url: '',
           secondary_cta_text: '',
           secondary_cta_url: '',
+          content_json: null,
+          items_json: null,
         });
         fetchPage();
       } else {
@@ -757,6 +1228,275 @@ export default function AdminPageEditor() {
       }
     } catch (err) {
       showToast('error', err.message);
+    }
+  };
+
+  const handleSectionTypeSelect = (val) => {
+    if (val === 'hero_banner') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'hero_banner',
+        heading: p.heading || 'Innovating Formulations for Better Health',
+        eyebrow: p.eyebrow || 'CLINICAL EXCELLENCE',
+        subheading: p.subheading || 'Committed to clinical excellence across specialized therapeutic divisions.',
+        body: p.body || '',
+        cta_text: p.cta_text || 'Explore Therapeutic Areas',
+        cta_url: p.cta_url || '/areas-of-care',
+        image_url: p.image_url || '/assets/hero-healthcare.jpg',
+        content_json: JSON.stringify({
+          headline: 'Innovating Formulations for Better Health',
+          subheadline: 'Committed to clinical excellence across specialized therapeutic divisions.',
+          cta_text: 'Explore Therapeutic Areas',
+          cta_link: '/areas-of-care',
+        }),
+      }));
+    } else if (val === 'divisions_showcase') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'divisions_showcase',
+        heading: p.heading || 'Our Specialized Areas of Care',
+        eyebrow: p.eyebrow || 'THERAPEUTIC DIVISIONS',
+        subheading: p.subheading || 'Comprehensive formulations spanning 9 medical domains.',
+        content_json: JSON.stringify({
+          heading: 'Our Specialized Areas of Care',
+          subtext: 'Comprehensive formulations spanning 9 medical domains.',
+        }),
+      }));
+    } else if (val === 'stats_counter') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'stats_counter',
+        heading: p.heading || 'Key Metrics & Numbers',
+        eyebrow: p.eyebrow || 'ONECORE IMPACT',
+        subheading: p.subheading || 'Delivering high-efficacy clinical molecules across key medical disciplines.',
+        content_json: JSON.stringify({
+          stat1_val: '9',
+          stat1_lbl: 'Divisions',
+          stat2_val: '155+',
+          stat2_lbl: 'Formulations',
+        }),
+        items_json: JSON.stringify([
+          { stat: '9', title: 'Divisions' },
+          { stat: '155+', title: 'Formulations' },
+        ]),
+      }));
+    } else if (val === 'quality_promise') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'quality_promise',
+        heading: p.heading || 'Manufactured to cGMP & WHO Standards',
+        eyebrow: p.eyebrow || 'QUALITY ASSURANCE',
+        body: p.body || 'Ensuring highest purity and bioavailability across all batches.',
+        content_json: JSON.stringify({
+          heading: 'Manufactured to cGMP & WHO Standards',
+          body: 'Ensuring highest purity and bioavailability.',
+        }),
+      }));
+    } else if (val === 'about_hero') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'about_hero',
+        heading: p.heading || 'About Onecore Pharma',
+        eyebrow: p.eyebrow || 'OUR STORY',
+        subheading: p.subheading || 'Pioneering accessible, high-efficacy pharmaceutical solutions.',
+        image_url: p.image_url || '/assets/about-facility.jpg',
+        content_json: JSON.stringify({
+          title: 'About Onecore Pharma',
+          lead: 'Pioneering accessible, high-efficacy pharmaceutical solutions.',
+        }),
+      }));
+    } else if (val === 'corporate_mission') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'corporate_mission',
+        heading: p.heading || 'Mission & Vision',
+        eyebrow: p.eyebrow || 'CORE PURPOSE',
+        subheading: p.subheading || 'Guided by clinical integrity and long-term care.',
+        body: p.body || 'To formulate superior therapeutic molecules that elevate patient care standards.',
+        content_json: JSON.stringify({
+          mission: 'To formulate superior therapeutic molecules that elevate patient care standards.',
+          vision: 'To become a globally respected name in clinical formulations.',
+        }),
+        items_json: JSON.stringify([
+          { title: 'Our Mission', desc: 'To formulate superior therapeutic molecules that elevate patient care standards.' },
+          { title: 'Our Vision', desc: 'To become a globally respected name in clinical formulations.' },
+        ]),
+      }));
+    } else if (val === 'leadership_overview') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'leadership_overview',
+        heading: p.heading || 'Our Scientific Advisory Board',
+        eyebrow: p.eyebrow || 'LEADERSHIP & RIGOR',
+        body: p.body || 'Driven by experienced clinicians and pharmacologists.',
+        content_json: JSON.stringify({
+          heading: 'Our Scientific Advisory Board',
+          description: 'Driven by experienced clinicians and pharmacologists.',
+        }),
+      }));
+    } else if (val === 'portfolio_header') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'portfolio_header',
+        heading: p.heading || 'Therapeutic Areas of Care',
+        eyebrow: p.eyebrow || 'AREAS OF CARE',
+        subheading: p.subheading || 'Explore our complete formulation ecosystem across all therapeutic divisions.',
+        content_json: JSON.stringify({
+          heading: 'Therapeutic Areas of Care',
+          subtext: 'Explore our complete formulation ecosystem across all therapeutic divisions.',
+        }),
+      }));
+    } else if (val === 'division_tabs_section') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'division_tabs_section',
+        heading: p.heading || 'Interactive Division Tabs',
+        eyebrow: p.eyebrow || 'FORMULATIONS CATALOGUE',
+        subheading: p.subheading || 'Explore therapeutic portfolios by medical specialty.',
+        content_json: JSON.stringify({
+          auto_display_all_divisions: true,
+        }),
+      }));
+    } else if (val === 'careers_hero') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'careers_hero',
+        heading: p.heading || 'Build Your Career at Onecore',
+        eyebrow: p.eyebrow || 'CAREERS & OPPORTUNITIES',
+        subheading: p.subheading || 'Join our passionate team advancing modern pharmaceutical development.',
+        content_json: JSON.stringify({
+          heading: 'Build Your Career at Onecore',
+          subheading: 'Join our passionate team advancing modern pharmaceutical development.',
+        }),
+      }));
+    } else if (val === 'recruitment_contact') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'recruitment_contact',
+        heading: p.heading || 'HR Contact Details',
+        eyebrow: p.eyebrow || 'JOIN OUR TEAM',
+        body: p.body || 'Submit CV with preferred division in the subject line.',
+        content_json: JSON.stringify({
+          hr_email: 'careers@onecorepharma.com',
+          notice: 'Submit CV with preferred division in the subject line.',
+        }),
+      }));
+    } else if (val === 'quality_hero') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'quality_hero',
+        heading: p.heading || 'Rigorous Quality Control & Analytical Testing',
+        eyebrow: p.eyebrow || 'QUALITY & COMPLIANCE',
+        subheading: p.subheading || 'Adhering to strict international pharmacopoeial specifications.',
+        image_url: p.image_url || '/assets/quality.jpg',
+        content_json: JSON.stringify({
+          heading: 'Rigorous Quality Control & Analytical Testing',
+          subheading: 'Adhering to strict international pharmacopoeial specifications.',
+        }),
+      }));
+    } else if (val === 'standards_cards') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'standards_cards',
+        heading: p.heading || 'Certifications & Accreditations',
+        eyebrow: p.eyebrow || 'GLOBAL STANDARDS',
+        subheading: p.subheading || 'WHO-GMP, cGMP, and ISO certified formulation infrastructure.',
+        content_json: JSON.stringify({
+          cGMP: true,
+          WHO_GMP: true,
+          ISO_certified: true,
+        }),
+      }));
+    } else if (val === 'patients_hero') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'patients_hero',
+        heading: p.heading || 'Clear Information. Supportive Care.',
+        eyebrow: p.eyebrow || 'PATIENTS & FAMILIES',
+        subheading: p.subheading || 'Transparent resources to help patients and families navigate therapy with confidence.',
+        image_url: p.image_url || '/assets/patients-caregivers.jpg',
+        content_json: JSON.stringify({
+          heading: 'Clear Information. Supportive Care.',
+          subheading: 'Transparent resources to help patients and families navigate therapy with confidence.',
+        }),
+      }));
+    } else if (val === 'contact_hero') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'contact_hero',
+        heading: p.heading || 'Get in Touch with Onecore Pharma',
+        eyebrow: p.eyebrow || 'CONNECT WITH US',
+        subheading: p.subheading || 'For product information, distribution enquiries, and general communications.',
+        body: p.body || 'Whether you are looking for product information, exploring a business opportunity or simply want to reach our team, we will help direct your enquiry to the appropriate place.',
+        cta_text: p.cta_text || 'Send an Enquiry',
+        cta_url: p.cta_url || '#enquiry-form',
+        image_url: p.image_url || '/assets/internet/contact-direct-helpline.jpg',
+        content_json: JSON.stringify({
+          heading: 'Get in Touch with Onecore Pharma',
+          subheading: 'For product information, distribution enquiries, and general communications.',
+          cta_text: 'Send an Enquiry',
+          cta_url: '#enquiry-form',
+        }),
+      }));
+    } else if (val === 'contact_info_cards') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'contact_info_cards',
+        heading: p.heading || 'Company Contact Coordinates',
+        eyebrow: p.eyebrow || 'GET IN TOUCH',
+        subheading: p.subheading || 'Direct channels and operational hours for healthcare professionals and partners.',
+        body: p.body || 'Onecore Pharma Headquarters, Industrial Area, Hyderabad, India',
+        content_json: JSON.stringify({
+          registered_office: 'Corporate Headquarters, Industrial Area, Hyderabad, India',
+          primary_phone: '+91 40 0000 0000',
+          support_email: 'contact@onecorepharma.com',
+          business_email: 'business@onecorepharma.com',
+          working_hours: 'Monday – Friday: 9:00 AM – 6:00 PM IST',
+        }),
+      }));
+    } else if (val === 'contact_form_settings') {
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: val,
+        section_key: p.section_key || 'contact_form_settings',
+        heading: p.heading || 'Send Us a Message',
+        eyebrow: p.eyebrow || 'SEND AN ENQUIRY',
+        subheading: p.subheading || 'Please do not use this form for medical emergencies or to request individual diagnosis.',
+        body: p.body || 'Thank you for reaching out. Our team will contact you shortly.',
+        cta_text: p.cta_text || 'Submit enquiry',
+        content_json: JSON.stringify({
+          form_heading: 'Send an Official Enquiry',
+          recipient_email: 'enquiry@onecorepharma.com',
+        }),
+      }));
+    } else if (val === 'legal_clause') {
+      const timestamp = Date.now().toString().slice(-4);
+      setNewSectionForm((p) => ({
+        ...p,
+        section_type: 'editorial',
+        section_key: p.section_key || `clause_${timestamp}`,
+        heading: p.heading || 'New Policy Clause',
+        eyebrow: p.eyebrow || 'POLICY',
+        body: p.body || 'Add detailed legal policy clause or regulatory text here.',
+      }));
+    } else {
+      setNewSectionForm((p) => ({ ...p, section_type: val }));
     }
   };
 
@@ -979,13 +1719,29 @@ export default function AdminPageEditor() {
                 </label>
                 <select
                   value={newSectionForm.section_type}
-                  onChange={(e) =>
-                    setNewSectionForm({ ...newSectionForm, section_type: e.target.value })
-                  }
+                  onChange={(e) => handleSectionTypeSelect(e.target.value)}
                   className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#0D5C75] focus:ring-1 focus:ring-[#0D5C75]"
                 >
                   <option value="editorial">Editorial / Text + Image</option>
+                  <option value="legal_clause">Legal Policy Clause / Article</option>
                   <option value="hero">Hero Section</option>
+                  <option value="hero_banner">Hero Banner & Core Mission</option>
+                  <option value="divisions_showcase">Therapeutic Divisions Overview</option>
+                  <option value="stats_counter">Statistics / Key Metrics</option>
+                  <option value="quality_promise">Quality Assurance & Compliance</option>
+                  <option value="about_hero">About Us Hero</option>
+                  <option value="corporate_mission">Corporate Mission & Vision</option>
+                  <option value="leadership_overview">Leadership & Scientific Advisory</option>
+                  <option value="portfolio_header">Portfolio Header</option>
+                  <option value="division_tabs_section">Interactive Division Tabs</option>
+                  <option value="careers_hero">Careers Hero</option>
+                  <option value="recruitment_contact">HR Recruitment Contact</option>
+                  <option value="quality_hero">Quality & Research Hero</option>
+                  <option value="standards_cards">Standards & Certifications Cards</option>
+                  <option value="patients_hero">Patients & Caregivers Hero</option>
+                  <option value="contact_hero">Contact Hero & Introduction</option>
+                  <option value="contact_info_cards">Contact Info Cards (Phone, Email, Hours, Office)</option>
+                  <option value="contact_form_settings">Contact Form & Notification Settings</option>
                   <option value="cards">Cards / Grid</option>
                   <option value="statistics">Statistics / Metrics</option>
                   <option value="timeline">Timeline / Process Steps</option>

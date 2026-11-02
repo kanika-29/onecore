@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getDermatologyProductBySlug } from '../data/dermatologyProducts';
 import { assetUrl } from '../utils/assetUrl';
 import ProductImageGallery from '../components/ProductImageGallery';
+import PageSkeleton from '../components/PageSkeleton';
 
 // Helper to parse Mechanism into 3 steps for the dark flow section
 function parseMechanismSteps(mechanismText) {
@@ -96,17 +96,39 @@ function parseUsedForItems(usedForText) {
 function parseDirectionSteps(directionText) {
   if (!directionText) return [];
 
-  const sentences = directionText
+  const text = directionText.trim();
+  const parts = text.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+
+  if (parts.length >= 2) {
+    return parts.slice(0, 2).map((part, idx) => {
+      let lines = part.split('\n').map(l => l.trim()).filter(Boolean);
+      let heading = idx === 0 ? "Dosing & Schedule" : "Administration Advice";
+      let body = part;
+
+      if (lines.length > 1 && /^(dosing\s*(and|&)\s*schedule|administration\s*advice|application\s*guidance)/i.test(lines[0])) {
+        body = lines.slice(1).join(' ');
+      } else {
+        body = body.replace(/^(dosing\s*(and|&)\s*(schedule|application)|administration\s*advice|application\s*guidance)[:\s-]*/i, '').trim();
+      }
+
+      const cleanSentence = body.endsWith('.') ? body : body + '.';
+      return {
+        num: String(idx + 1).padStart(2, '0'),
+        title: heading,
+        desc: cleanSentence
+      };
+    });
+  }
+
+  const sentences = text
     .split(/\.\s+/)
     .map(s => s.trim())
     .filter(s => s.length > 0 && !s.toLowerCase().startsWith('use as prescribed'));
 
   return sentences.slice(0, 2).map((sentence, idx) => {
-    let title = "Application Guidance";
-    if (idx === 0) title = "Dosing & Application";
-    else if (idx === 1) title = "Application Advice";
-
-    const cleanSentence = sentence.endsWith('.') ? sentence : sentence + '.';
+    let title = idx === 0 ? "Dosing & Schedule" : "Administration Advice";
+    let body = sentence.replace(/^(dosing\s*(and|&)\s*(schedule|application)|administration\s*advice|application\s*guidance)[:\s-]*/i, '').trim();
+    const cleanSentence = body.endsWith('.') ? body : body + '.';
 
     return {
       num: String(idx + 1).padStart(2, '0'),
@@ -155,12 +177,15 @@ function parsePrecautionsAccordions(precautionsArray) {
 }
 
 import { useProduct } from '../hooks/useProduct';
+import { getAreaListingRoute } from '../utils/areaNavigation';
+import { formatProductName } from '../utils/formatProductName';
+import ProductEndLink from '../components/ProductEndLink';
 
 export default function DermatologyProductDetail() {
   const { productSlug } = useParams();
-  const staticProduct = getDermatologyProductBySlug(productSlug);
-  const { product: cmsProduct } = useProduct(productSlug);
-  const product = cmsProduct || staticProduct;
+  const { product, loading } = useProduct(productSlug);
+  const listingRoute = getAreaListingRoute(product, 'vellis');
+  const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
     if (product) {
@@ -169,6 +194,37 @@ export default function DermatologyProductDetail() {
       document.title = "Product Not Found | Onecore Pharma";
     }
   }, [product]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const navOffset = window.innerWidth < 640 ? 120 : 140;
+      const sections = ['precautions', 'directions', 'used', 'indications', 'mechanism'];
+      
+      if (window.scrollY < 300) {
+        setActiveTab('overview');
+        return;
+      }
+
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= navOffset) {
+            setActiveTab(id === 'indications' ? 'used' : id);
+            return;
+          }
+        }
+      }
+      setActiveTab('overview');
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  if (loading) {
+    return <PageSkeleton />;
+  }
 
   if (!product) {
     return (
@@ -194,16 +250,27 @@ export default function DermatologyProductDetail() {
     );
   }
 
-  const mechanismSteps = parseMechanismSteps(product.mechanism);
+  const mechanismSteps = (product.mechanisms && product.mechanisms.length > 0)
+    ? product.mechanisms.map((m, idx) => ({
+        num: String(idx + 1).padStart(2, '0'),
+        title: (m.title || `Action Step ${idx + 1}`).replace(/^(?:0?[1-9]\s*[-—:.]\s*)+/, '').trim(),
+        desc: (m.description || '').replace(/^(?:0?[1-9]\s*[-—:.]\s*)+/, '').trim(),
+      }))
+    : parseMechanismSteps(product.mechanism);
   const directionSteps = parseDirectionSteps(product.direction);
   const precautionsAccordions = parsePrecautionsAccordions(product.precautions);
   const hasPrecautions = precautionsAccordions && precautionsAccordions.length > 0;
 
   const scrollToSection = (id) => {
+    setActiveTab(id);
+    if (id === 'overview') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     const el = document.getElementById(id) || document.getElementById(id === 'used' ? 'indications' : (id === 'indications' ? 'used' : id));
     if (el) {
-      const yOffset = -90;
-      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      const navOffset = window.innerWidth < 640 ? 114 : 126;
+      const y = el.getBoundingClientRect().top + window.pageYOffset - navOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
@@ -222,7 +289,7 @@ export default function DermatologyProductDetail() {
               brandName={product.name}
               className="max-w-[340px]"
             />
-          ) : (product.image || product.packshot_url) ? (
+          ) : ((product.image || product.packshot_url) && !(product.image || product.packshot_url).includes('therapeutic-') && !(product.image || product.packshot_url).includes('pediaplus')) ? (
             <div className="absolute inset-0 w-full h-full overflow-hidden flex items-center justify-center">
               <img
                 src={assetUrl(product.image || product.packshot_url)}
@@ -236,13 +303,21 @@ export default function DermatologyProductDetail() {
                 <span className="text-[10px] tracking-[0.2em] font-bold text-[#5b2a70] uppercase">ONECORE</span>
               </div>
               <div className="my-auto py-8 text-center space-y-2">
-                <h3 className="font-serif text-3xl text-[#232126] font-normal tracking-tight">{product.name}</h3>
+                <h3 className="font-serif text-3xl text-[#232126] font-normal tracking-tight">{formatProductName(product.name)}</h3>
                 <p className="text-[11px] text-[#5f5862] leading-relaxed max-w-[200px] mx-auto">
                   {product.composition}
                 </p>
               </div>
               <div className="w-full pt-3 border-t border-[#eeeae6] text-center">
-                <span className="text-[9px] font-mono uppercase tracking-widest text-[#887e8c]">VELLIS · DERMATOLOGY</span>
+                <span className="text-[9px] font-mono uppercase tracking-widest text-[#887e8c]">
+                  <Link to={listingRoute} className="hover:underline transition-colors">
+                    VELLIS
+                  </Link>
+                  <span> · </span>
+                  <Link to={listingRoute} className="hover:underline transition-colors">
+                    DERMATOLOGY
+                  </Link>
+                </span>
               </div>
             </div>
           )}
@@ -254,64 +329,82 @@ export default function DermatologyProductDetail() {
         {/* RIGHT 57% - Product Information */}
         <div className="lg:col-span-7 p-8 sm:p-14 lg:p-20 flex flex-col justify-center">
           <div className="text-[11px] tracking-[0.2em] uppercase font-bold text-[#5b2a70]">
-            VELLIS · DERMATOLOGY
+            <Link to={listingRoute} className="hover:underline transition-colors">
+              VELLIS
+            </Link>
+            <span> · </span>
+            <Link to={listingRoute} className="hover:underline transition-colors">
+              DERMATOLOGY
+            </Link>
           </div>
           <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl tracking-tight text-[#232126] font-normal my-4 leading-[0.98]">
-            {product.name}
+            {formatProductName(product.name)}
           </h1>
           <div className="text-base text-[#736c74] mb-6 font-sans">
             {product.composition}
           </div>
           <p className="text-lg sm:text-xl text-[#575159] leading-relaxed max-w-2xl font-sans">
-            {product.description}
+            {product.full_description || product.description}
           </p>
-          <div className="border-t border-[#beb8b3] mt-8 pt-6 max-w-2xl">
-            <small className="block text-[10px] tracking-[0.15em] uppercase text-[#887e8c] font-semibold mb-2">
-              PRODUCT AT A GLANCE
-            </small>
-            <span className="font-serif text-xl sm:text-2xl leading-snug text-[#232126]">
-              {product.usedFor}
-            </span>
-          </div>
         </div>
       </div>
 
       {/* 5. STICKY ANCHOR NAVIGATION */}
-      <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-t border-[#eeeae6] border-b border-[#d9d4cf] px-6 sm:px-12">
-        <div className="max-w-6xl mx-auto flex gap-8 overflow-x-auto py-4 scrollbar-none no-scrollbar">
+      <div className="sticky top-[64px] sm:top-[76px] z-30 bg-white/95 backdrop-blur-md border-t border-[#eeeae6] border-b border-[#d9d4cf] px-6 sm:px-12 shadow-2xs">
+        <div className="max-w-6xl mx-auto flex gap-6 sm:gap-8 overflow-x-auto py-3 scrollbar-none no-scrollbar">
           <button
             type="button"
             onClick={() => scrollToSection('overview')}
-            className="text-xs uppercase tracking-wider font-semibold text-[#514b53] hover:text-[#5b2a70] transition-colors whitespace-nowrap cursor-pointer"
+            className={`text-xs uppercase tracking-wider font-semibold py-2 px-1 transition-all whitespace-nowrap cursor-pointer border-b-2 ${
+              activeTab === 'overview'
+                ? 'border-[#D52B1E] text-[#121212] font-bold'
+                : 'border-transparent text-[#514b53] hover:text-[#121212]'
+            }`}
           >
             Overview
           </button>
           <button
             type="button"
             onClick={() => scrollToSection('mechanism')}
-            className="text-xs uppercase tracking-wider font-semibold text-[#514b53] hover:text-[#5b2a70] transition-colors whitespace-nowrap cursor-pointer"
+            className={`text-xs uppercase tracking-wider font-semibold py-2 px-1 transition-all whitespace-nowrap cursor-pointer border-b-2 ${
+              activeTab === 'mechanism'
+                ? 'border-[#D52B1E] text-[#121212] font-bold'
+                : 'border-transparent text-[#514b53] hover:text-[#121212]'
+            }`}
           >
             Mechanism of Action
           </button>
           <button
             type="button"
             onClick={() => scrollToSection('used')}
-            className="text-xs uppercase tracking-wider font-semibold text-[#514b53] hover:text-[#5b2a70] transition-colors whitespace-nowrap cursor-pointer"
+            className={`text-xs uppercase tracking-wider font-semibold py-2 px-1 transition-all whitespace-nowrap cursor-pointer border-b-2 ${
+              activeTab === 'used'
+                ? 'border-[#D52B1E] text-[#121212] font-bold'
+                : 'border-transparent text-[#514b53] hover:text-[#121212]'
+            }`}
           >
             Therapeutic Role
           </button>
           <button
             type="button"
             onClick={() => scrollToSection('directions')}
-            className="text-xs uppercase tracking-wider font-semibold text-[#514b53] hover:text-[#5b2a70] transition-colors whitespace-nowrap cursor-pointer"
+            className={`text-xs uppercase tracking-wider font-semibold py-2 px-1 transition-all whitespace-nowrap cursor-pointer border-b-2 ${
+              activeTab === 'directions'
+                ? 'border-[#D52B1E] text-[#121212] font-bold'
+                : 'border-transparent text-[#514b53] hover:text-[#121212]'
+            }`}
           >
-            Administration
+            Administration & Dosage
           </button>
           {hasPrecautions && (
             <button
               type="button"
               onClick={() => scrollToSection('precautions')}
-              className="text-xs uppercase tracking-wider font-semibold text-[#514b53] hover:text-[#5b2a70] transition-colors whitespace-nowrap cursor-pointer"
+              className={`text-xs uppercase tracking-wider font-semibold py-2 px-1 transition-all whitespace-nowrap cursor-pointer border-b-2 ${
+                activeTab === 'precautions'
+                  ? 'border-[#D52B1E] text-[#121212] font-bold'
+                  : 'border-transparent text-[#514b53] hover:text-[#121212]'
+              }`}
             >
               Safety Profile
             </button>
@@ -322,7 +415,11 @@ export default function DermatologyProductDetail() {
       {/* 6. MECHANISM OF WORK (DARK SECTION) */}
       <section id="mechanism" className="bg-[#232126] text-white py-20 px-6 sm:px-16 scroll-mt-24">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-          <div className="lg:col-span-3" />
+          <div className="lg:col-span-3">
+            <span className="text-xs uppercase tracking-[0.2em] font-mono text-[#D52B1E] font-bold block">
+              Mechanism of Action
+            </span>
+          </div>
           <div className="lg:col-span-9 space-y-8">
             <h2 className="font-serif text-4xl sm:text-5xl font-normal leading-tight max-w-3xl">
               How the formula operates in the body.
@@ -332,7 +429,7 @@ export default function DermatologyProductDetail() {
               {mechanismSteps.map((step, idx) => (
                 <React.Fragment key={idx}>
                   <div className="border-t border-[#5c5760] pt-6 min-h-[180px]">
-                    <div className="font-serif text-3xl text-[#cbb9d3]">{step.num}</div>
+                    <div className="font-serif text-3xl text-[#D52B1E]">{step.num}</div>
                     <h3 className="font-serif text-2xl font-normal text-white my-3">{step.title}</h3>
                     <p className="text-sm text-[#cbc6ce] leading-relaxed">{step.desc}</p>
                   </div>
@@ -348,20 +445,61 @@ export default function DermatologyProductDetail() {
         </div>
       </section>
 
-      {/* 7. WHEN IS IT USED? (STONE/NEUTRAL SECTION) */}
+      {/* 7. WHEN IS IT USED? (THERAPEUTIC ROLE) */}
       <section id="used" className="bg-[#ebe7e1] text-[#232126] py-20 px-6 sm:px-16 scroll-mt-24">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-          <div className="lg:col-span-3 text-xs font-bold tracking-[0.19em] uppercase text-[#5b2a70] pt-2">
-            WHEN IS IT USED?
+          <div className="lg:col-span-3">
+            <span className="text-xs uppercase tracking-[0.2em] font-mono text-[#5b2a70] font-bold block">
+              Therapeutic Indications
+            </span>
           </div>
           <div className="lg:col-span-9 space-y-8">
             <h2 className="font-serif text-4xl sm:text-5xl font-normal leading-tight max-w-3xl">
-              Targeted clinical indications & support.
+              When is it used?
             </h2>
-            <p className="text-base sm:text-lg text-[#625d64] leading-relaxed max-w-3xl">
-              {product.usedFor}
-            </p>
+            {product.benefits && product.benefits.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                {product.benefits.map((b, idx) => (
+                  <div key={idx} className="bg-white/80 backdrop-blur-xs border border-[#d8d3cb] p-6 rounded-2xl shadow-2xs space-y-2">
+                    <h3 className="font-serif text-xl font-medium text-[#232126]">{b.title}</h3>
+                    <p className="text-sm text-[#4a454d] leading-relaxed">{b.description}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-base sm:text-lg text-[#333333] leading-relaxed max-w-3xl font-normal">
+                {product.usedFor}
+              </p>
+            )}
 
+            {/* In-section exploration links */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-[#d8d3cb]">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+                <span className="text-xs text-[#736c74] font-medium shrink-0">Explore Details:</span>
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection('mechanism')}
+                    className="text-xs font-semibold px-4 py-2 sm:py-1.5 rounded-full bg-white text-[#232126] border border-[#d4cfc9] hover:border-[#D52B1E] transition-all cursor-pointer shadow-2xs text-center"
+                  >
+                    Mechanism of Action →
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection('directions')}
+                    className="text-xs font-semibold px-4 py-2 sm:py-1.5 rounded-full bg-white text-[#232126] border border-[#d4cfc9] hover:border-[#D52B1E] transition-all cursor-pointer shadow-2xs text-center"
+                  >
+                    Administration & Dosage →
+                  </button>
+                </div>
+              </div>
+              <Link
+                to={listingRoute}
+                className="text-xs font-semibold text-[#736c74] hover:text-[#232126] underline transition-all self-start sm:self-auto sm:ml-auto"
+              >
+                All Dermatology Formulations
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -369,9 +507,7 @@ export default function DermatologyProductDetail() {
       {/* 8. ADMINISTRATION & DOSAGE */}
       <section id="directions" className="bg-white text-[#232126] py-20 px-6 sm:px-16 scroll-mt-24">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-          <div className="lg:col-span-3 text-xs font-bold tracking-[0.19em] uppercase text-[#5b2a70] pt-2">
-            ADMINISTRATION
-          </div>
+          <div className="lg:col-span-3" />
           <div className="lg:col-span-9 space-y-8">
             <h2 className="font-serif text-4xl sm:text-5xl font-normal leading-tight max-w-3xl">
               Administration and dosage guidance.
@@ -403,9 +539,7 @@ export default function DermatologyProductDetail() {
       {hasPrecautions && (
         <section id="precautions" className="bg-white text-[#232126] py-20 px-6 sm:px-16 border-t border-[#eeeae6] scroll-mt-24">
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-            <div className="lg:col-span-3 text-xs font-bold tracking-[0.19em] uppercase text-[#5b2a70] pt-2">
-              PRECAUTIONS
-            </div>
+            <div className="lg:col-span-3" />
             <div className="lg:col-span-9 space-y-6">
               <h2 className="font-serif text-4xl sm:text-5xl font-normal leading-tight max-w-3xl">
                 Important safety information.
@@ -436,6 +570,9 @@ export default function DermatologyProductDetail() {
           </div>
         </section>
       )}
+
+      {/* Direct Product Action Link */}
+      <ProductEndLink product={product} />
     </div>
   );
 }

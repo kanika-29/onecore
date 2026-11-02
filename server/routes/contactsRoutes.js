@@ -11,8 +11,11 @@ import { requireAdminOrSuper } from '../middleware/roleMiddleware.js';
 
 const router = Router();
 
-// Public submission route
+// Public submission routes
 router.post('/contact', submitContactEnquiry);
+router.post('/enquiries', submitContactEnquiry);
+router.post('/partnerships/enquiry', submitContactEnquiry);
+router.post('/safety-report', submitContactEnquiry);
 
 // Protected Admin enquiry management routes
 router.get('/admin/enquiries', authenticateToken, getEnquiries);

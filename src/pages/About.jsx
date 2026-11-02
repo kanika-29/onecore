@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ScrollReveal from '../components/ScrollReveal';
+import HeroResponsiveImage from '../components/HeroResponsiveImage';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useCmsPage } from '../hooks/useCmsPage';
 import { assetUrl } from '../utils/assetUrl';
+import PageSkeleton from '../components/PageSkeleton';
 
 export default function About() {
-  const { getSection } = useCmsPage('about');
+  const { getSection, loading: cmsLoading, isError: cmsError } = useCmsPage('about');
 
   useEffect(() => {
     document.title = "About Onecore | Purposeful Formulations, Dependable Quality";
@@ -24,11 +26,11 @@ export default function About() {
     items: [
       {
         title: 'Our Vision',
-        desc: 'To be a trusted partner for healthcare professionals across India, known for our innovation, reliability, and commitment to excellence in prescription medicine.'
+        desc: 'To become one of India’s most trusted healthcare companies, shaping better health and better lives through quality, innovation and purpose.'
       },
       {
         title: 'Our Mission',
-        desc: 'To improve patient health outcomes by delivering high-quality, prescription-based products that address the unique needs of Orthopaedic, Gynaecological, Paediatric and General Segment.'
+        desc: 'To provide the medical fraternity with trusted medicines and innovative healthcare solutions, while empowering our people and stakeholders through intellectual, professional and financial growth.'
       }
     ]
   });
@@ -60,7 +62,7 @@ export default function About() {
   const principlesSec = getSection('principles', {
     eyebrow: 'FOUNDATIONAL PRINCIPLES',
     title: 'Principles guiding every decision.',
-    subtitle: 'A disciplined framework connecting formulation science with clinical trust and everyday healthcare across India.',
+    subtitle: '',
     image_url: '/assets/healthcare-professionals.jpg',
     items: [
       {
@@ -89,15 +91,15 @@ export default function About() {
     items: [
       {
         title: 'Therapeutic Breadth',
-        text: 'Developing specialized portfolios across essential medical disciplines including Women’s Health, Orthopaedics, Neurology, Paediatrics, Dermatology, ENT, and Oncology.',
+        text: 'Developing specialized portfolios across essential medical disciplines including General Medicine, Paediatrics, ENT, Orthopaedics, and Oncology.',
       },
       {
         title: 'Formulation Integrity',
-        text: 'Every batch is verified through rigorous stability testing, active ingredient identity assay, and multi-stage analytical checkpoints.',
+        text: 'Every batch is verified through rigorous stability testing, identity verification, and multi-stage analytical checkpoints.',
       },
       {
         title: 'Patient Centricity',
-        text: 'Creating clear, transparent clinical monographs, accessible packaging formats, and dependable supply networks to support continuity in everyday care.',
+        text: 'Creating clear, transparent product information and reliable supply chains to support continuity in everyday care.',
       },
     ]
   });
@@ -118,36 +120,46 @@ export default function About() {
     (item) => item.title && !item.title.toLowerCase().includes('purpose')
   ).slice(0, 2);
 
+  if (cmsLoading && !cmsError) {
+    return <PageSkeleton />;
+  }
+
   return (
     <div className="w-full bg-transparent text-[#121212] overflow-x-hidden">
       
       {/* =========================================================================
-          SECTION 1 — EDITORIAL HERO
-          Spacious, dignified, human-scale typography (The Lilly Model)
+          SECTION 1 — HERO BANNER
+          Clean, stately, high-contrast human photography with bold typography
           ========================================================================= */}
-      <section className="pt-20 sm:pt-24 pb-10 sm:pb-14 px-4 sm:px-8 border-b border-[#E5E3DC]/80 bg-transparent">
-        <div className="max-w-7xl mx-auto space-y-8">
-          
-          <div className="max-w-4xl space-y-6">
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-light text-[#121212] tracking-tight leading-[1.05]">
+      <section className="relative min-h-[90vh] sm:min-h-screen flex items-end pb-16 sm:pb-24 pt-32 px-4 sm:px-8 lg:px-12 bg-black">
+        {/* Hero Background Responsive Photograph */}
+        <div className="absolute inset-0 z-0">
+          <HeroResponsiveImage
+            desktopImage={heroSec.image_url}
+            mobileImage={heroSec.image_mobile_url || heroSec.mobile_image_url}
+            alt="Onecore Pharma formulation and manufacturing facility"
+            fallback="/assets/about-facility.jpg"
+            className="w-full h-full object-cover object-center"
+          />
+          {/* Directional contrast gradient — lessened intensity */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent pointer-events-none" />
+        </div>
+
+        {/* Hero Content Block */}
+        <div className="relative z-10 max-w-5xl mx-auto w-full space-y-6 sm:space-y-8">
+          <ScrollReveal>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-serif font-light text-white tracking-tight leading-[1.04] max-w-4xl">
               Built around clinical reality. <br />
               <span className="italic font-normal text-[#D52B1E]">Guided by patient trust.</span>
             </h1>
+          </ScrollReveal>
 
-            <p className="text-lg sm:text-2xl text-[#555555] font-light leading-relaxed font-sans max-w-3xl">
+          <ScrollReveal delay={0.1}>
+            <p className="text-base sm:text-xl lg:text-2xl text-white/90 font-light leading-relaxed font-sans max-w-3xl">
               {heroSec.body || 'Onecore Pharma is built around the belief that modern pharmaceutical science achieves its highest impact when aligned closely with the clinical reality of patients and doctors.'}
             </p>
-          </div>
-
-          {/* Stately Facility Frame */}
-          <div className="relative rounded-3xl overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[16/9] lg:aspect-[21/9] bg-[#FAF9F6]">
-            <img
-              src={assetUrl(heroSec.image_url || '/assets/about-facility.jpg')}
-              alt="Onecore Pharma formulation and manufacturing facility"
-              className="w-full h-full object-cover"
-            />
-          </div>
-
+          </ScrollReveal>
         </div>
       </section>
 
@@ -221,10 +233,14 @@ export default function About() {
                 <div className="lg:col-span-6">
                   <div className="rounded-3xl overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[4/3] bg-[#FAF9F6]">
                     <img
-                      src={assetUrl(foundationSec.image_url || '/assets/quality.jpg')}
+                      src={assetUrl(foundationSec.image_url || '/assets/internet/lab-chemistry.jpg')}
                       alt="Onecore Pharma laboratory analytics and research"
                       className="w-full h-full object-cover"
                       loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = '/assets/internet/lab-chemistry.jpg';
+                      }}
                     />
                   </div>
                 </div>
@@ -263,32 +279,34 @@ export default function About() {
       {principlesSec.is_active && (
         <section className="py-12 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto space-y-8 sm:space-y-10">
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            
-            <div className="lg:col-span-7 space-y-4">
-              <ScrollReveal>
-                <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight text-balance">
-                  Principles guiding <br className="hidden sm:inline" />every decision.
-                </h2>
-                <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-1">
-                  {principlesSec.subtitle || 'A disciplined framework connecting formulation science with clinical trust and everyday healthcare across India.'}
-                </p>
-              </ScrollReveal>
-            </div>
-
-            {/* Doctor Consultation Image */}
-            <div className="lg:col-span-5">
-              <div className="rounded-3xl overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[4/3] bg-white">
+          {/* Full-Width Image Banner with Text Overlay */}
+          <ScrollReveal>
+            <div className="relative rounded-[28px] sm:rounded-3xl overflow-hidden border border-[#E5E3DC] shadow-sm min-h-[320px] sm:min-h-[400px] lg:min-h-[440px] flex items-end bg-black">
+              {/* Background Doctor Consultation Image */}
+              <div className="absolute inset-0 z-0">
                 <img
                   src={assetUrl(principlesSec.image_url || '/assets/healthcare-professionals.jpg')}
-                  alt="Healthcare professional consultation in Indian clinical practice"
-                  className="w-full h-full object-cover"
+                  alt="Principles guiding every decision — Healthcare professional consultation in Indian clinical practice"
+                  className="w-full h-full object-cover object-center opacity-85 brightness-90"
                   loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = '/assets/healthcare-professionals.jpg';
+                  }}
                 />
+                {/* Contrast Gradients for Clear Readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/30 to-transparent" />
+              </div>
+
+              {/* Text Overlay directly on top of the image */}
+              <div className="relative z-10 p-6 sm:p-10 lg:p-14 max-w-3xl">
+                <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-white tracking-tight leading-[1.08] text-balance">
+                  {principlesSec.title || 'Principles guiding every decision.'}
+                </h2>
               </div>
             </div>
-
-          </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {principlesSec.items.map((pillar, idx) => (
@@ -323,51 +341,57 @@ export default function About() {
           ========================================================================= */}
       {commitmentsSec.is_active && (
         <section className="py-12 sm:py-16 bg-transparent border-t border-[#E5E3DC]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-8 sm:space-y-10">
-            
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-              
-              <div className="lg:col-span-5 order-2 lg:order-1">
-                <div className="rounded-3xl overflow-hidden border border-[#E5E3DC] shadow-sm aspect-[4/3] bg-[#FAF9F6]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-8">
+            <ScrollReveal>
+              <div className="relative rounded-[28px] sm:rounded-3xl overflow-hidden border border-[#E5E3DC] shadow-sm bg-black">
+                {/* Background Two-Perspectives Photograph */}
+                <div className="absolute inset-0 z-0">
                   <img
                     src={assetUrl(commitmentsSec.image_url || '/assets/two-perspectives.jpg')}
-                    alt="Doctor and patient perspective in everyday care"
-                    className="w-full h-full object-cover"
+                    alt="Doctor and patient perspective in everyday care — Disciplined science, human focus"
+                    className="w-full h-full object-cover object-center opacity-75 brightness-90"
                     loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/assets/two-perspectives.jpg';
+                    }}
                   />
+                  {/* Contrast Gradients for Clear Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/45" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/50 to-transparent" />
+                </div>
+
+                {/* Overlay Content Block */}
+                <div className="relative z-10 p-8 sm:p-12 lg:p-16 flex flex-col justify-between space-y-10 sm:space-y-12">
+                  {/* Top: Header & Description */}
+                  <div className="max-w-3xl space-y-4">
+                    <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-light text-white tracking-tight leading-[1.08] text-balance">
+                      {commitmentsSec.title || 'Disciplined science, human focus.'}
+                    </h2>
+                    <p className="text-base sm:text-xl text-white/90 font-light leading-relaxed font-sans max-w-2xl">
+                      {commitmentsSec.subtitle || 'Connecting clinical insight with dependable pharmaceutical manufacturing to deliver medicines people can trust.'}
+                    </p>
+                  </div>
+
+                  {/* Bottom: 3 Content Blocks over the image */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pt-6 border-t border-white/20">
+                    {commitmentsSec.items.map((item, idx) => (
+                      <div key={item.title || idx} className="space-y-2.5">
+                        <span className="text-xs font-mono text-red-400 font-bold block">
+                          0{idx + 1}
+                        </span>
+                        <h3 className="text-xl sm:text-2xl font-serif font-medium text-white tracking-tight">
+                          {item.title}
+                        </h3>
+                        <p className="text-sm sm:text-base text-white/80 font-light leading-relaxed font-sans">
+                          {item.text || item.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-
-              <div className="lg:col-span-7 space-y-4 order-1 lg:order-2">
-                <ScrollReveal>
-                  <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#121212] tracking-tight leading-tight text-balance">
-                    Disciplined science, <br className="hidden sm:inline" />human focus.
-                  </h2>
-                  <p className="text-base sm:text-lg text-[#555555] font-light leading-relaxed font-sans pt-1">
-                    {commitmentsSec.subtitle || 'Connecting clinical insight with dependable pharmaceutical manufacturing to deliver medicines people can trust.'}
-                  </p>
-                </ScrollReveal>
-              </div>
-
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {commitmentsSec.items.map((item, idx) => (
-                <ScrollReveal key={item.title || idx} delay={idx * 0.08}>
-                  <div className="p-8 sm:p-10 rounded-3xl bg-white/80 backdrop-blur-xs border border-[#E5E3DC] space-y-3 h-full flex flex-col justify-between">
-                    <div className="space-y-2">
-                      <h4 className="text-xl font-serif font-medium text-[#121212] tracking-tight">
-                        {item.title}
-                      </h4>
-                      <p className="text-sm text-[#555555] font-light leading-relaxed pt-1">
-                        {item.text || item.description}
-                      </p>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-
+            </ScrollReveal>
           </div>
         </section>
       )}

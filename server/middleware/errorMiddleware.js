@@ -9,7 +9,7 @@ export const errorHandler = (err, req, res, next) => {
   console.error('Unhandled Error:', err);
 
   const statusCode = err.status || err.statusCode || 500;
-  const isProduction = process.env.NODE_ENV === 'production';
+  const isProduction = String(process.env.NODE_ENV || '').toLowerCase() === 'production';
 
   res.status(statusCode).json({
     success: false,
