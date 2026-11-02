@@ -35,6 +35,10 @@ dist-ssr
 # Server
 server/node_modules
 server/.env
+# Uploads and runtime storage
+uploads/*
+!uploads/.gitkeep
+server/uploads/*
 !server/uploads/.gitkeep
 
 # Temporary raw downloads and scratch dumps
