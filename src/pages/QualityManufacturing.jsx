@@ -146,7 +146,7 @@ export default function QualityManufacturing() {
             <video
               ref={videoRef}
               src={assetUrl(heroSec.video_url || '/assets/quality-manufacturing.mp4')}
-              poster={assetUrl(heroSec.image_url || '/assets/quality.jpg')}
+              poster={assetUrl(heroSec.poster_url || heroSec.image_url || '/assets/quality.jpg')}
               autoPlay
               loop
               muted

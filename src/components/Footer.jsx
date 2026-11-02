@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { useSettings } from '../hooks/useSettings';
 import { assetUrl } from '../utils/assetUrl';
+import { openCookiePreferences } from '../services/cookieConsent';
 import TechnicalGridBackground from './TechnicalGridBackground';
 
 export default function Footer() {
@@ -196,6 +197,13 @@ export default function Footer() {
               <Link to="/contact" className="hover:text-white hover:underline underline-offset-4 transition-colors">
                 Contact & Regulatory
               </Link>
+              <button
+                type="button"
+                onClick={() => openCookiePreferences()}
+                className="hover:text-white hover:underline underline-offset-4 transition-colors cursor-pointer text-left"
+              >
+                Cookie Preferences
+              </button>
             </div>
           </div>
 

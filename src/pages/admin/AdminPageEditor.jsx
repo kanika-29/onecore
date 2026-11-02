@@ -857,10 +857,17 @@ function SectionEditorPanel({ section, onSave, onCancel, onOpenMedia }) {
         <div>
           <div className="flex items-center justify-between mb-1">
             <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-700 font-semibold">
-              Section Image (Desktop / Default)
+              {form.video_url || section.section_key === 'hero' ? 'Section Image / Video Poster' : 'Section Image (Desktop / Default)'}
             </label>
-            <span className="text-[10px] text-slate-500">Standard & Desktop</span>
+            <span className="text-[10px] text-slate-500">
+              {form.video_url ? 'Video Poster & Desktop' : 'Standard & Desktop'}
+            </span>
           </div>
+          {form.video_url && (
+            <p className="text-[11px] text-slate-500 mb-2 leading-relaxed">
+              <span className="font-semibold text-[#0D5C75]">Video Poster:</span> This image displays instantly as the crisp preview frame while the background video buffers.
+            </p>
+          )}
           <div className="flex gap-2">
             <input
               type="text"

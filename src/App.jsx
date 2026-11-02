@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate, Link, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import CookieConsentBanner from './components/CookieConsentBanner';
 import TechnicalGridBackground from './components/TechnicalGridBackground';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -255,6 +256,7 @@ function PublicRoutes() {
           </Routes>
         </main>
         <Footer />
+        <CookieConsentBanner />
       </div>
     </div>
   );
